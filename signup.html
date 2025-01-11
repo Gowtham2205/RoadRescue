@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - RoadRescue</title>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --secondary: #06b6d4;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --error: #ef4444;
+            --success: #10b981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)),
+                        url('https://images.pexels.com/photos/4489749/pexels-photo-4489749.jpeg') center/cover;
+            background-attachment: fixed;
+        }
+
+        .signup-container {
+            width: 100%;
+            max-width: 500px;
+            margin: auto;
+            padding: 2rem;
+        }
+
+        .signup-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo-section a {
+            text-decoration: none;
+            color: var(--primary);
+            font-size: 2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .welcome-text {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .welcome-text h1 {
+            color: var(--dark);
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-text p {
+            color: var(--gray);
+        }
+
+        .signup-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .signup-option {
+            padding: 1.5rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .signup-option.active {
+            border-color: var(--primary);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .signup-option i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .signup-option h3 {
+            font-size: 1.1rem;
+            color: var(--dark);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .password-field {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+            cursor: pointer;
+        }
+
+        .password-strength {
+            margin-top: 0.5rem;
+            height: 4px;
+            background: #e2e8f0;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .password-strength-bar {
+            height: 100%;
+            width: 0;
+            transition: all 0.3s ease;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .login-prompt {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--gray);
+        }
+
+        .login-prompt a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .message {
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .success-message {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        @media (max-width: 640px) {
+            .signup-container {
+                padding: 1rem;
+            }
+
+            .signup-card {
+                padding: 1.5rem;
+            }
+
+            .signup-options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <div class="signup-card">
+            <div class="logo-section">
+                <a href="../index.html">
+                    <i class="fas fa-wrench"></i>
+                    RoadRescue
+                </a>
+            </div>
+
+            <div class="welcome-text">
+                <h1>Create Account</h1>
+                <p>Join RoadRescue today</p>
+            </div>
+
+            <div class="signup-options">
+                <div class="signup-option active" data-type="user">
+                    <i class="fas fa-car"></i>
+                    <h3>Vehicle Owner</h3>
+                </div>
+                <div class="signup-option" data-type="mechanic">
+                    <i class="fas fa-tools"></i>
+                    <h3>Mechanic</h3>
+                </div>
+            </div>
+
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" required placeholder="Enter your full name">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required placeholder="Enter your email">
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" required placeholder="Enter your phone number">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="password-field">
+                        <input type="password" id="password" required placeholder="Create a strong password">
+                        <i class="fas fa-eye password-toggle" id="passwordToggle"></i>
+                    </div>
+                    <div class="password-strength">
+                        <div class="password-strength-bar"></div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-user-plus"></i>
+                    Create Account
+                </button>
+
+                <div class="message error-message" id="signupError"></div>
+                <div class="message success-message" id="signupSuccess"></div>
+            </form>
+
+            <div class="login-prompt">
+                Already have an account? <a href="log.html">Login here</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle between user types
+        const signupOptions = document.querySelectorAll('.signup-option');
+        signupOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                signupOptions.forEach(opt => opt.classList.remove('active'));
+                option.classList.add('active');
+            });
+        });
+
+        // Password toggle
+        const passwordToggle = document.getElementById('passwordToggle');
+        const passwordInput = document.getElementById('password');
+        
+        passwordToggle.addEventListener('click', () => {
+            const type = passwordInput.type === 'password' ? 'text' : 'password';
+            passwordInput.type = type;
+            passwordToggle.classList.toggle('fa-eye');
+            passwordToggle.classList.toggle('fa-eye-slash');
+        });
+
+        // Password strength
+        const strengthBar = document.querySelector('.password-strength-bar');
+        
+        passwordInput.addEventListener('input', () => {
+            const value = passwordInput.value;
+            let strength = 0;
+            
+            if (value.length >= 8) strength += 25;
+            if (value.match(/[A-Z]/)) strength += 25;
+            if (value.match(/[0-9]/)) strength += 25;
+            if (value.match(/[^A-Za-z0-9]/)) strength += 25;
+            
+            strengthBar.style.width = `${strength}%`;
+            
+            if (strength <= 25) {
+                strengthBar.style.backgroundColor = '#ef4444';
+            } else if (strength <= 50) {
+                strengthBar.style.backgroundColor = '#f59e0b';
+            } else if (strength <= 75) {
+                strengthBar.style.backgroundColor = '#10b981';
+            } else {
+                strengthBar.style.backgroundColor = '#059669';
+            }
+        });
+
+        // Form submission
+        const signupForm = document.getElementById('signupForm');
+        const signupError = document.getElementById('signupError');
+        const signupSuccess = document.getElementById('signupSuccess');
+
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            signupError.style.display = 'none';
+            signupSuccess.style.display = 'none';
+
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const userType = document.querySelector('.signup-option.active').dataset.type;
+
+            // Basic validation
+            if (!email.includes('@')) {
+                signupError.textContent = 'Please enter a valid email address';
+                signupError.style.display = 'block';
+                return;
+            }
+
+            if (phone.length < 10) {
+                signupError.textContent = 'Please enter a valid phone number';
+                signupError.style.display = 'block';
+                return;
+            }
+
+            if (passwordInput.value.length < 8) {
+                signupError.textContent = 'Password must be at least 8 characters long';
+                signupError.style.display = 'block';
+                return;
+            }
+
+            // Show loading state
+            const submitButton = signupForm.querySelector('button[type="submit"]');
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
+            submitButton.disabled = true;
+
+            try {
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 2000));
+
+                signupSuccess.textContent = 'Account created successfully! Redirecting to login...';
+                signupSuccess.style.display = 'block';
+
+                // Redirect to login page
+                setTimeout(() => {
+                    window.location.href = 'log.html';
+                }, 1500);
+
+            } catch (error) {
+                signupError.textContent = 'Something went wrong. Please try again.';
+                signupError.style.display = 'block';
+                submitButton.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
+                submitButton.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
