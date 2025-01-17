@@ -84,7 +84,52 @@
             position: relative;
         }
 
-        /* Page Header with Blue Background */
+        /* Mobile Header */
+        .mobile-header {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 999;
+            transition: background-color 0.3s ease;
+        }
+
+        .mobile-header-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.3s ease;
+        }
+
+        .mobile-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .mobile-logo i {
+            font-size: 1.5rem;
+        }
+                /* Page Header with Blue Background */
         .page-header {
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             padding: 2rem;
@@ -103,28 +148,6 @@
         .page-subtitle {
             opacity: 0.9;
             font-size: 1.1rem;
-        }
-
-        /* Menu Toggle Button */
-        .menu-toggle {
-            position: sticky;
-            top: 1rem;
-            left: 1rem;
-            z-index: 1001;
-            display: none;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            font-size: 1.5rem;
-            padding: 0.75rem;
-            border-radius: 0.75rem;
-            cursor: pointer;
-            box-shadow: var(--shadow-sm);
-            transition: all 0.3s ease;
-        }
-
-        .menu-toggle:hover {
-            background: var(--sidebar-hover);
         }
 
         /* Filters Section */
@@ -183,7 +206,8 @@
             border-color: var(--primary);
             box-shadow: 0 0 0 3px var(--primary-lighter);
         }
-                /* Service Cards Grid */
+
+        /* Service Cards Grid */
         .service-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -283,6 +307,85 @@
         .status-cancelled {
             background-color: var(--danger-light);
             color: var(--danger);
+        }
+                /* Sidebar Styles */
+        .sidebar {
+            width: 280px;
+            background: var(--sidebar-bg);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--primary);
+        }
+
+        .logo i {
+            font-size: 1.75rem;
+        }
+
+        .logo span {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .nav-menu {
+            padding: 1.5rem 1rem;
+            flex: 1;
+        }
+
+        .nav-menu ul {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.875rem 1rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            gap: 0.75rem;
+        }
+
+        .nav-link i {
+            font-size: 1.25rem;
+            width: 1.5rem;
+            text-align: center;
+        }
+
+        .nav-link:hover {
+            background: var(--primary-lighter);
+            color: var(--primary);
+        }
+
+        .nav-link.active {
+            background: var(--primary-lighter);
+            color: var(--primary);
+            font-weight: 600;
         }
 
         /* Modal Styles */
@@ -430,87 +533,7 @@
         .timeline-content {
             color: var(--text-secondary);
         }
-                /* Sidebar Styles */
-        .sidebar {
-            width: 280px;
-            background: var(--sidebar-bg);
-            height: 100vh;
-            position: fixed;
-            left: 0;
-            top: 0;
-            border-right: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            transition: all 0.3s ease;
-            z-index: 1000;
-            overflow-y: auto;
-        }
-
-        .sidebar-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            text-decoration: none;
-            color: var(--primary);
-        }
-
-        .logo i {
-            font-size: 1.75rem;
-        }
-
-        .logo span {
-            font-size: 1.25rem;
-            font-weight: 700;
-        }
-
-        .nav-menu {
-            padding: 1.5rem 1rem;
-            flex: 1;
-        }
-
-        .nav-menu ul {
-            list-style: none;
-        }
-
-        .nav-item {
-            margin-bottom: 0.5rem;
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            padding: 0.875rem 1rem;
-            color: var(--text-secondary);
-            text-decoration: none;
-            border-radius: 0.75rem;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            gap: 0.75rem;
-        }
-
-        .nav-link i {
-            font-size: 1.25rem;
-            width: 1.5rem;
-            text-align: center;
-        }
-
-        .nav-link:hover {
-            background: var(--primary-lighter);
-            color: var(--primary);
-        }
-
-        .nav-link.active {
-            background: var(--primary-lighter);
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        /* Rating Section */
+                /* Rating Section */
         .rating-section {
             padding: 1.5rem;
             border-top: 1px solid var(--border-color);
@@ -536,25 +559,6 @@
             color: var(--warning);
         }
 
-        /* Overlay */
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--modal-overlay);
-            z-index: 999;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .overlay.active {
-            opacity: 1;
-            display: block;
-        }
-
         /* Responsive Design */
         @media (max-width: 1024px) {
             .sidebar {
@@ -565,13 +569,15 @@
                 transform: translateX(0);
             }
 
-            .menu-toggle {
+            .main-content {
+                margin-left: 0;
+            }
+
+            .mobile-header {
                 display: block;
-                position: fixed;
             }
 
             .main-content {
-                margin-left: 0;
                 padding-top: 5rem;
             }
 
@@ -590,7 +596,7 @@
 
         @media (max-width: 768px) {
             .main-content {
-                padding: 4rem 1rem 1rem 1rem;
+                padding: 4.5rem 1rem 1rem 1rem;
             }
 
             .page-header {
@@ -647,18 +653,23 @@
                 padding-left: 1.5rem;
             }
         }
-            </style>
+    </style>
 </head>
 <body>
-    <!-- Overlay for Mobile -->
-    <div class="overlay" id="overlay"></div>
+    <!-- Mobile Header -->
+    <header class="mobile-header">
+        <div class="mobile-header-content">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <a href="#" class="mobile-logo">
+                <i class="fas fa-car"></i>
+                <span>RoadRescue</span>
+            </a>
+        </div>
+    </header>
 
     <div class="dashboard-container">
-        <!-- Mobile Menu Toggle -->
-        <button class="menu-toggle" id="menuToggle">
-            <i class="fas fa-bars"></i>
-        </button>
-
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
@@ -714,8 +725,7 @@
                 </ul>
             </nav>
         </aside>
-
-        <!-- Main Content -->
+               <!-- Main Content -->
         <main class="main-content">
             <div class="page-header">
                 <h1 class="page-title">Service History</h1>
@@ -788,7 +798,8 @@
             </div>
         </div>
     </div>
-        <script>
+
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             initializeApp();
             initializeMobileMenu();
@@ -857,57 +868,51 @@
             });
 
             // Initialize modal close
-            document.getElementById('modalClose').addEventListener('click', () => {
-                closeModal();
-            });
+            document.getElementById('modalClose').addEventListener('click', closeModal);
 
             // Close modal on outside click
             document.getElementById('serviceModal').addEventListener('click', (e) => {
-                if (e.target === e.currentTarget) {
-                    closeModal();
-                }
+                if (e.target === e.currentTarget) closeModal();
             });
 
             // Close modal on escape key
             document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    closeModal();
-                }
+                if (e.key === 'Escape') closeModal();
             });
         }
 
         function initializeMobileMenu() {
             const menuToggle = document.getElementById('menuToggle');
             const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('overlay');
             
             menuToggle.addEventListener('click', () => {
                 sidebar.classList.toggle('active');
-                overlay.classList.toggle('active');
                 document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
             });
 
-            overlay.addEventListener('click', () => {
-                sidebar.classList.remove('active');
-                overlay.classList.remove('active');
-                document.body.style.overflow = '';
+            // Close sidebar when clicking outside on mobile
+            document.addEventListener('click', (e) => {
+                if (window.innerWidth <= 1024 && 
+                    !e.target.closest('.sidebar') && 
+                    !e.target.closest('.menu-toggle') && 
+                    sidebar.classList.contains('active')) {
+                    sidebar.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
             });
         }
 
         function initializeTheme() {
-            // Check localStorage for theme preference
             const savedTheme = localStorage.getItem('theme') || 'light';
             document.documentElement.setAttribute('data-theme', savedTheme);
 
-            // Listen for theme changes from other pages
             window.addEventListener('storage', (e) => {
                 if (e.key === 'theme') {
                     document.documentElement.setAttribute('data-theme', e.newValue || 'light');
                 }
             });
         }
-
-        function renderServices(services) {
+         function renderServices(services) {
             const grid = document.getElementById('serviceGrid');
             grid.innerHTML = '';
 
@@ -1077,4 +1082,4 @@
         }
     </script>
 </body>
-</html>
+</html> 
