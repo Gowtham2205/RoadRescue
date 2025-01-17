@@ -120,8 +120,7 @@
             justify-content: center;
             transition: color 0.3s ease;
         }
-
-        /* Overlay */
+                /* Overlay */
         .overlay {
             display: none;
             position: fixed;
@@ -139,7 +138,8 @@
             opacity: 1;
             display: block;
         }
-                /* Layout Structure */
+
+        /* Layout Structure */
         .dashboard-container {
             display: flex;
             min-height: 100vh;
@@ -155,7 +155,7 @@
             height: 100vh;
             border-right: 1px solid var(--border-color);
             z-index: 1000;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, background-color 0.3s ease;
             overflow-y: auto;
         }
 
@@ -297,78 +297,14 @@
             font-size: 0.875rem;
         }
 
-        /* Support Grid */
-        .support-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        /* Form Styles */
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-            font-weight: 500;
-        }
-
-        .form-input,
-        .form-textarea {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: 0.5rem;
-            background: var(--input-bg);
-            color: var(--text-primary);
-            transition: all 0.3s ease;
-        }
-
-        .form-input:focus,
-        .form-textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px var(--primary-lighter);
-        }
-
-        .form-textarea {
-            resize: vertical;
-            min-height: 120px;
-        }
-
-        /* Button Styles */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: none;
-            gap: 0.5rem;
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-dark);
-        }
-                /* FAQ Section */
+        /* FAQ Section */
         .faq-section {
             background: var(--bg-secondary);
             border-radius: 1rem;
             border: 1px solid var(--border-color);
             overflow: hidden;
             transition: all 0.3s ease;
+            margin-bottom: 2rem;
         }
 
         .faq-header {
@@ -422,6 +358,13 @@
 
         .faq-item.active .faq-question i {
             transform: rotate(180deg);
+        }
+                /* Support Grid */
+        .support-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
         }
 
         /* Chat Container */
@@ -496,6 +439,20 @@
             color: var(--text-primary);
         }
 
+        .chat-input button {
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input button:hover {
+            background: var(--primary-dark);
+        }
+
         /* Contact Form */
         .contact-form {
             background: var(--bg-secondary);
@@ -505,13 +462,46 @@
             transition: all 0.3s ease;
         }
 
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-lighter);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
         /* Ticket Section */
         .ticket-section {
             background: var(--bg-secondary);
             border-radius: 1rem;
             border: 1px solid var(--border-color);
             overflow: hidden;
-            margin-top: 2rem;
         }
 
         .ticket-header {
@@ -532,7 +522,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: all 0.3s ease;
         }
 
         .ticket-item:last-child {
@@ -570,6 +559,29 @@
         .status-closed {
             background: var(--success-light);
             color: var(--success);
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
         }
 
         /* Responsive Styles */
@@ -611,19 +623,6 @@
 
             .support-title {
                 font-size: 1.5rem;
-            }
-
-            .chat-input {
-                flex-direction: column;
-            }
-
-            .chat-input input {
-                border-radius: 0.5rem;
-            }
-
-            .chat-input button {
-                width: 100%;
-                border-radius: 0.5rem;
             }
         }
 
@@ -697,6 +696,13 @@
                         <a href="support.html" class="nav-link active">
                             <i class="fas fa-headset"></i>
                             <span>Support</span>
+                        </a>
+                    </li>
+                    <!-- Theme Toggle Button -->
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" onclick="toggleTheme(); return false;">
+                            <i class="fas fa-moon"></i>
+                            <span>Toggle Theme</span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -778,7 +784,7 @@
 
                 <!-- Contact Form -->
                 <div class="contact-form" id="contactForm" style="display: none;">
-                    <h2 class="mb-3">Submit a Ticket</h2>
+                    <h2>Submit a Ticket</h2>
                     <div class="form-group">
                         <label class="form-label">Subject</label>
                         <input type="text" class="form-input" id="ticketSubject" placeholder="Enter ticket subject">
@@ -832,56 +838,38 @@
             loadFAQs();
             loadTickets();
             setupEventListeners();
+            initializeTheme();
+        });
 
-            // Add this right after the DOMContentLoaded event listener
-document.addEventListener('DOMContentLoaded', function() {
-    initializeMobileMenu();
-    initializeSupport();
-    loadFAQs();
-    loadTickets();
-    setupEventListeners();
-    initializeTheme(); // Add this line
-});
-
-// Add these theme-related functions
-function initializeTheme() {
-    // Check localStorage for theme preference
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    applyTheme(savedTheme);
-
-    // Listen for theme changes from other pages
-    window.addEventListener('storage', function(e) {
-        if (e.key === 'theme') {
-            applyTheme(e.newValue);
-        }
-    });
-}
-
-function applyTheme(theme) {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
-}
-
-// Add theme toggle function (if you want to add a theme toggle button)
-function toggleTheme() {
-    const currentTheme = localStorage.getItem('theme') || 'light';
-    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-    applyTheme(newTheme);
-}
-
-            // Check localStorage for theme preference
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme) {
-                document.documentElement.setAttribute('data-theme', savedTheme);
-            }
+        // Theme Management
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            applyTheme(savedTheme);
 
             // Listen for theme changes from other pages
             window.addEventListener('storage', function(e) {
                 if (e.key === 'theme') {
-                    document.documentElement.setAttribute('data-theme', e.newValue);
+                    applyTheme(e.newValue);
                 }
             });
-        });
+        }
+
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            
+            // Update theme toggle icon
+            const themeIcon = document.querySelector('.nav-link .fa-moon');
+            if (themeIcon) {
+                themeIcon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            }
+        }
+
+        function toggleTheme() {
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            applyTheme(newTheme);
+        }
 
         // FAQ Data
         const faqs = [
@@ -925,48 +913,11 @@ function toggleTheme() {
             }
         ];
 
-        function initializeMobileMenu() {
-            const menuToggle = document.getElementById('menuToggle');
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('overlay');
-            
-            menuToggle.addEventListener('click', () => {
-                sidebar.classList.toggle('active');
-                overlay.classList.toggle('active');
-                document.body.classList.toggle('sidebar-active');
-            });
-
-            overlay.addEventListener('click', () => {
-                sidebar.classList.remove('active');
-                overlay.classList.remove('active');
-                document.body.classList.remove('sidebar-active');
-            });
-
-            document.addEventListener('click', (e) => {
-                if (window.innerWidth <= 1024 && 
-                    !e.target.closest('.sidebar') && 
-                    !e.target.closest('.menu-toggle') && 
-                    sidebar.classList.contains('active')) {
-                    sidebar.classList.remove('active');
-                    overlay.classList.remove('active');
-                    document.body.classList.remove('sidebar-active');
-                }
-            });
-
-            window.addEventListener('resize', () => {
-                if (window.innerWidth > 1024) {
-                    sidebar.classList.remove('active');
-                    overlay.classList.remove('active');
-                    document.body.classList.remove('sidebar-active');
-                }
-            });
-        }
-
         function loadFAQs() {
             const faqList = document.getElementById('faqList');
             faqList.innerHTML = faqs.map((faq, index) => `
-                <div class="faq-item" onclick="toggleFAQ(${index})">
-                    <div class="faq-question">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(${index})">
                         ${faq.question}
                         <i class="fas fa-chevron-down"></i>
                     </div>
@@ -980,6 +931,23 @@ function toggleTheme() {
         function toggleFAQ(index) {
             const faqItems = document.querySelectorAll('.faq-item');
             faqItems[index].classList.toggle('active');
+        }
+
+        function loadTickets() {
+            const ticketList = document.getElementById('ticketList');
+            ticketList.innerHTML = tickets.map(ticket => `
+                <div class="ticket-item">
+                    <div class="ticket-info">
+                        <span class="ticket-subject">${ticket.subject}</span>
+                        <span class="ticket-meta">
+                            ${ticket.id} • ${formatDate(ticket.date)}
+                        </span>
+                    </div>
+                    <span class="ticket-status status-${ticket.status}">
+                        ${capitalizeFirst(ticket.status)}
+                    </span>
+                </div>
+            `).join('');
         }
 
         function openChat() {
@@ -1026,23 +994,6 @@ function toggleTheme() {
             }
         }
 
-        function loadTickets() {
-            const ticketList = document.getElementById('ticketList');
-            ticketList.innerHTML = tickets.map(ticket => `
-                <div class="ticket-item">
-                    <div class="ticket-info">
-                        <span class="ticket-subject">${ticket.subject}</span>
-                        <span class="ticket-meta">
-                            ${ticket.id} • ${formatDate(ticket.date)}
-                        </span>
-                    </div>
-                    <span class="ticket-status status-${ticket.status}">
-                        ${capitalizeFirst(ticket.status)}
-                    </span>
-                </div>
-            `).join('');
-        }
-
         function openTicketForm() {
             document.getElementById('contactForm').style.display = 'block';
             document.getElementById('chatContainer').style.display = 'none';
@@ -1055,7 +1006,6 @@ function toggleTheme() {
             const priority = document.getElementById('ticketPriority').value;
 
             if (subject && category && description) {
-                // Simulate ticket submission
                 alert('Ticket submitted successfully! We will respond shortly.');
                 document.getElementById('contactForm').style.display = 'none';
                 
@@ -1071,6 +1021,24 @@ function toggleTheme() {
 
         function scrollToFAQ() {
             document.querySelector('.faq-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function initializeMobileMenu() {
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            
+            menuToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+                overlay.classList.toggle('active');
+                document.body.classList.toggle('sidebar-active');
+            });
+
+            overlay.addEventListener('click', () => {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.classList.remove('sidebar-active');
+            });
         }
 
         function setupEventListeners() {
