@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile | RoadRescue Pro</title>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        /* Theme Variables */
+        :root {
+            /* Brand Colors */
+            --primary: #3485ff;
+            --primary-gradient: linear-gradient(135deg, #3485ff 0%, #0ea5e9 100%);
+            --primary-hover: #2d7be5;
+            --primary-dark: #2563eb;
+            --primary-light: #60a5fa;
+            --primary-lighter: #e0e9ff;
+            --secondary: #0ea5e9;
+            --sidebar-active: #f0f7ff;
+            --text-blue: #3485ff;
+            
+            /* System Colors */
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            
+            /* Light Theme */
+            --bg-main: #f8fafc;
+            --bg-white: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: #e2e8f0;
+            --sidebar-bg: #ffffff;
+            --card-bg: #ffffff;
+            --header-bg: var(--primary-gradient);
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Dark Theme */
+        [data-theme="dark"] {
+            --bg-main: #0f172a;
+            --bg-white: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --sidebar-bg: #1e293b;
+            --card-bg: #1e293b;
+            --sidebar-active: rgba(52, 133, 255, 0.1);
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            transition: background-color 0.3s ease;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Menu Toggle Button */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 12px;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 24px;
+            transition: margin-left 0.3s ease;
+        }
+
+        /* Overlay for Mobile */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .overlay.active {
+            opacity: 1;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 1024px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding-top: 70px;
+            }
+
+            .overlay {
+                display: block;
+                opacity: 0;
+                pointer-events: none;
+            }
+
+            .overlay.active {
+                opacity: 1;
+                pointer-events: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 16px;
+                padding-top: 70px;
+            }
+        }
+        /* Sidebar Styles */
+        .sidebar {
+            width: 280px;
+            background: var(--sidebar-bg);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        /* Logo Section */
+        .sidebar-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo img {
+            width: 32px;
+            height: 32px;
+        }
+
+        .logo span {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-blue);
+        }
+
+        /* Navigation Menu */
+        .nav-menu {
+            padding: 16px;
+            flex: 1;
+        }
+
+        .nav-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            text-decoration: none;
+            color: var(--text-secondary);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-link i {
+            width: 20px;
+            font-size: 18px;
+            margin-right: 12px;
+        }
+
+        .nav-link:hover {
+            color: var(--text-blue);
+            background: var(--sidebar-active);
+            transform: translateX(5px);
+        }
+
+        .nav-link.active {
+            color: white;
+            background: var(--primary);
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            margin: 16px;
+            padding: 12px 16px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: calc(100% - 32px);
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle i {
+            width: 20px;
+            font-size: 18px;
+        }
+
+        .theme-toggle:hover {
+            background: var(--sidebar-active);
+            color: var(--text-blue);
+        }
+
+        /* Profile Header Styles */
+        .profile-header {
+            background: var(--primary-gradient);
+            border-radius: 16px;
+            padding: 32px;
+            color: white;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.1;
+        }
+
+        .profile-info {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .profile-avatar-wrapper {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 24px;
+        }
+
+        .profile-avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 4px solid white;
+            object-fit: cover;
+            box-shadow: var(--shadow-md);
+        }
+
+        .avatar-edit {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: var(--primary);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 2px solid white;
+            transition: all 0.3s ease;
+            color: white;
+        }
+
+        .avatar-edit:hover {
+            transform: scale(1.1);
+            background: var(--primary-dark);
+        }
+
+        /* Mobile Responsive Sidebar */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 260px;
+            }
+
+            .profile-header {
+                padding: 24px;
+            }
+
+            .profile-avatar-wrapper {
+                width: 100px;
+                height: 100px;
+                margin-bottom: 16px;
+            }
+        }
+        /* Profile Content Styles */
+        .profile-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        /* Profile Cards */
+        .profile-card {
+            background: var(--bg-white);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            margin-bottom: 24px;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .profile-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .card-title {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .card-title i {
+            color: var(--primary);
+            margin-right: 12px;
+        }
+
+        /* Profile Stats */
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Membership Info */
+        .membership-info {
+            padding: 24px;
+        }
+
+        .membership-info p {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        .membership-info p:last-child {
+            border-bottom: none;
+        }
+
+        .membership-info strong {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* Vehicle List */
+        .vehicle-list {
+            padding: 24px;
+            list-style: none;
+        }
+
+        .vehicle-list li {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .vehicle-list li:last-child {
+            border-bottom: none;
+        }
+
+        .vehicle-list li i {
+            color: var(--primary);
+            margin-right: 12px;
+            font-size: 16px;
+        }
+
+        /* Form Styles */
+        .form-group {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .form-group:last-child {
+            border-bottom: none;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-white);
+            color: var(--text-primary);
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:disabled {
+            background: var(--bg-main);
+            cursor: not-allowed;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-lighter);
+        }
+
+        /* Action Buttons */
+        .form-actions {
+            padding: 24px;
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .edit-button {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .edit-button:hover {
+            background: var(--primary-lighter);
+        }
+
+        /* Profile Name and Status */
+        .profile-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .profile-status {
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .profile-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .profile-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .profile-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-name {
+                font-size: 20px;
+            }
+        }
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1100;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-white);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--danger);
+            transform: rotate(90deg);
+        }
+
+        /* Camera Options */
+        .camera-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            padding: 24px;
+        }
+
+        .camera-option {
+            padding: 24px;
+            text-align: center;
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .camera-option:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .camera-option i {
+            font-size: 24px;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .camera-option span {
+            display: block;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            padding: 16px 24px;
+            background: var(--bg-white);
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 1200;
+            opacity: 0;
+            transform: translateY(16px);
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast i {
+            font-size: 20px;
+        }
+
+        .toast.success {
+            border-left: 4px solid var(--success);
+        }
+
+        .toast.success i {
+            color: var(--success);
+        }
+
+        .toast.error {
+            border-left: 4px solid var(--danger);
+        }
+
+        .toast.error i {
+            color: var(--danger);
+        }
+
+        /* Loading States */
+        .spinner {
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Camera Feed */
+        #cameraFeed {
+            width: 100%;
+            height: 300px;
+            background: var(--bg-main);
+            border-radius: 12px;
+            margin-top: 16px;
+            display: none;
+        }
+
+        #photoCanvas {
+            display: none;
+        }
+
+        /* File Upload */
+        #photoUpload {
+            display: none;
+        }
+
+        /* Additional Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-4 {
+            margin-top: 16px;
+        }
+
+        .mb-4 {
+            margin-bottom: 16px;
+        }
+
+        /* Mobile Responsive Modal */
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 95%;
+                margin: 16px;
+            }
+
+            .camera-options {
+                grid-template-columns: 1fr;
+            }
+
+            .toast {
+                left: 16px;
+                right: 16px;
+                bottom: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .modal-header {
+                padding: 16px;
+            }
+
+            .camera-options {
+                padding: 16px;
+            }
+
+            .camera-option {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="#" class="logo">
+                    <img src="path/to/logo.svg" alt="RoadRescue">
+                    <span>RoadRescue</span>
+                </a>
+            </div>
+            <nav class="nav-menu">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="dash.html" class="nav-link">
+                            <i class="fas fa-home"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="profile.html" class="nav-link active">
+                            <i class="fas fa-user"></i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="myvehicle.html" class="nav-link">
+                            <i class="fas fa-car"></i>
+                            <span>My Vehicles</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="history.html" class="nav-link">
+                            <i class="fas fa-history"></i>
+                            <span>Service History</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="settings.html" class="nav-link">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="support.html" class="nav-link">
+                            <i class="fas fa-headset"></i>
+                            <span>Support</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="log.html" class="nav-link">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+                <span>Dark Mode</span>
+            </button>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Mobile Menu Toggle -->
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <div class="profile-info">
+                    <div class="profile-avatar-wrapper">
+                        <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Profile" class="profile-avatar" id="profileAvatar">
+                        <div class="avatar-edit" id="avatarEdit">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                    </div>
+                    <h1 class="profile-name" id="profileName">John Doe</h1>
+                    <span class="profile-status">Premium Member</span>
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">12</div>
+                            <div class="stat-label">Services Used</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">4.9</div>
+                            <div class="stat-label">Rating</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">3</div>
+                            <div class="stat-label">Vehicles</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Content -->
+            <div class="profile-content">
+                <!-- Left Column -->
+                <div class="profile-sidebar">
+                    <div class="profile-card">
+                        <h3 class="card-title">
+                            <i class="fas fa-shield-alt"></i>
+                            Membership Details
+                        </h3>
+                        <div class="membership-info">
+                            <p><strong>Plan:</strong> Premium</p>
+                            <p><strong>Status:</strong> Active</p>
+                            <p><strong>Renewal Date:</strong> Dec 31, 2024</p>
+                            <p><strong>Member Since:</strong> Jan 1, 2023</p>
+                        </div>
+                    </div>
+
+                    <div class="profile-card">
+                        <h3 class="card-title">
+                            <i class="fas fa-car"></i>
+                            Registered Vehicles
+                        </h3>
+                        <ul class="vehicle-list">
+                            <li><i class="fas fa-car"></i>Honda City (MH01AB1234)</li>
+                            <li><i class="fas fa-car"></i>Hyundai i20 (MH01CD5678)</li>
+                            <li><i class="fas fa-car"></i>Maruti Swift (MH01EF9012)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div class="profile-main">
+                    <div class="profile-card">
+                        <h3 class="card-title">
+                            <span><i class="fas fa-user"></i> Personal Information</span>
+                            <button class="edit-button" id="editProfileBtn">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                        </h3>
+                        <form id="profileForm">
+                            <div class="form-group">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="fullName" value="John Doe" disabled required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="email" value="john.doe@example.com" disabled required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="phone" value="+91 98765 43210" disabled required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Location</label>
+                                <input type="text" class="form-control" id="location" value="Mumbai, Maharashtra" disabled required>
+                            </div>
+                            <div class="form-actions" style="display: none;">
+                                <button type="button" class="btn btn-secondary" id="cancelBtn">
+                                    <i class="fas fa-times"></i> Cancel
+                                </button>
+                                <button type="submit" class="btn btn-primary" id="saveBtn">
+                                    <i class="fas fa-save"></i> Save Changes
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Overlay for Mobile Sidebar -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Camera Modal -->
+    <div class="modal-overlay" id="cameraModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Update Profile Picture</h3>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="camera-options">
+                <div class="camera-option" id="takePhotoBtn">
+                    <i class="fas fa-camera"></i>
+                    <span>Take Photo</span>
+                </div>
+                <div class="camera-option" id="uploadPhotoBtn">
+                    <i class="fas fa-upload"></i>
+                    <span>Upload Photo</span>
+                </div>
+            </div>
+            <video id="cameraFeed" autoplay playsinline></video>
+            <canvas id="photoCanvas"></canvas>
+            <input type="file" id="photoUpload" accept="image/*">
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize all components
+            const ThemeManager = {
+                init() {
+                    this.themeToggle = document.getElementById('themeToggle');
+                    this.theme = localStorage.getItem('theme') || 'light';
+                    
+                    this.applyTheme(this.theme);
+                    this.setupEventListeners();
+                },
+
+                setupEventListeners() {
+                    this.themeToggle.addEventListener('click', () => this.toggleTheme());
+                },
+
+                applyTheme(theme) {
+                    document.documentElement.setAttribute('data-theme', theme);
+                    localStorage.setItem('theme', theme);
+                    
+                    // Update theme toggle icon and text
+                    const icon = this.themeToggle.querySelector('i');
+                    const text = this.themeToggle.querySelector('span');
+                    if (theme === 'dark') {
+                        icon.className = 'fas fa-sun';
+                        text.textContent = 'Light Mode';
+                    } else {
+                        icon.className = 'fas fa-moon';
+                        text.textContent = 'Dark Mode';
+                    }
+                },
+
+                toggleTheme() {
+                    const newTheme = this.theme === 'light' ? 'dark' : 'light';
+                    this.theme = newTheme;
+                    this.applyTheme(newTheme);
+                }
+            };
+
+            const ProfileManager = {
+                init() {
+                    this.form = document.getElementById('profileForm');
+                    this.editBtn = document.getElementById('editProfileBtn');
+                    this.cancelBtn = document.getElementById('cancelBtn');
+                    this.saveBtn = document.getElementById('saveBtn');
+                    this.formActions = document.querySelector('.form-actions');
+                    this.inputs = this.form.querySelectorAll('.form-control');
+                    
+                    this.setupEventListeners();
+                },
+
+                setupEventListeners() {
+                    this.editBtn.addEventListener('click', () => this.enableEditing());
+                    this.cancelBtn.addEventListener('click', () => this.disableEditing());
+                    this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+                },
+
+                enableEditing() {
+                    this.inputs.forEach(input => input.disabled = false);
+                    this.formActions.style.display = 'flex';
+                    this.editBtn.style.display = 'none';
+                },
+
+                disableEditing() {
+                    this.inputs.forEach(input => input.disabled = true);
+                    this.formActions.style.display = 'none';
+                    this.editBtn.style.display = 'block';
+                },
+
+                async handleSubmit(e) {
+                    e.preventDefault();
+                    this.saveBtn.disabled = true;
+                    this.saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+                    try {
+                        // Simulate API call
+                        await new Promise(resolve => setTimeout(resolve, 1500));
+                        
+                        // Update profile name in header
+                        const newName = document.getElementById('fullName').value;
+                        document.getElementById('profileName').textContent = newName;
+                        
+                        this.showToast('Profile updated successfully!', 'success');
+                        this.disableEditing();
+                    } catch (error) {
+                        this.showToast('Failed to update profile', 'error');
+                    } finally {
+                        this.saveBtn.disabled = false;
+                        this.saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+                    }
+                },
+
+                showToast(message, type = 'success') {
+                    const toast = document.createElement('div');
+                    toast.className = `toast ${type}`;
+                    toast.innerHTML = `
+                        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                        <span>${message}</span>
+                    `;
+                    document.body.appendChild(toast);
+                    
+                    setTimeout(() => toast.classList.add('show'), 10);
+
+                    setTimeout(() => {
+                        toast.classList.remove('show');
+                        setTimeout(() => toast.remove(), 300);
+                    }, 3000);
+                }
+            };
+
+            const CameraManager = {
+                init() {
+                    this.modal = document.getElementById('cameraModal');
+                    this.closeBtn = document.getElementById('modalClose');
+                    this.takePhotoBtn = document.getElementById('takePhotoBtn');
+                    this.uploadPhotoBtn = document.getElementById('uploadPhotoBtn');
+                    this.avatarEdit = document.getElementById('avatarEdit');
+                    this.cameraFeed = document.getElementById('cameraFeed');
+                    this.photoCanvas = document.getElementById('photoCanvas');
+                    this.photoUpload = document.getElementById('photoUpload');
+                    this.profileAvatar = document.getElementById('profileAvatar');
+                    
+                    this.stream = null;
+                    this.setupEventListeners();
+                },
+
+                setupEventListeners() {
+                    this.avatarEdit.addEventListener('click', () => this.openModal());
+                    this.closeBtn.addEventListener('click', () => this.closeModal());
+                    this.takePhotoBtn.addEventListener('click', () => this.startCamera());
+                    this.uploadPhotoBtn.addEventListener('click', () => this.photoUpload.click());
+                    this.photoUpload.addEventListener('change', (e) => this.handleFileUpload(e));
+                },
+
+                openModal() {
+                    this.modal.classList.add('active');
+                },
+
+                async closeModal() {
+                    this.modal.classList.remove('active');
+                    if (this.stream) {
+                        this.stream.getTracks().forEach(track => track.stop());
+                        this.stream = null;
+                    }
+                    this.cameraFeed.style.display = 'none';
+                },
+
+                async startCamera() {
+                    try {
+                        this.stream = await navigator.mediaDevices.getUserMedia({ 
+                            video: { facingMode: 'user' }
+                        });
+                        this.cameraFeed.srcObject = this.stream;
+                        this.cameraFeed.style.display = 'block';
+                        
+                        // Add capture button if not exists
+                        if (!document.getElementById('captureBtn')) {
+                            const captureBtn = document.createElement('button');
+                            captureBtn.id = 'captureBtn';
+                            captureBtn.className = 'btn btn-primary mt-4';
+                            captureBtn.innerHTML = '<i class="fas fa-camera"></i> Capture';
+                            captureBtn.onclick = () => this.capturePhoto();
+                            this.modal.querySelector('.modal-content').appendChild(captureBtn);
+                        }
+                    } catch (error) {
+                        ProfileManager.showToast('Camera access denied or not available', 'error');
+                    }
+                },
+
+                capturePhoto() {
+                    const context = this.photoCanvas.getContext('2d');
+                    this.photoCanvas.width = this.cameraFeed.videoWidth;
+                    this.photoCanvas.height = this.cameraFeed.videoHeight;
+                    context.drawImage(this.cameraFeed, 0, 0);
+                    
+                    const photoData = this.photoCanvas.toDataURL('image/jpeg');
+                    this.updateProfilePicture(photoData);
+                },
+
+                handleFileUpload(event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => this.updateProfilePicture(e.target.result);
+                        reader.readAsDataURL(file);
+                    }
+                },
+
+                updateProfilePicture(imageData) {
+                    this.profileAvatar.src = imageData;
+                    this.closeModal();
+                    ProfileManager.showToast('Profile picture updated successfully!', 'success');
+                }
+            };
+
+            // Mobile menu toggle
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            
+            menuToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+                overlay.classList.toggle('active');
+            });
+
+            overlay.addEventListener('click', () => {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+
+            // Close sidebar when window is resized
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 1024) {
+                    sidebar.classList.remove('active');
+                    overlay.classList.remove('active');
+                }
+            });
+
+            // Initialize all managers
+            ThemeManager.init();
+            ProfileManager.init();
+            CameraManager.init();
+        });
+    </script>
+</body>
+</html>
