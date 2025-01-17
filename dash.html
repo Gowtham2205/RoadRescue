@@ -3,12 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RoadRescue Pro - Dashboard</title>
+    <title>Dashboard - RoadRescue</title>
     
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
+    <!-- Initialize theme -->
+    <script>
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+
     <style>
         /* Reset & Base Styles */
         * {
@@ -18,16 +24,18 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
+        /* Theme Variables */
         :root {
             --primary: #0095FF;
             --primary-dark: #0077cc;
             --primary-light: #66b3ff;
+            --primary-lighter: #e0f2ff;
             --secondary: #64748b;
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
             
-            /* Light Theme */
+            /* Light Theme Colors */
             --bg-main: #f8fafc;
             --bg-secondary: #ffffff;
             --bg-card: #ffffff;
@@ -35,24 +43,46 @@
             --text-secondary: #64748b;
             --border-color: #e2e8f0;
             --header-bg: #ffffff;
+            --sidebar-bg: #ffffff;
+            --sidebar-hover: #f1f5f9;
+            --notification-bg: #ffffff;
+            --notification-hover: #f8fafc;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        /* Dark Theme Colors */
+        [data-theme="dark"] {
+            --bg-main: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+            --header-bg: #1e293b;
+            --sidebar-bg: #1e293b;
+            --sidebar-hover: #334155;
+            --notification-bg: #1e293b;
+            --notification-hover: #334155;
+            --shadow-color: rgba(0, 0, 0, 0.3);
         }
 
         body {
             background-color: var(--bg-main);
             color: var(--text-primary);
-            line-height: 1.5;
+            line-height: 1.6;
+            min-height: 100vh;
         }
 
         /* Layout */
         .dashboard-container {
             display: flex;
             min-height: 100vh;
+            position: relative;
         }
-
-        /* Sidebar */
+	            /* Sidebar Styles */
         .sidebar {
             width: 280px;
-            background: var(--bg-secondary);
+            background: var(--sidebar-bg);
             height: 100vh;
             position: fixed;
             left: 0;
@@ -60,26 +90,94 @@
             border-right: 1px solid var(--border-color);
             z-index: 1000;
             transition: transform 0.3s ease;
+            overflow-y: auto;
         }
 
-        /* Header */
+        .logo-section {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .logo-link:hover {
+            opacity: 0.9;
+        }
+
+        .nav-menu {
+            padding: 1rem;
+        }
+
+        .nav-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.875rem 1rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            gap: 0.75rem;
+        }
+
+        .nav-link i {
+            font-size: 1.25rem;
+            width: 1.5rem;
+            text-align: center;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--primary-lighter);
+            color: var(--primary);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 1rem 2rem;
+            background: var(--bg-main);
+            min-height: 100vh;
+            transition: margin-left 0.3s ease;
+        }
+
+        /* Header Styles */
         .main-header {
             position: sticky;
             top: 0;
             background: var(--header-bg);
-            padding: 1rem;
+            padding: 1rem 2rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
             border-bottom: 1px solid var(--border-color);
-            margin: -1rem -1rem 1rem -1rem;
+            margin: -1rem -2rem 1rem -2rem;
             z-index: 100;
         }
 
         .header-left {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 2rem;
         }
 
         .menu-toggle {
@@ -88,17 +186,17 @@
             border: none;
             color: var(--text-primary);
             font-size: 1.5rem;
-            padding: 0.5rem;
             cursor: pointer;
+            padding: 0.5rem;
         }
 
-        /* Profile Section */
         .header-right {
             display: flex;
             align-items: center;
             gap: 1.5rem;
         }
 
+        /* Notification Styles */
         .notification-wrapper {
             position: relative;
         }
@@ -115,8 +213,8 @@
 
         .notification-count {
             position: absolute;
-            top: 0;
-            right: 0;
+            top: -5px;
+            right: -5px;
             background: var(--danger);
             color: white;
             font-size: 0.75rem;
@@ -130,45 +228,24 @@
             padding: 0 6px;
         }
 
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 0.5rem;
+        .notification-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 320px;
+            background: var(--notification-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            margin-top: 0.5rem;
+            display: none;
+            z-index: 1000;
         }
 
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
+        .notification-dropdown.active {
+            display: block;
         }
-
-        .user-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .user-name {
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .user-status {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-        }
-	            /* Main Content Area */
-        .main-content {
-            flex: 1;
-            margin-left: 280px;
-            padding: 1rem;
-            background: var(--bg-main);
-            min-height: 100vh;
-            transition: margin-left 0.3s ease;
-        }
-
-        /* Welcome Section */
+	          /* Welcome Section Styles */
         .welcome-section {
             background: var(--primary);
             border-radius: 24px;
@@ -207,7 +284,7 @@
             opacity: 0.9;
         }
 
-        /* Quick Actions */
+        /* Quick Actions Grid */
         .quick-actions {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -226,14 +303,14 @@
 
         .action-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 20px var(--shadow-color);
             border-color: var(--primary);
         }
 
         .action-icon {
             width: 48px;
             height: 48px;
-            background: #E6F3FF;
+            background: var(--primary-lighter);
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -260,14 +337,184 @@
         }
 
         .action-link {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
             margin-top: 1rem;
             color: var(--primary);
             font-weight: 500;
             font-size: 0.875rem;
+            text-decoration: none;
         }
 
-        /* Overlay for Mobile */
+        .action-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Mechanic Section */
+        .mechanic-section {
+            margin-top: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .mechanic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .mechanic-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .mechanic-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .mechanic-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .mechanic-info {
+            flex: 1;
+        }
+
+        .mechanic-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .mechanic-specialty {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .mechanic-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            color: var(--warning);
+            font-weight: 500;
+        }
+
+        .request-button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        .request-button:hover {
+            background: var(--primary-dark);
+        }
+	         /* Toast Notifications */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+
+        /* Notification Dropdown Content */
+        .notification-header {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .notification-title {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .notification-list {
+            max-height: 360px;
+            overflow-y: auto;
+        }
+
+        .notification-item {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            gap: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .notification-item:hover {
+            background: var(--notification-hover);
+        }
+
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-lighter);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-message {
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+            font-size: 0.875rem;
+        }
+
+        .notification-time {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+        }
+
+        /* Overlay */
         .overlay {
             display: none;
             position: fixed;
@@ -277,16 +524,13 @@
             bottom: 0;
             background: rgba(0, 0, 0, 0.5);
             z-index: 999;
-            opacity: 0;
-            transition: opacity 0.3s ease;
         }
 
         .overlay.active {
-            opacity: 1;
             display: block;
         }
 
-        /* Mobile Responsive Styles */
+        /* Responsive Styles */
         @media (max-width: 1024px) {
             .sidebar {
                 transform: translateX(-100%);
@@ -305,31 +549,23 @@
             }
 
             .welcome-section {
-                padding: 1.5rem;
-            }
-
-            .welcome-title {
-                font-size: 1.75rem;
-            }
-
-            .welcome-text {
-                font-size: 1.125rem;
+                border-radius: 16px;
             }
         }
 
         @media (max-width: 768px) {
-            .main-header {
+            .main-content {
                 padding: 1rem;
             }
 
-            .user-info {
-                display: none;
+            .main-header {
+                padding: 1rem;
+                margin: -1rem -1rem 1rem -1rem;
             }
 
             .welcome-section {
-                padding: 1.25rem;
-                margin: -0.5rem -0.5rem 1rem -0.5rem;
-                border-radius: 0;
+                padding: 1.5rem;
+                margin: 0 0 1.5rem 0;
             }
 
             .welcome-title {
@@ -338,43 +574,73 @@
 
             .welcome-text {
                 font-size: 1rem;
-                margin-bottom: 1rem;
-            }
-
-            .location-info {
-                font-size: 0.875rem;
             }
 
             .quick-actions {
                 grid-template-columns: 1fr;
                 gap: 1rem;
-                padding: 0 0.5rem;
             }
 
             .action-card {
                 padding: 1.25rem;
             }
+
+            .mechanic-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .notification-dropdown {
+                position: fixed;
+                top: auto;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                width: 100%;
+                margin: 0;
+                border-radius: 16px 16px 0 0;
+                max-height: 80vh;
+                overflow-y: auto;
+            }
         }
 
-        /* Toast Notifications */
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 1rem 1.5rem;
-            background: var(--bg-card);
+        /* User Profile Styles */
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.5rem;
+            cursor: pointer;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 600;
             color: var(--text-primary);
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 1000;
         }
 
-        .toast.show {
-            opacity: 1;
+        .user-status {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
         }
-	     </style>
+
+        @media (max-width: 480px) {
+            .user-info {
+                display: none;
+            }
+        }
+	       </style>
 </head>
 <body>
     <div class="dashboard-container">
@@ -382,8 +648,8 @@
         <aside class="sidebar">
             <div class="logo-section">
                 <a href="#" class="logo-link">
-                    <img src="https://via.placeholder.com/32" alt="RoadRescue" class="logo-image">
-                    <span class="logo-text">RoadRescue</span>
+                    <i class="fas fa-car"></i>
+                    <span>RoadRescue</span>
                 </a>
             </div>
             <nav class="nav-menu">
@@ -445,10 +711,35 @@
                 </div>
                 <div class="header-right">
                     <div class="notification-wrapper">
-                        <button class="notification-trigger">
+                        <button class="notification-trigger" id="notificationTrigger">
                             <i class="fas fa-bell"></i>
                             <span class="notification-count">2</span>
                         </button>
+                        <div class="notification-dropdown" id="notificationDropdown">
+                            <div class="notification-header">
+                                <h3 class="notification-title">Notifications</h3>
+                            </div>
+                            <div class="notification-list">
+                                <div class="notification-item">
+                                    <div class="notification-icon">
+                                        <i class="fas fa-car"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <div class="notification-message">Your mechanic will arrive in 10 minutes</div>
+                                        <div class="notification-time">2 minutes ago</div>
+                                    </div>
+                                </div>
+                                <div class="notification-item">
+                                    <div class="notification-icon">
+                                        <i class="fas fa-credit-card"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <div class="notification-message">Payment received for last service</div>
+                                        <div class="notification-time">1 hour ago</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="user-profile">
                         <img src="https://via.placeholder.com/40" alt="User" class="user-avatar">
@@ -474,8 +765,7 @@
                     </div>
                 </div>
             </section>
-
-            <!-- Quick Actions -->
+		            <!-- Quick Actions -->
             <section class="quick-actions">
                 <div class="action-card" onclick="window.location.href='service-request.html'">
                     <div class="action-icon">
@@ -504,12 +794,51 @@
                     <span class="action-link">View History →</span>
                 </div>
             </section>
+
+            <!-- Mechanic Section -->
+            <section class="mechanic-section">
+                <div class="section-header">
+                    <h2 class="section-title">Available Mechanics</h2>
+                </div>
+                <div class="mechanic-grid">
+                    <div class="mechanic-card">
+                        <div class="mechanic-header">
+                            <img src="https://via.placeholder.com/64" alt="Mechanic" class="mechanic-avatar">
+                            <div class="mechanic-info">
+                                <h3 class="mechanic-name">Rajesh Kumar</h3>
+                                <p class="mechanic-specialty">Car Specialist</p>
+                                <div class="mechanic-rating">
+                                    <i class="fas fa-star"></i>
+                                    <span>4.8</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="request-button">Request Service</button>
+                    </div>
+
+                    <div class="mechanic-card">
+                        <div class="mechanic-header">
+                            <img src="https://via.placeholder.com/64" alt="Mechanic" class="mechanic-avatar">
+                            <div class="mechanic-info">
+                                <h3 class="mechanic-name">Amit Patel</h3>
+                                <p class="mechanic-specialty">Bike Specialist</p>
+                                <div class="mechanic-rating">
+                                    <i class="fas fa-star"></i>
+                                    <span>4.9</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="request-button">Request Service</button>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 
     <!-- Overlay for Mobile -->
     <div class="overlay" id="overlay"></div>
-	    <script>
+
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             initializeMobileMenu();
             initializeNotifications();
@@ -523,21 +852,18 @@
             const overlay = document.getElementById('overlay');
             
             if (menuToggle && sidebar && overlay) {
-                // Toggle menu on hamburger click
                 menuToggle.addEventListener('click', () => {
                     sidebar.classList.toggle('active');
                     overlay.classList.toggle('active');
                     document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
                 });
 
-                // Close menu when clicking overlay
                 overlay.addEventListener('click', () => {
                     sidebar.classList.remove('active');
                     overlay.classList.remove('active');
                     document.body.style.overflow = '';
                 });
 
-                // Close menu when window is resized to desktop view
                 window.addEventListener('resize', () => {
                     if (window.innerWidth > 1024) {
                         sidebar.classList.remove('active');
@@ -550,80 +876,52 @@
 
         // Notification System
         function initializeNotifications() {
-            const notifications = [
-                {
-                    id: 1,
-                    message: 'Your mechanic will arrive in 10 minutes',
-                    time: '2 minutes ago',
-                    icon: 'car',
-                    unread: true
-                },
-                {
-                    id: 2,
-                    message: 'Payment received for last service',
-                    time: '1 hour ago',
-                    icon: 'credit-card',
-                    unread: true
-                }
-            ];
-
-            const notificationTrigger = document.querySelector('.notification-trigger');
+            const notificationTrigger = document.getElementById('notificationTrigger');
+            const notificationDropdown = document.getElementById('notificationDropdown');
             
-            if (notificationTrigger) {
-                notificationTrigger.addEventListener('click', () => {
-                    showToast('Notifications feature coming soon!');
+            if (notificationTrigger && notificationDropdown) {
+                notificationTrigger.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    notificationDropdown.classList.toggle('active');
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!notificationDropdown.contains(e.target)) {
+                        notificationDropdown.classList.remove('active');
+                    }
                 });
             }
         }
 
         // Action Cards Interaction
         function initializeActionCards() {
-            document.querySelectorAll('.action-card').forEach(card => {
-                card.addEventListener('click', () => {
-                    const title = card.querySelector('.action-title').textContent;
-                    showToast(`Navigating to ${title}...`);
+            document.querySelectorAll('.request-button').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    showToast('Requesting service...');
                 });
             });
         }
 
         // Toast Notification
         function showToast(message, type = 'info') {
-            // Remove existing toasts
             const existingToasts = document.querySelectorAll('.toast');
             existingToasts.forEach(toast => toast.remove());
 
-            // Create new toast
             const toast = document.createElement('div');
             toast.className = `toast toast-${type}`;
             toast.textContent = message;
             
             document.body.appendChild(toast);
-            
-            // Force reflow
             toast.offsetHeight;
-            
-            // Show toast
             toast.classList.add('show');
             
-            // Hide and remove toast
             setTimeout(() => {
                 toast.classList.remove('show');
                 setTimeout(() => toast.remove(), 300);
             }, 3000);
         }
-
-        // Theme Management (if needed)
-        function initializeTheme() {
-            const theme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-theme', theme);
-
-            window.addEventListener('storage', (e) => {
-                if (e.key === 'theme') {
-                    document.documentElement.setAttribute('data-theme', e.newValue);
-                }
-            });
-        }
     </script>
 </body>
 </html>
-	
+		
