@@ -11,7 +11,6 @@
     
     <!-- Initialize theme before page load -->
     <script>
-        // Immediately set theme on page load
         const savedTheme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
     </script>
@@ -40,6 +39,7 @@
             --sidebar-hover: #f8fafc;
             --sidebar-active: #4299e1;
             --sidebar-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --modal-overlay: rgba(0, 0, 0, 0.5);
         }
 
         /* Dark Theme Colors */
@@ -55,6 +55,7 @@
             --sidebar-hover: #2d2d2d;
             --sidebar-active: #4299e1;
             --sidebar-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            --modal-overlay: rgba(0, 0, 0, 0.7);
         }
 
         /* Reset & Base Styles */
@@ -72,7 +73,57 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* Layout Structure */
+        /* Mobile Header */
+        .mobile-header {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 999;
+            transition: background-color 0.3s ease;
+        }
+
+        .mobile-header-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.3s ease;
+        }
+
+        /* Overlay */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--modal-overlay);
+            z-index: 998;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            display: block;
+        }
+                /* Layout Structure */
         .app-container {
             display: flex;
             min-height: 100vh;
@@ -89,6 +140,7 @@
             box-shadow: var(--sidebar-shadow);
             z-index: 1000;
             transition: all 0.3s ease;
+            overflow-y: auto;
         }
 
         .sidebar-header {
@@ -207,6 +259,7 @@
             font-weight: 600;
             color: var(--text-primary);
         }
+
         /* Toggle Switch Styles */
         .toggle-switch {
             position: relative;
@@ -253,8 +306,7 @@
         input:checked + .toggle-slider:before {
             transform: translateX(26px);
         }
-
-        /* Setting Items */
+                /* Setting Items */
         .setting-item {
             display: flex;
             justify-content: space-between;
@@ -319,6 +371,10 @@
 
         /* Responsive Styles */
         @media (max-width: 1024px) {
+            .mobile-header {
+                display: block;
+            }
+
             .sidebar {
                 transform: translateX(-100%);
             }
@@ -329,6 +385,19 @@
 
             .main-content {
                 margin-left: 0;
+                padding-top: 4.5rem;
+            }
+
+            body.sidebar-active {
+                overflow: hidden;
+            }
+
+            .overlay {
+                display: none;
+            }
+
+            .overlay.active {
+                display: block;
             }
         }
 
@@ -347,10 +416,45 @@
                 width: 100%;
                 justify-content: center;
             }
+
+            .main-content {
+                padding: 4.5rem 1rem 1rem 1rem;
+            }
+
+            .settings-title {
+                font-size: 1.5rem;
+            }
+
+            .settings-subtitle {
+                font-size: 0.875rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .setting-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .toggle-switch {
+                align-self: flex-start;
+            }
+
+            .settings-card-title {
+                font-size: 1.125rem;
+            }
+
+            .setting-item-title {
+                font-size: 1rem;
+            }
+
+            .setting-item-description {
+                font-size: 0.875rem;
+            }
         }
     </style>
-
-    <!-- Theme Management Script -->
+        <!-- Theme Management Script -->
     <script>
         const ThemeManager = {
             init() {
@@ -379,7 +483,6 @@
                 document.documentElement.setAttribute('data-theme', theme);
                 localStorage.setItem('theme', theme);
                 
-                // Broadcast theme change to other tabs
                 if (broadcast) {
                     this.channel.postMessage({
                         type: 'theme-change',
@@ -387,29 +490,38 @@
                     });
                 }
 
-                // Update toggle switch if it exists
                 const toggle = document.getElementById('darkModeToggle');
                 if (toggle) {
                     toggle.checked = theme === 'dark';
                 }
 
-                // Dispatch event for other scripts
                 window.dispatchEvent(new CustomEvent('themeChange', { 
                     detail: { theme } 
                 }));
             }
         };
 
-        // Initialize theme manager when DOM is loaded
         document.addEventListener('DOMContentLoaded', () => {
             ThemeManager.init();
         });
     </script>
 </head>
 <body>
+    <!-- Mobile Header -->
+    <header class="mobile-header">
+        <div class="mobile-header-content">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Overlay for Mobile -->
+    <div class="overlay" id="overlay"></div>
+
     <div class="app-container">
         <!-- Sidebar -->
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <a href="#" class="logo">
                     <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMzQ4NWZmIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTE0LjcgNi4zYTEgMSAwIDAgMCAwIDEuNGwxLjYgMS42YTEgMSAwIDAgMCAxLjQgMGwzLjc3Ny0zLjc3N2E2IDYgMCAwIDEtLjg3OSA4Ljg3OWwtMi40NzQgMi40NzRhNiA2IDAgMCAxLTguNDg2LTguNDg2bDIuNDc0LTIuNDc0YTYgNiAwIDAgMSA4LjQ4NiA4LjQ4NiIvPjwvc3ZnPg==" alt="RoadRescue">
@@ -463,8 +575,7 @@
                 </ul>
             </nav>
         </aside>
-
-        <!-- Main Content -->
+                <!-- Main Content -->
         <main class="main-content">
             <div class="settings-container">
                 <div class="settings-header">
@@ -539,6 +650,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             initializeSettings();
+            initializeMobileMenu();
         });
 
         function initializeSettings() {
@@ -553,6 +665,47 @@
             // Listen for theme changes
             window.addEventListener('themeChange', (e) => {
                 darkModeToggle.checked = e.detail.theme === 'dark';
+            });
+        }
+
+        function initializeMobileMenu() {
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            
+            // Toggle menu
+            menuToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+                overlay.classList.toggle('active');
+                document.body.classList.toggle('sidebar-active');
+            });
+
+            // Close menu when clicking overlay
+            overlay.addEventListener('click', () => {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.classList.remove('sidebar-active');
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (window.innerWidth <= 1024 && 
+                    !e.target.closest('.sidebar') && 
+                    !e.target.closest('.menu-toggle') && 
+                    sidebar.classList.contains('active')) {
+                    sidebar.classList.remove('active');
+                    overlay.classList.remove('active');
+                    document.body.classList.remove('sidebar-active');
+                }
+            });
+
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 1024) {
+                    sidebar.classList.remove('active');
+                    overlay.classList.remove('active');
+                    document.body.classList.remove('sidebar-active');
+                }
             });
         }
     </script>
