@@ -637,6 +637,53 @@
             background: var(--primary-dark);
         }
 
+        /* Add these CSS rules in your existing styles */
+.mobile-header {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    z-index: 999;
+    transition: background-color 0.3s ease;
+}
+
+.menu-toggle {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.3s ease;
+    z-index: 1000;
+}
+
+@media (max-width: 1024px) {
+    .mobile-header {
+        display: block;
+    }
+
+    .sidebar {
+        transform: translateX(-100%);
+        z-index: 1000;
+    }
+
+    .sidebar.active {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding-top: 4.5rem;
+    }
+}
         /* Responsive Styles */
         @media (max-width: 1024px) {
             .mobile-header {
@@ -960,24 +1007,46 @@
 
         // Mobile Menu and Support Initialization
         function initializeSupport() {
-            const menuToggle = document.getElementById('menuToggle');
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('overlay');
-            
-            if (menuToggle && sidebar && overlay) {
-                menuToggle.addEventListener('click', () => {
-                    sidebar.classList.toggle('active');
-                    overlay.classList.toggle('active');
-                    document.body.classList.toggle('sidebar-active');
-                });
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    
+    // Toggle menu
+    menuToggle.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent event from bubbling up
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+        document.body.classList.toggle('sidebar-active');
+    });
 
-                overlay.addEventListener('click', () => {
-                    sidebar.classList.remove('active');
-                    overlay.classList.remove('active');
-                    document.body.classList.remove('sidebar-active');
-                });
-            }
+    // Close menu when clicking overlay
+    overlay.addEventListener('click', () => {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.classList.remove('sidebar-active');
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (window.innerWidth <= 1024 && 
+            !e.target.closest('.sidebar') && 
+            !e.target.closest('.menu-toggle') && 
+            sidebar.classList.contains('active')) {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.classList.remove('sidebar-active');
         }
+    });
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 1024) {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.classList.remove('sidebar-active');
+        }
+    });
+}
 
         // FAQ Data and Functions
         const faqs = [
