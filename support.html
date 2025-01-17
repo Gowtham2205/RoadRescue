@@ -52,7 +52,9 @@
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-        <style>
+
+    <style>
+        /* CSS Variables */
         :root {
             /* Light Theme Colors */
             --primary: #4299e1;
@@ -116,8 +118,7 @@
             --info-light: rgba(59, 130, 246, 0.2);
             --primary-lighter: rgba(66, 153, 225, 0.2);
         }
-
-        /* Reset & Base Styles */
+                /* Reset & Base Styles */
         * {
             margin: 0;
             padding: 0;
@@ -174,6 +175,8 @@
             justify-content: center;
             border-radius: 8px;
             transition: all 0.3s ease;
+            padding: 0;
+            margin: 0;
         }
 
         .menu-toggle:hover {
@@ -196,16 +199,20 @@
             z-index: 998;
             opacity: 0;
             transition: opacity 0.3s ease;
+            touch-action: none;
         }
 
         .overlay.active {
             opacity: 1;
             display: block;
         }
-                /* Layout Structure */
+
+        /* Layout Structure */
         .dashboard-container {
             display: flex;
             min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
         }
 
         /* Sidebar Styles - Updated for better mobile handling */
@@ -220,7 +227,18 @@
             z-index: 1000;
             transition: transform 0.3s ease, background-color 0.3s ease;
             overflow-y: auto;
-            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+            -webkit-overflow-scrolling: touch;
+            transform: translateX(-100%);
+        }
+
+        .sidebar.active {
+            transform: translateX(0);
+        }
+
+        @media (min-width: 1025px) {
+            .sidebar {
+                transform: translateX(0);
+            }
         }
 
         .sidebar-header {
@@ -287,12 +305,27 @@
             font-weight: 600;
         }
 
-        /* Main Content */
+        /* Main Content - Updated for smooth transitions */
         .main-content {
             flex: 1;
             margin-left: 280px;
             padding: 2rem;
-            transition: margin-left 0.3s ease;
+            transition: margin-left 0.3s ease, transform 0.3s ease;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                margin-left: 0;
+                padding-top: 5rem;
+            }
+            
+            .mobile-header {
+                display: block;
+            }
+
+            .main-content.sidebar-active {
+                transform: translateX(280px);
+            }
         }
 
         .support-header {
@@ -359,8 +392,7 @@
             color: var(--text-secondary);
             font-size: 0.875rem;
         }
-
-        /* Support Grid */
+                /* Support Grid */
         .support-grid {
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -368,44 +400,7 @@
             margin-bottom: 2rem;
         }
 
-        /* Mobile Responsive Styles - Updated for better mobile handling */
-        @media (max-width: 1024px) {
-            .mobile-header {
-                display: block;
-            }
-
-            .sidebar {
-                transform: translateX(-100%);
-            }
-
-            .sidebar.active {
-                transform: translateX(0);
-            }
-
-            .main-content {
-                margin-left: 0;
-                padding-top: 5rem;
-            }
-
-            .support-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .quick-actions {
-                grid-template-columns: 1fr;
-            }
-
-            .main-content {
-                padding: 5rem 1rem 1rem;
-            }
-
-            .support-title {
-                font-size: 1.5rem;
-            }
-        }
-                /* FAQ Section */
+        /* FAQ Section */
         .faq-section {
             background: var(--bg-secondary);
             border-radius: 1rem;
@@ -605,6 +600,27 @@
             resize: vertical;
             min-height: 120px;
         }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 1024px) {
+            .support-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .main-content {
+                padding: 5rem 1rem 1rem;
+            }
+
+            .support-title {
+                font-size: 1.5rem;
+            }
+        }
                 /* Ticket Section */
         .ticket-section {
             background: var(--bg-secondary);
@@ -673,6 +689,7 @@
             border-radius: 1rem;
             border: 1px solid var(--border-color);
             padding: 1.5rem;
+            margin-top: 2rem;
             transition: all 0.3s ease;
         }
 
@@ -1021,20 +1038,46 @@
             const menuToggle = document.getElementById('menuToggle');
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('overlay');
+            const mainContent = document.querySelector('.main-content');
             
-            // Toggle menu
+            // Toggle menu with improved touch handling
             menuToggle.addEventListener('click', (e) => {
-                e.stopPropagation(); // Prevent event from bubbling up
-                sidebar.classList.toggle('active');
-                overlay.classList.toggle('active');
-                document.body.classList.toggle('sidebar-active');
+                e.stopPropagation();
+                e.preventDefault();
+                toggleMenu();
             });
 
-            // Close menu when clicking overlay
-            overlay.addEventListener('click', () => {
+            // Function to toggle menu state
+            function toggleMenu() {
+                const isActive = sidebar.classList.contains('active');
+                
+                if (isActive) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            }
+
+            // Function to open menu
+            function openMenu() {
+                sidebar.classList.add('active');
+                overlay.classList.add('active');
+                document.body.classList.add('sidebar-active');
+                mainContent.style.transform = 'translateX(280px)';
+            }
+
+            // Function to close menu
+            function closeMenu() {
                 sidebar.classList.remove('active');
                 overlay.classList.remove('active');
                 document.body.classList.remove('sidebar-active');
+                mainContent.style.transform = 'translateX(0)';
+            }
+
+            // Close menu when clicking overlay
+            overlay.addEventListener('click', (e) => {
+                e.stopPropagation();
+                closeMenu();
             });
 
             // Close menu when clicking outside
@@ -1043,18 +1086,43 @@
                     !sidebar.contains(e.target) && 
                     !menuToggle.contains(e.target) && 
                     sidebar.classList.contains('active')) {
-                    sidebar.classList.remove('active');
-                    overlay.classList.remove('active');
-                    document.body.classList.remove('sidebar-active');
+                    closeMenu();
                 }
             });
+
+            // Handle touch events for better mobile experience
+            let touchStartX = 0;
+            let touchEndX = 0;
+
+            document.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, false);
+
+            document.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, false);
+
+            function handleSwipe() {
+                const swipeThreshold = 50;
+                const swipeDistance = touchEndX - touchStartX;
+
+                if (Math.abs(swipeDistance) > swipeThreshold) {
+                    if (swipeDistance > 0 && !sidebar.classList.contains('active')) {
+                        // Swiped right, open menu
+                        openMenu();
+                    } else if (swipeDistance < 0 && sidebar.classList.contains('active')) {
+                        // Swiped left, close menu
+                        closeMenu();
+                    }
+                }
+            }
 
             // Handle window resize
             window.addEventListener('resize', () => {
                 if (window.innerWidth > 1024) {
-                    sidebar.classList.remove('active');
-                    overlay.classList.remove('active');
-                    document.body.classList.remove('sidebar-active');
+                    closeMenu();
+                    mainContent.style.transform = '';
                 }
             });
         }
