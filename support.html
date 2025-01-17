@@ -52,9 +52,7 @@
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    
-    <style>
-        /* CSS Variables for Theme Management */
+        <style>
         :root {
             /* Light Theme Colors */
             --primary: #4299e1;
@@ -65,6 +63,11 @@
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
+            --success-light: #d1fae5;
+            --warning-light: #fef3c7;
+            --danger-light: #fee2e2;
+            --info: #3b82f6;
+            --info-light: #dbeafe;
             
             /* Light Theme Specific */
             --bg-main: #f8fafc;
@@ -76,31 +79,45 @@
             --input-bg: #ffffff;
             --sidebar-bg: #ffffff;
             --sidebar-hover: #f8fafc;
-            --sidebar-active: #4299e1;
-            --sidebar-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             --modal-overlay: rgba(0, 0, 0, 0.5);
             --chat-user-bg: #e0e9ff;
             --chat-support-bg: #f1f5f9;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
         }
 
         /* Dark Theme Colors */
         [data-theme="dark"] {
-            --bg-main: #121212;
-            --bg-secondary: #1a1a1a;
-            --bg-card: #1e1e1e;
-            --text-primary: #ffffff;
-            --text-secondary: #a0aec0;
-            --border-color: #2d2d2d;
-            --input-bg: #2d2d2d;
-            --sidebar-bg: #1a1a1a;
-            --sidebar-hover: #2d2d2d;
-            --sidebar-active: #4299e1;
-            --sidebar-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            --bg-main: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+            --input-bg: #1e293b;
+            --sidebar-bg: #1e293b;
+            --sidebar-hover: #334155;
             --modal-overlay: rgba(0, 0, 0, 0.7);
             --chat-user-bg: #2563eb;
             --chat-support-bg: #334155;
+            
+            /* Adjusted shadows for dark mode */
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+            
+            /* Success and warning colors for dark mode */
+            --success-light: rgba(16, 185, 129, 0.2);
+            --warning-light: rgba(245, 158, 11, 0.2);
+            --danger-light: rgba(239, 68, 68, 0.2);
+            --info-light: rgba(59, 130, 246, 0.2);
+            --primary-lighter: rgba(66, 153, 225, 0.2);
         }
-                /* Reset & Base Styles */
+
+        /* Reset & Base Styles */
         * {
             margin: 0;
             padding: 0;
@@ -113,42 +130,61 @@
             color: var(--text-primary);
             line-height: 1.6;
             transition: background-color 0.3s ease, color 0.3s ease;
+            min-height: 100vh;
+            position: relative;
         }
 
-        /* Mobile Header */
+        body.sidebar-active {
+            overflow: hidden;
+        }
+
+        /* Mobile Header - Updated for better visibility */
         .mobile-header {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            padding: 1rem;
-            background: var(--bg-card);
+            height: 64px;
+            padding: 0 1rem;
+            background: var(--bg-secondary);
             border-bottom: 1px solid var(--border-color);
             z-index: 999;
             transition: background-color 0.3s ease;
         }
 
         .mobile-header-content {
+            height: 100%;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
+        /* Menu Toggle Button - Updated for better interaction */
         .menu-toggle {
             background: none;
             border: none;
             color: var(--text-primary);
             font-size: 1.5rem;
             cursor: pointer;
-            padding: 0.5rem;
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: color 0.3s ease;
+            border-radius: 8px;
+            transition: all 0.3s ease;
         }
 
-        /* Overlay */
+        .menu-toggle:hover {
+            background-color: var(--bg-main);
+        }
+
+        .menu-toggle:active {
+            transform: scale(0.95);
+        }
+
+        /* Overlay - Updated for smoother transitions */
         .overlay {
             display: none;
             position: fixed;
@@ -166,14 +202,13 @@
             opacity: 1;
             display: block;
         }
-
-        /* Layout Structure */
+                /* Layout Structure */
         .dashboard-container {
             display: flex;
             min-height: 100vh;
         }
 
-        /* Sidebar Styles */
+        /* Sidebar Styles - Updated for better mobile handling */
         .sidebar {
             width: 280px;
             background: var(--sidebar-bg);
@@ -185,6 +220,7 @@
             z-index: 1000;
             transition: transform 0.3s ease, background-color 0.3s ease;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
         }
 
         .sidebar-header {
@@ -274,7 +310,8 @@
             color: var(--text-secondary);
             font-size: 1.1rem;
         }
-                /* Quick Actions */
+
+        /* Quick Actions */
         .quick-actions {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -331,7 +368,44 @@
             margin-bottom: 2rem;
         }
 
-        /* FAQ Section */
+        /* Mobile Responsive Styles - Updated for better mobile handling */
+        @media (max-width: 1024px) {
+            .mobile-header {
+                display: block;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding-top: 5rem;
+            }
+
+            .support-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .main-content {
+                padding: 5rem 1rem 1rem;
+            }
+
+            .support-title {
+                font-size: 1.5rem;
+            }
+        }
+                /* FAQ Section */
         .faq-section {
             background: var(--bg-secondary);
             border-radius: 1rem;
@@ -463,6 +537,13 @@
             border-radius: 2rem;
             background: var(--input-bg);
             color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .chat-input input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px var(--primary-lighter);
         }
 
         .chat-input button {
@@ -473,12 +554,16 @@
             border-radius: 2rem;
             cursor: pointer;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .chat-input button:hover {
             background: var(--primary-dark);
         }
-                /* Contact Form */
+
+        /* Contact Form */
         .contact-form {
             background: var(--bg-secondary);
             border-radius: 1rem;
@@ -509,12 +594,18 @@
             transition: all 0.3s ease;
         }
 
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px var(--primary-lighter);
+        }
+
         .form-textarea {
             resize: vertical;
             min-height: 120px;
         }
-
-        /* Ticket Section */
+                /* Ticket Section */
         .ticket-section {
             background: var(--bg-secondary);
             border-radius: 1rem;
@@ -541,6 +632,22 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+        }
+
+        .ticket-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .ticket-subject {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .ticket-meta {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
         }
 
         .ticket-status {
@@ -637,92 +744,24 @@
             background: var(--primary-dark);
         }
 
-        /* Add these CSS rules in your existing styles */
-.mobile-header {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    padding: 1rem;
-    background: var(--bg-secondary);
-    border-bottom: 1px solid var(--border-color);
-    z-index: 999;
-    transition: background-color 0.3s ease;
-}
-
-.menu-toggle {
-    background: none;
-    border: none;
-    color: var(--text-primary);
-    font-size: 1.5rem;
-    cursor: pointer;
-    padding: 0.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: color 0.3s ease;
-    z-index: 1000;
-}
-
-@media (max-width: 1024px) {
-    .mobile-header {
-        display: block;
-    }
-
-    .sidebar {
-        transform: translateX(-100%);
-        z-index: 1000;
-    }
-
-    .sidebar.active {
-        transform: translateX(0);
-    }
-
-    .main-content {
-        margin-left: 0;
-        padding-top: 4.5rem;
-    }
-}
-        /* Responsive Styles */
-        @media (max-width: 1024px) {
-            .mobile-header {
-                display: block;
+        /* Additional Mobile Responsive Styles */
+        @media (max-width: 480px) {
+            .message {
+                max-width: 90%;
             }
 
-            .sidebar {
-                transform: translateX(-100%);
+            .faq-question {
+                font-size: 0.875rem;
             }
 
-            .sidebar.active {
-                transform: translateX(0);
+            .action-card {
+                padding: 1rem;
             }
 
-            .main-content {
-                margin-left: 0;
-                padding-top: 4.5rem;
-            }
-
-            .support-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .chat-container {
-                height: 400px;
-            }
-
-            .kb-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .quick-actions {
-                grid-template-columns: 1fr;
-            }
-
-            .kb-grid {
-                grid-template-columns: 1fr;
+            .action-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.25rem;
             }
 
             .ticket-item {
@@ -742,34 +781,6 @@
             .chat-input button {
                 width: 100%;
                 border-radius: 0.5rem;
-            }
-
-            .main-content {
-                padding: 4.5rem 1rem 1rem;
-            }
-
-            .support-title {
-                font-size: 1.5rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .message {
-                max-width: 90%;
-            }
-
-            .faq-question {
-                font-size: 0.875rem;
-            }
-
-            .action-card {
-                padding: 1rem;
-            }
-
-            .action-icon {
-                width: 40px;
-                height: 40px;
-                font-size: 1.25rem;
             }
         }
     </style>
@@ -961,8 +972,8 @@
             </div>
 
             <!-- Knowledge Base Section -->
-            <div class="kb-section mt-4">
-                <h2 class="mb-3">Knowledge Base</h2>
+            <div class="kb-section">
+                <h2>Knowledge Base</h2>
                 <div class="kb-grid">
                     <div class="kb-card" onclick="openKBArticle('getting-started')">
                         <div class="kb-icon">
@@ -1007,46 +1018,46 @@
 
         // Mobile Menu and Support Initialization
         function initializeSupport() {
-    const menuToggle = document.getElementById('menuToggle');
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('overlay');
-    
-    // Toggle menu
-    menuToggle.addEventListener('click', (e) => {
-        e.stopPropagation(); // Prevent event from bubbling up
-        sidebar.classList.toggle('active');
-        overlay.classList.toggle('active');
-        document.body.classList.toggle('sidebar-active');
-    });
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            
+            // Toggle menu
+            menuToggle.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent event from bubbling up
+                sidebar.classList.toggle('active');
+                overlay.classList.toggle('active');
+                document.body.classList.toggle('sidebar-active');
+            });
 
-    // Close menu when clicking overlay
-    overlay.addEventListener('click', () => {
-        sidebar.classList.remove('active');
-        overlay.classList.remove('active');
-        document.body.classList.remove('sidebar-active');
-    });
+            // Close menu when clicking overlay
+            overlay.addEventListener('click', () => {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.classList.remove('sidebar-active');
+            });
 
-    // Close menu when clicking outside
-    document.addEventListener('click', (e) => {
-        if (window.innerWidth <= 1024 && 
-            !e.target.closest('.sidebar') && 
-            !e.target.closest('.menu-toggle') && 
-            sidebar.classList.contains('active')) {
-            sidebar.classList.remove('active');
-            overlay.classList.remove('active');
-            document.body.classList.remove('sidebar-active');
+            // Close menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (window.innerWidth <= 1024 && 
+                    !sidebar.contains(e.target) && 
+                    !menuToggle.contains(e.target) && 
+                    sidebar.classList.contains('active')) {
+                    sidebar.classList.remove('active');
+                    overlay.classList.remove('active');
+                    document.body.classList.remove('sidebar-active');
+                }
+            });
+
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 1024) {
+                    sidebar.classList.remove('active');
+                    overlay.classList.remove('active');
+                    document.body.classList.remove('sidebar-active');
+                }
+            });
         }
-    });
-
-    // Handle window resize
-    window.addEventListener('resize', () => {
-        if (window.innerWidth > 1024) {
-            sidebar.classList.remove('active');
-            overlay.classList.remove('active');
-            document.body.classList.remove('sidebar-active');
-        }
-    });
-}
 
         // FAQ Data and Functions
         const faqs = [
