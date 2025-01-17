@@ -105,6 +105,7 @@
         .mobile-header-content {
             display: flex;
             align-items: center;
+            justify-content: space-between;
         }
 
         .menu-toggle {
@@ -247,7 +248,7 @@
             font-size: 1.1rem;
         }
 
-        /* Quick Actions Grid */
+        /* Quick Actions */
         .quick-actions {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -302,6 +303,64 @@
             grid-template-columns: 2fr 1fr;
             gap: 2rem;
             margin-bottom: 2rem;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-lighter);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
         }
                 /* FAQ Section */
         .faq-section {
@@ -437,18 +496,80 @@
             color: var(--text-primary);
         }
 
-        .chat-input button {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 2rem;
-            background: var(--primary);
-            color: white;
-            cursor: pointer;
+        /* Contact Form */
+        .contact-form {
+            background: var(--bg-secondary);
+            border-radius: 1rem;
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
             transition: all 0.3s ease;
         }
 
-        .chat-input button:hover {
-            background: var(--primary-dark);
+        /* Ticket Section */
+        .ticket-section {
+            background: var(--bg-secondary);
+            border-radius: 1rem;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            margin-top: 2rem;
+        }
+
+        .ticket-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ticket-list {
+            padding: 1rem;
+        }
+
+        .ticket-item {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .ticket-item:last-child {
+            border-bottom: none;
+        }
+
+        .ticket-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .ticket-subject {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .ticket-meta {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .ticket-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .status-open {
+            background: var(--warning-light);
+            color: var(--warning);
+        }
+
+        .status-closed {
+            background: var(--success-light);
+            color: var(--success);
         }
 
         /* Responsive Styles */
@@ -515,7 +636,7 @@
                 font-size: 0.875rem;
             }
         }
-            </style>
+    </style>
 </head>
 <body>
     <!-- Mobile Header -->
@@ -596,7 +717,7 @@
             </div>
 
             <!-- Quick Actions -->
-            <div class="quick-actions mb-4">
+            <div class="quick-actions">
                 <div class="action-card" onclick="openChat()">
                     <div class="action-icon">
                         <i class="fas fa-comments"></i>
@@ -625,7 +746,8 @@
                     </div>
                 </div>
             </div>
-                        <div class="support-grid">
+
+            <div class="support-grid">
                 <!-- FAQ Section -->
                 <div class="faq-section">
                     <div class="faq-header">
@@ -654,53 +776,136 @@
                     </div>
                 </div>
 
-                <!-- Contact Form Section -->
+                <!-- Contact Form -->
                 <div class="contact-form" id="contactForm" style="display: none;">
-                    <!-- Form content remains the same -->
+                    <h2 class="mb-3">Submit a Ticket</h2>
+                    <div class="form-group">
+                        <label class="form-label">Subject</label>
+                        <input type="text" class="form-input" id="ticketSubject" placeholder="Enter ticket subject">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Category</label>
+                        <select class="form-input" id="ticketCategory">
+                            <option value="">Select category</option>
+                            <option value="technical">Technical Issue</option>
+                            <option value="billing">Billing</option>
+                            <option value="service">Service Related</option>
+                            <option value="feedback">Feedback</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-textarea" id="ticketDescription" placeholder="Describe your issue in detail"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Priority</label>
+                        <select class="form-input" id="ticketPriority">
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="submitTicket()">Submit Ticket</button>
                 </div>
             </div>
 
             <!-- Support Tickets Section -->
-            <div class="ticket-section mt-4">
-                <!-- Ticket content remains the same -->
-            </div>
-
-            <!-- Knowledge Base Section -->
-            <div class="kb-section mt-4">
-                <!-- Knowledge base content remains the same -->
+            <div class="ticket-section">
+                <div class="ticket-header">
+                    <h2>Your Support Tickets</h2>
+                    <button class="btn btn-primary" onclick="openTicketForm()">
+                        <i class="fas fa-plus"></i>
+                        New Ticket
+                    </button>
+                </div>
+                <div class="ticket-list" id="ticketList">
+                    <!-- Tickets will be dynamically added here -->
+                </div>
             </div>
         </main>
     </div>
-
-    <script>
+        <script>
         document.addEventListener('DOMContentLoaded', function() {
             initializeMobileMenu();
             initializeSupport();
             loadFAQs();
             loadTickets();
             setupEventListeners();
+
+            // Check localStorage for theme preference
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            }
+
+            // Listen for theme changes from other pages
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'theme') {
+                    document.documentElement.setAttribute('data-theme', e.newValue);
+                }
+            });
         });
+
+        // FAQ Data
+        const faqs = [
+            {
+                question: "How do I request emergency roadside assistance?",
+                answer: "You can request assistance through our mobile app or by calling our 24/7 emergency hotline. Select 'Request Service' from the dashboard and follow the prompts to specify your location and issue."
+            },
+            {
+                question: "What services are covered under my subscription?",
+                answer: "Basic subscription includes battery jump-start, tire change, fuel delivery, and lockout services. Premium subscribers also get free towing up to 50km, unlimited service calls, and priority support."
+            },
+            {
+                question: "How long does it typically take for help to arrive?",
+                answer: "Our average response time is 30-45 minutes in urban areas. Response times may vary based on your location, traffic conditions, and service demand. You can track your mechanic's arrival in real-time through the app."
+            },
+            {
+                question: "What payment methods do you accept?",
+                answer: "We accept all major credit/debit cards, UPI payments, and digital wallets. Premium subscribers can also opt for monthly billing. Payment is processed after service completion."
+            },
+            {
+                question: "How do I cancel or reschedule a service request?",
+                answer: "You can cancel or modify your service request through the app or by contacting our support team. Cancellations before mechanic dispatch are free of charge."
+            }
+        ];
+
+        // Sample Tickets Data
+        const tickets = [
+            {
+                id: 'TKT-001',
+                subject: 'Battery Service Issue',
+                category: 'technical',
+                status: 'open',
+                date: '2024-02-15'
+            },
+            {
+                id: 'TKT-002',
+                subject: 'Billing Question',
+                category: 'billing',
+                status: 'closed',
+                date: '2024-02-10'
+            }
+        ];
 
         function initializeMobileMenu() {
             const menuToggle = document.getElementById('menuToggle');
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('overlay');
             
-            // Toggle menu
             menuToggle.addEventListener('click', () => {
                 sidebar.classList.toggle('active');
                 overlay.classList.toggle('active');
                 document.body.classList.toggle('sidebar-active');
             });
 
-            // Close menu when clicking overlay
             overlay.addEventListener('click', () => {
                 sidebar.classList.remove('active');
                 overlay.classList.remove('active');
                 document.body.classList.remove('sidebar-active');
             });
 
-            // Close menu when clicking outside
             document.addEventListener('click', (e) => {
                 if (window.innerWidth <= 1024 && 
                     !e.target.closest('.sidebar') && 
@@ -712,7 +917,6 @@
                 }
             });
 
-            // Handle window resize
             window.addEventListener('resize', () => {
                 if (window.innerWidth > 1024) {
                     sidebar.classList.remove('active');
@@ -722,56 +926,140 @@
             });
         }
 
-        // Rest of your existing JavaScript functions remain the same
-        function initializeSupport() {
-            // Your existing support initialization code
-        }
-
         function loadFAQs() {
-            // Your existing FAQ loading code
+            const faqList = document.getElementById('faqList');
+            faqList.innerHTML = faqs.map((faq, index) => `
+                <div class="faq-item" onclick="toggleFAQ(${index})">
+                    <div class="faq-question">
+                        ${faq.question}
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        ${faq.answer}
+                    </div>
+                </div>
+            `).join('');
         }
 
-        function loadTickets() {
-            // Your existing ticket loading code
-        }
-
-        function setupEventListeners() {
-            // Your existing event listener setup code
+        function toggleFAQ(index) {
+            const faqItems = document.querySelectorAll('.faq-item');
+            faqItems[index].classList.toggle('active');
         }
 
         function openChat() {
-            // Your existing chat opening code
+            document.getElementById('chatContainer').style.display = 'flex';
+            document.getElementById('contactForm').style.display = 'none';
+            
+            // Add welcome message
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.innerHTML = `
+                <div class="message support">
+                    <p>Hello! How can we help you today?</p>
+                </div>
+            `;
         }
 
         function sendMessage() {
-            // Your existing message sending code
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value.trim();
+            
+            if (message) {
+                const chatMessages = document.getElementById('chatMessages');
+                
+                // Add user message
+                chatMessages.innerHTML += `
+                    <div class="message user">
+                        <p>${message}</p>
+                    </div>
+                `;
+
+                // Clear input
+                messageInput.value = '';
+
+                // Simulate support response
+                setTimeout(() => {
+                    chatMessages.innerHTML += `
+                        <div class="message support">
+                            <p>Thank you for your message. A support agent will be with you shortly.</p>
+                        </div>
+                    `;
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 1000);
+
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        }
+
+        function loadTickets() {
+            const ticketList = document.getElementById('ticketList');
+            ticketList.innerHTML = tickets.map(ticket => `
+                <div class="ticket-item">
+                    <div class="ticket-info">
+                        <span class="ticket-subject">${ticket.subject}</span>
+                        <span class="ticket-meta">
+                            ${ticket.id} • ${formatDate(ticket.date)}
+                        </span>
+                    </div>
+                    <span class="ticket-status status-${ticket.status}">
+                        ${capitalizeFirst(ticket.status)}
+                    </span>
+                </div>
+            `).join('');
         }
 
         function openTicketForm() {
-            // Your existing ticket form opening code
+            document.getElementById('contactForm').style.display = 'block';
+            document.getElementById('chatContainer').style.display = 'none';
         }
 
         function submitTicket() {
-            // Your existing ticket submission code
-        }
+            const subject = document.getElementById('ticketSubject').value;
+            const category = document.getElementById('ticketCategory').value;
+            const description = document.getElementById('ticketDescription').value;
+            const priority = document.getElementById('ticketPriority').value;
 
-        function openKBArticle(articleId) {
-            // Your existing knowledge base article opening code
+            if (subject && category && description) {
+                // Simulate ticket submission
+                alert('Ticket submitted successfully! We will respond shortly.');
+                document.getElementById('contactForm').style.display = 'none';
+                
+                // Clear form
+                document.getElementById('ticketSubject').value = '';
+                document.getElementById('ticketCategory').value = '';
+                document.getElementById('ticketDescription').value = '';
+                document.getElementById('ticketPriority').value = 'low';
+            } else {
+                alert('Please fill in all required fields.');
+            }
         }
 
         function scrollToFAQ() {
-            // Your existing FAQ scrolling code
+            document.querySelector('.faq-section').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Theme Management
-        const savedTheme = localStorage.getItem('theme') || 'light';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-
-        window.addEventListener('storage', function(e) {
-            if (e.key === 'theme') {
-                document.documentElement.setAttribute('data-theme', e.newValue);
+        function setupEventListeners() {
+            const messageInput = document.getElementById('messageInput');
+            if (messageInput) {
+                messageInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        sendMessage();
+                    }
+                });
             }
-        });
+        }
+
+        // Utility Functions
+        function formatDate(dateString) {
+            return new Date(dateString).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        function capitalizeFirst(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
     </script>
 </body>
 </html>
