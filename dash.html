@@ -9,9 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Add a temporary logo for testing -->
-    <link rel="icon" type="image/png" href="https://via.placeholder.com/32">
-    
     <style>
         /* Reset & Base Styles */
         * {
@@ -21,13 +18,11 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
-        /* Theme Variables */
         :root {
-            --primary: #3485ff;
-            --primary-dark: #2563eb;
-            --primary-light: #60a5fa;
-            --primary-lighter: #e0e9ff;
-            --secondary: #0ea5e9;
+            --primary: #0095FF;
+            --primary-dark: #0077cc;
+            --primary-light: #66b3ff;
+            --secondary: #64748b;
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
@@ -39,49 +34,25 @@
             --text-primary: #1e293b;
             --text-secondary: #64748b;
             --border-color: #e2e8f0;
-            --input-bg: #ffffff;
-            --sidebar-bg: #ffffff;
-            --sidebar-hover: #f1f5f9;
             --header-bg: #ffffff;
-            --notification-bg: #ffffff;
-            --notification-hover: #f8fafc;
-            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Dark Theme */
-        [data-theme="dark"] {
-            --bg-main: #0f172a;
-            --bg-secondary: #1e293b;
-            --bg-card: #1e293b;
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --border-color: #334155;
-            --input-bg: #1e293b;
-            --sidebar-bg: #1e293b;
-            --sidebar-hover: #334155;
-            --header-bg: #1e293b;
-            --notification-bg: #1e293b;
-            --notification-hover: #334155;
         }
 
         body {
             background-color: var(--bg-main);
             color: var(--text-primary);
             line-height: 1.5;
-            min-height: 100vh;
         }
 
+        /* Layout */
         .dashboard-container {
             display: flex;
             min-height: 100vh;
-            position: relative;
         }
-	            /* Sidebar Styles */
+
+        /* Sidebar */
         .sidebar {
             width: 280px;
-            background: var(--sidebar-bg);
+            background: var(--bg-secondary);
             height: 100vh;
             position: fixed;
             left: 0;
@@ -89,95 +60,26 @@
             border-right: 1px solid var(--border-color);
             z-index: 1000;
             transition: transform 0.3s ease;
-            overflow-y: auto;
         }
 
-        .logo-section {
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .logo-link {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            text-decoration: none;
-        }
-
-        .logo-image {
-            width: 32px;
-            height: 32px;
-        }
-
-        .logo-text {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--primary);
-        }
-
-        .nav-menu {
-            padding: 1.5rem 1rem;
-        }
-
-        .nav-list {
-            list-style: none;
-        }
-
-        .nav-item {
-            margin-bottom: 0.5rem;
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            padding: 0.875rem 1rem;
-            color: var(--text-secondary);
-            text-decoration: none;
-            border-radius: 0.5rem;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-
-        .nav-link i {
-            width: 20px;
-            margin-right: 0.75rem;
-            font-size: 1.1rem;
-        }
-
-        .nav-link:hover,
-        .nav-link.active {
-            background: var(--primary-lighter);
-            color: var(--primary);
-        }
-
-        /* Main Content Area */
-        .main-content {
-            flex: 1;
-            margin-left: 280px;
-            padding: 1rem 2rem;
-            background: var(--bg-main);
-            min-height: 100vh;
-            transition: margin-left 0.3s ease;
-        }
-
-        /* Header Styles */
+        /* Header */
         .main-header {
             position: sticky;
             top: 0;
             background: var(--header-bg);
-            padding: 1rem 2rem;
+            padding: 1rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
             border-bottom: 1px solid var(--border-color);
-            margin: -1rem -2rem 1rem -2rem;
+            margin: -1rem -1rem 1rem -1rem;
             z-index: 100;
         }
 
         .header-left {
             display: flex;
             align-items: center;
-            gap: 2rem;
+            gap: 1rem;
         }
 
         .menu-toggle {
@@ -185,51 +87,30 @@
             background: none;
             border: none;
             color: var(--text-primary);
-            font-size: 1.25rem;
-            cursor: pointer;
+            font-size: 1.5rem;
             padding: 0.5rem;
+            cursor: pointer;
         }
 
-        .search-bar {
-            position: relative;
-            width: 400px;
+        /* Profile Section */
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
         }
 
-        .search-input {
-            width: 100%;
-            padding: 0.75rem 1rem 0.75rem 2.5rem;
-            border: 1px solid var(--border-color);
-            border-radius: 0.5rem;
-            background: var(--input-bg);
-            color: var(--text-primary);
-            font-size: 0.875rem;
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 0.875rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-secondary);
-        }
-
-        /* Notification Styles */
         .notification-wrapper {
             position: relative;
         }
 
         .notification-trigger {
-            position: relative;
-            padding: 0.75rem;
-            cursor: pointer;
-            color: var(--text-secondary);
             background: none;
             border: none;
-            border-radius: 0.5rem;
-        }
-
-        .notification-trigger i {
-            font-size: 1.5rem;
+            color: var(--text-secondary);
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            position: relative;
         }
 
         .notification-count {
@@ -249,93 +130,48 @@
             padding: 0 6px;
         }
 
-        .notification-dropdown {
-            position: absolute;
-            top: calc(100% + 0.5rem);
-            right: -10px;
-            width: 320px;
-            background: var(--notification-bg);
-            border-radius: 0.5rem;
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow-lg);
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: all 0.3s ease;
-            z-index: 1000;
-        }
-
-        .notification-dropdown.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-	            /* Notification Dropdown Styles Continued */
-        .notification-header {
-            padding: 1rem;
-            border-bottom: 1px solid var(--border-color);
+        .user-profile {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            gap: 1rem;
+            padding: 0.5rem;
         }
 
-        .notification-title {
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
             font-weight: 600;
             color: var(--text-primary);
         }
 
-        .mark-read {
-            color: var(--primary);
-            background: none;
-            border: none;
-            cursor: pointer;
+        .user-status {
+            color: var(--text-secondary);
             font-size: 0.875rem;
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.25rem;
         }
-
-        .mark-read:hover {
-            background: var(--primary-lighter);
-        }
-
-        .notification-list {
-            max-height: 360px;
-            overflow-y: auto;
-        }
-
-        .notification-item {
+	            /* Main Content Area */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
             padding: 1rem;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: start;
-            gap: 1rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .notification-item:hover {
-            background: var(--notification-hover);
-        }
-
-        .notification-item.unread {
-            background: rgba(52, 133, 255, 0.1);
-        }
-
-        .notification-icon-wrapper {
-            width: 36px;
-            height: 36px;
-            background: var(--primary-lighter);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
+            background: var(--bg-main);
+            min-height: 100vh;
+            transition: margin-left 0.3s ease;
         }
 
         /* Welcome Section */
         .welcome-section {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            border-radius: 1rem;
+            background: var(--primary);
+            border-radius: 24px;
             padding: 2rem;
             color: white;
             margin-bottom: 2rem;
@@ -349,12 +185,16 @@
         }
 
         .welcome-title {
-            font-size: 1.875rem;
+            font-size: 2rem;
             font-weight: 600;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .welcome-text {
+            font-size: 1.25rem;
             opacity: 0.9;
             margin-bottom: 1.5rem;
         }
@@ -363,7 +203,7 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            font-size: 0.875rem;
+            font-size: 1.125rem;
             opacity: 0.9;
         }
 
@@ -378,7 +218,7 @@
         .action-card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: 1rem;
+            border-radius: 16px;
             padding: 1.5rem;
             transition: all 0.3s ease;
             cursor: pointer;
@@ -386,15 +226,15 @@
 
         .action-card:hover {
             transform: translateY(-5px);
-            box-shadow: var(--shadow-lg);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
             border-color: var(--primary);
         }
 
         .action-icon {
             width: 48px;
             height: 48px;
-            background: var(--primary-lighter);
-            border-radius: 0.75rem;
+            background: #E6F3FF;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -446,27 +286,7 @@
             display: block;
         }
 
-        /* Toast Notifications */
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 1rem 1.5rem;
-            background: var(--bg-card);
-            color: var(--text-primary);
-            border-radius: 0.5rem;
-            box-shadow: var(--shadow-lg);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 1000;
-            border: 1px solid var(--border-color);
-        }
-
-        .toast.show {
-            opacity: 1;
-        }
-
-        /* Responsive Styles */
+        /* Mobile Responsive Styles */
         @media (max-width: 1024px) {
             .sidebar {
                 transform: translateX(-100%);
@@ -484,8 +304,16 @@
                 display: block;
             }
 
-            .search-bar {
-                width: 280px;
+            .welcome-section {
+                padding: 1.5rem;
+            }
+
+            .welcome-title {
+                font-size: 1.75rem;
+            }
+
+            .welcome-text {
+                font-size: 1.125rem;
             }
         }
 
@@ -494,19 +322,59 @@
                 padding: 1rem;
             }
 
-            .search-bar {
+            .user-info {
                 display: none;
+            }
+
+            .welcome-section {
+                padding: 1.25rem;
+                margin: -0.5rem -0.5rem 1rem -0.5rem;
+                border-radius: 0;
             }
 
             .welcome-title {
                 font-size: 1.5rem;
             }
 
+            .welcome-text {
+                font-size: 1rem;
+                margin-bottom: 1rem;
+            }
+
+            .location-info {
+                font-size: 0.875rem;
+            }
+
             .quick-actions {
                 grid-template-columns: 1fr;
+                gap: 1rem;
+                padding: 0 0.5rem;
+            }
+
+            .action-card {
+                padding: 1.25rem;
             }
         }
-    </style>
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+	     </style>
 </head>
 <body>
     <div class="dashboard-container">
@@ -521,43 +389,43 @@
             <nav class="nav-menu">
                 <ul class="nav-list">
                     <li class="nav-item">
-                        <a href="#" class="nav-link active">
+                        <a href="dash.html" class="nav-link active">
                             <i class="fas fa-home"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="profile.html" class="nav-link">
                             <i class="fas fa-user"></i>
                             <span>Profile</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="myvehicle.html" class="nav-link">
                             <i class="fas fa-car"></i>
                             <span>My Vehicles</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="history.html" class="nav-link">
                             <i class="fas fa-history"></i>
                             <span>Service History</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="settings.html" class="nav-link">
                             <i class="fas fa-cog"></i>
                             <span>Settings</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="support.html" class="nav-link">
                             <i class="fas fa-headset"></i>
                             <span>Support</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="log.html" class="nav-link">
                             <i class="fas fa-sign-out-alt"></i>
                             <span>Logout</span>
                         </a>
@@ -574,29 +442,16 @@
                     <button class="menu-toggle" id="menuToggle">
                         <i class="fas fa-bars"></i>
                     </button>
-                    <div class="search-bar">
-                        <i class="fas fa-search search-icon"></i>
-                        <input type="text" class="search-input" placeholder="Search services, history...">
-                    </div>
                 </div>
                 <div class="header-right">
                     <div class="notification-wrapper">
-                        <button class="notification-trigger" id="notificationToggle">
+                        <button class="notification-trigger">
                             <i class="fas fa-bell"></i>
-                            <span class="notification-count">3</span>
+                            <span class="notification-count">2</span>
                         </button>
-                        <div class="notification-dropdown" id="notificationDropdown">
-                            <div class="notification-header">
-                                <span class="notification-title">Notifications</span>
-                                <button class="mark-read">Mark all as read</button>
-                            </div>
-                            <div class="notification-list">
-                                <!-- Notifications will be dynamically added here -->
-                            </div>
-                        </div>
                     </div>
                     <div class="user-profile">
-                        <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="User" class="user-avatar">
+                        <img src="https://via.placeholder.com/40" alt="User" class="user-avatar">
                         <div class="user-info">
                             <div class="user-name">John Doe</div>
                             <div class="user-status">Premium Member</div>
@@ -608,7 +463,10 @@
             <!-- Welcome Section -->
             <section class="welcome-section">
                 <div class="welcome-content">
-                    <h1 class="welcome-title">Welcome back, John! 👋</h1>
+                    <h1 class="welcome-title">
+                        Welcome back, John! 
+                        <span style="font-size: 1.5rem;">👋</span>
+                    </h1>
                     <p class="welcome-text">Need roadside assistance? We're here to help 24/7.</p>
                     <div class="location-info">
                         <i class="fas fa-map-marker-alt"></i>
@@ -619,16 +477,16 @@
 
             <!-- Quick Actions -->
             <section class="quick-actions">
-                <div class="action-card" data-action="service-request">
+                <div class="action-card" onclick="window.location.href='service-request.html'">
                     <div class="action-icon">
                         <i class="fas fa-tools"></i>
                     </div>
                     <h3 class="action-title">Request Service</h3>
-                    <p class="action-description">Book a mechanic for vehicle issues</p>
+                    <p class="action-description">Book a mechanic for immediate assistance</p>
                     <span class="action-link">Book Now →</span>
                 </div>
 
-                <div class="action-card" data-action="track-service">
+                <div class="action-card" onclick="window.location.href='track-service.html'">
                     <div class="action-icon">
                         <i class="fas fa-map-marked-alt"></i>
                     </div>
@@ -637,7 +495,7 @@
                     <span class="action-link">Track Now →</span>
                 </div>
 
-                <div class="action-card" data-action="service-history">
+                <div class="action-card" onclick="window.location.href='service-history.html'">
                     <div class="action-icon">
                         <i class="fas fa-history"></i>
                     </div>
@@ -653,11 +511,9 @@
     <div class="overlay" id="overlay"></div>
 	    <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize all components
             initializeMobileMenu();
             initializeNotifications();
             initializeActionCards();
-            initializeTheme();
         });
 
         // Mobile Menu Management
@@ -667,16 +523,27 @@
             const overlay = document.getElementById('overlay');
             
             if (menuToggle && sidebar && overlay) {
+                // Toggle menu on hamburger click
                 menuToggle.addEventListener('click', () => {
                     sidebar.classList.toggle('active');
                     overlay.classList.toggle('active');
                     document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
                 });
 
+                // Close menu when clicking overlay
                 overlay.addEventListener('click', () => {
                     sidebar.classList.remove('active');
                     overlay.classList.remove('active');
                     document.body.style.overflow = '';
+                });
+
+                // Close menu when window is resized to desktop view
+                window.addEventListener('resize', () => {
+                    if (window.innerWidth > 1024) {
+                        sidebar.classList.remove('active');
+                        overlay.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
                 });
             }
         }
@@ -697,119 +564,35 @@
                     time: '1 hour ago',
                     icon: 'credit-card',
                     unread: true
-                },
-                {
-                    id: 3,
-                    message: 'Your premium membership will expire soon',
-                    time: '2 hours ago',
-                    icon: 'crown',
-                    unread: true
                 }
             ];
 
-            const notificationToggle = document.getElementById('notificationToggle');
-            const notificationDropdown = document.getElementById('notificationDropdown');
-            const notificationList = document.querySelector('.notification-list');
-            const markReadBtn = document.querySelector('.mark-read');
-
-            // Load notifications
-            if (notificationList) {
-                notificationList.innerHTML = notifications.map(notification => `
-                    <div class="notification-item ${notification.unread ? 'unread' : ''}" data-id="${notification.id}">
-                        <div class="notification-icon-wrapper">
-                            <i class="fas fa-${notification.icon}"></i>
-                        </div>
-                        <div class="notification-content">
-                            <div class="notification-message">${notification.message}</div>
-                            <div class="notification-time">${notification.time}</div>
-                        </div>
-                    </div>
-                `).join('');
-
-                // Add click handlers for individual notifications
-                notificationList.querySelectorAll('.notification-item').forEach(item => {
-                    item.addEventListener('click', () => {
-                        if (item.classList.contains('unread')) {
-                            item.classList.remove('unread');
-                            updateNotificationCount();
-                            showToast('Notification marked as read');
-                        }
-                    });
+            const notificationTrigger = document.querySelector('.notification-trigger');
+            
+            if (notificationTrigger) {
+                notificationTrigger.addEventListener('click', () => {
+                    showToast('Notifications feature coming soon!');
                 });
-            }
-
-            // Toggle notification dropdown
-            if (notificationToggle && notificationDropdown) {
-                notificationToggle.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    notificationDropdown.classList.toggle('active');
-                });
-
-                // Close dropdown when clicking outside
-                document.addEventListener('click', (e) => {
-                    if (!notificationDropdown.contains(e.target) && 
-                        !notificationToggle.contains(e.target)) {
-                        notificationDropdown.classList.remove('active');
-                    }
-                });
-            }
-
-            // Mark all as read
-            if (markReadBtn) {
-                markReadBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    document.querySelectorAll('.notification-item').forEach(item => {
-                        item.classList.remove('unread');
-                    });
-                    updateNotificationCount();
-                    showToast('All notifications marked as read');
-                });
-            }
-
-            // Initial notification count
-            updateNotificationCount();
-        }
-
-        // Update notification count
-        function updateNotificationCount() {
-            const unreadCount = document.querySelectorAll('.notification-item.unread').length;
-            const countElement = document.querySelector('.notification-count');
-            if (countElement) {
-                countElement.textContent = unreadCount;
-                countElement.style.display = unreadCount > 0 ? 'flex' : 'none';
             }
         }
 
-        // Action Cards
+        // Action Cards Interaction
         function initializeActionCards() {
             document.querySelectorAll('.action-card').forEach(card => {
                 card.addEventListener('click', () => {
-                    const action = card.getAttribute('data-action');
-                    handleActionClick(action);
+                    const title = card.querySelector('.action-title').textContent;
+                    showToast(`Navigating to ${title}...`);
                 });
-            });
-        }
-
-        function handleActionClick(action) {
-            // For demonstration, just show a toast
-            showToast(`Navigating to ${action.replace('-', ' ')}...`);
-        }
-
-        // Theme Management
-        function initializeTheme() {
-            const theme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-theme', theme);
-
-            // Listen for theme changes from settings page
-            window.addEventListener('storage', (e) => {
-                if (e.key === 'theme') {
-                    document.documentElement.setAttribute('data-theme', e.newValue);
-                }
             });
         }
 
         // Toast Notification
         function showToast(message, type = 'info') {
+            // Remove existing toasts
+            const existingToasts = document.querySelectorAll('.toast');
+            existingToasts.forEach(toast => toast.remove());
+
+            // Create new toast
             const toast = document.createElement('div');
             toast.className = `toast toast-${type}`;
             toast.textContent = message;
@@ -828,7 +611,19 @@
                 setTimeout(() => toast.remove(), 300);
             }, 3000);
         }
+
+        // Theme Management (if needed)
+        function initializeTheme() {
+            const theme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+
+            window.addEventListener('storage', (e) => {
+                if (e.key === 'theme') {
+                    document.documentElement.setAttribute('data-theme', e.newValue);
+                }
+            });
+        }
     </script>
 </body>
 </html>
-    
+	
