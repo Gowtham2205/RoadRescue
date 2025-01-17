@@ -11,50 +11,51 @@
     
     <!-- Initialize theme before page load -->
     <script>
-        // Immediately set theme on page load
         const savedTheme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
     </script>
     <style>
         /* CSS Variables for Theme Management */
         :root {
-            /* Light Theme Colors */
-            --primary: #4299e1;
-            --primary-dark: #3182ce;
-            --primary-hover: #2b6cb0;
-            --primary-light: #63b3ed;
-            --primary-lighter: #ebf8ff;
+            /* Colors */
+            --primary: #3485ff;
+            --primary-dark: #2563eb;
+            --primary-light: #60a5fa;
+            --primary-lighter: #e0e9ff;
+            --secondary: #0ea5e9;
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
             
-            /* Light Theme Specific */
+            /* Light Theme */
             --bg-main: #f8fafc;
             --bg-secondary: #ffffff;
             --bg-card: #ffffff;
-            --text-primary: #1a202c;
-            --text-secondary: #4a5568;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
             --border-color: #e2e8f0;
             --input-bg: #ffffff;
             --sidebar-bg: #ffffff;
-            --sidebar-hover: #f8fafc;
-            --sidebar-active: #4299e1;
-            --sidebar-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --sidebar-hover: #f1f5f9;
+            --header-bg: #ffffff;
+            --notification-bg: #ffffff;
+            --notification-hover: #f8fafc;
         }
 
-        /* Dark Theme Colors */
+        /* Dark Theme */
         [data-theme="dark"] {
-            --bg-main: #121212;
-            --bg-secondary: #1a1a1a;
-            --bg-card: #1e1e1e;
-            --text-primary: #ffffff;
-            --text-secondary: #a0aec0;
-            --border-color: #2d2d2d;
-            --input-bg: #2d2d2d;
-            --sidebar-bg: #1a1a1a;
-            --sidebar-hover: #2d2d2d;
-            --sidebar-active: #4299e1;
-            --sidebar-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            --bg-main: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+            --input-bg: #1e293b;
+            --sidebar-bg: #1e293b;
+            --sidebar-hover: #334155;
+            --header-bg: #1e293b;
+            --notification-bg: #1e293b;
+            --notification-hover: #334155;
         }
 
         /* Reset & Base Styles */
@@ -69,65 +70,115 @@
             background-color: var(--bg-main);
             color: var(--text-primary);
             line-height: 1.6;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            min-height: 100vh;
         }
 
         /* Layout Structure */
-        .app-container {
+        .dashboard-container {
             display: flex;
             min-height: 100vh;
+            position: relative;
         }
 
         /* Sidebar Styles */
         .sidebar {
             width: 280px;
             background: var(--sidebar-bg);
+            height: 100vh;
             position: fixed;
             left: 0;
             top: 0;
-            height: 100vh;
-            box-shadow: var(--sidebar-shadow);
+            border-right: 1px solid var(--border-color);
             z-index: 1000;
-            transition: all 0.3s ease;
+            transition: transform 0.3s ease;
+            overflow-y: auto;
         }
 
-        .sidebar-header {
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+        }
+
+        /* Header Styles */
+        .main-header {
+            position: sticky;
+            top: 0;
+            background: var(--header-bg);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
+            margin: -1rem -2rem 1rem -2rem;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        @media (max-width: 1024px) {
+            .menu-toggle {
+                display: block;
+            }
+        }
+                /* Logo and Navigation Styles */
+        .logo-section {
             padding: 1.5rem;
             border-bottom: 1px solid var(--border-color);
         }
 
-        .logo {
+        .logo-link {
             display: flex;
             align-items: center;
             gap: 0.75rem;
             text-decoration: none;
         }
 
-        .logo img {
+        .logo-image {
             width: 32px;
             height: 32px;
         }
 
-        .logo span {
+        .logo-text {
             font-size: 1.25rem;
             font-weight: 600;
             color: var(--primary);
         }
 
-        /* Navigation Menu */
         .nav-menu {
-            padding: 1rem;
+            padding: 1.5rem 1rem;
+        }
+
+        .nav-list {
+            list-style: none;
         }
 
         .nav-item {
-            list-style: none;
             margin-bottom: 0.5rem;
         }
 
         .nav-link {
             display: flex;
             align-items: center;
-            padding: 0.875rem 1.25rem;
+            padding: 0.875rem 1rem;
             color: var(--text-secondary);
             text-decoration: none;
             border-radius: 0.5rem;
@@ -138,30 +189,31 @@
         .nav-link i {
             width: 20px;
             margin-right: 0.75rem;
-            font-size: 1.1rem;
         }
 
-        .nav-link:hover {
-            background: var(--sidebar-hover);
-            color: var(--primary);
-        }
-
+        .nav-link:hover,
         .nav-link.active {
-            background: var(--primary);
-            color: white;
+            background: var(--primary-lighter);
+            color: var(--primary);
         }
 
         /* Main Content Area */
         .main-content {
             flex: 1;
             margin-left: 280px;
-            padding: 2rem;
+            padding: 1rem 2rem;
             background: var(--bg-main);
             min-height: 100vh;
             transition: margin-left 0.3s ease;
         }
 
-        /* Settings Container */
+        @media (max-width: 1024px) {
+            .main-content {
+                margin-left: 0;
+            }
+        }
+
+        /* Settings Styles */
         .settings-container {
             max-width: 800px;
             margin: 0 auto;
@@ -207,6 +259,7 @@
             font-weight: 600;
             color: var(--text-primary);
         }
+
         /* Toggle Switch Styles */
         .toggle-switch {
             position: relative;
@@ -283,55 +336,23 @@
             font-size: 0.9rem;
         }
 
-        /* Button Styles */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            font-weight: 500;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
+        /* Overlay */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
         }
 
-        .btn-primary {
-            background: var(--primary);
-            color: white;
+        .overlay.active {
+            display: block;
         }
 
-        .btn-primary:hover {
-            background: var(--primary-dark);
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-        }
-
-        .btn-outline:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        /* Responsive Styles */
-        @media (max-width: 1024px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-
-            .sidebar.active {
-                transform: translateX(0);
-            }
-
-            .main-content {
-                margin-left: 0;
-            }
-        }
-
+        /* Responsive Adjustments */
         @media (max-width: 768px) {
             .settings-card {
                 padding: 1rem;
@@ -342,82 +363,19 @@
                 gap: 1rem;
                 align-items: flex-start;
             }
-
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
         }
-    </style>
-
-    <!-- Theme Management Script -->
-    <script>
-        const ThemeManager = {
-            init() {
-                // Initialize theme from localStorage
-                this.theme = localStorage.getItem('theme') || 'light';
-                this.applyTheme(this.theme);
-                
-                // Set up broadcast channel for cross-tab sync
-                this.channel = new BroadcastChannel('theme-channel');
-                
-                // Listen for theme changes from other tabs
-                this.channel.onmessage = (event) => {
-                    if (event.data.type === 'theme-change') {
-                        this.applyTheme(event.data.theme, false);
-                    }
-                };
-            },
-
-            toggle() {
-                const newTheme = this.theme === 'light' ? 'dark' : 'light';
-                this.applyTheme(newTheme, true);
-            },
-
-            applyTheme(theme, broadcast = true) {
-                this.theme = theme;
-                document.documentElement.setAttribute('data-theme', theme);
-                localStorage.setItem('theme', theme);
-                
-                // Broadcast theme change to other tabs
-                if (broadcast) {
-                    this.channel.postMessage({
-                        type: 'theme-change',
-                        theme: theme
-                    });
-                }
-
-                // Update toggle switch if it exists
-                const toggle = document.getElementById('darkModeToggle');
-                if (toggle) {
-                    toggle.checked = theme === 'dark';
-                }
-
-                // Dispatch event for other scripts
-                window.dispatchEvent(new CustomEvent('themeChange', { 
-                    detail: { theme } 
-                }));
-            }
-        };
-
-        // Initialize theme manager when DOM is loaded
-        document.addEventListener('DOMContentLoaded', () => {
-            ThemeManager.init();
-        });
-    </script>
-</head>
-<body>
-    <div class="app-container">
+        <body>
+    <div class="dashboard-container">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <div class="sidebar-header">
-                <a href="#" class="logo">
-                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMzQ4NWZmIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTE0LjcgNi4zYTEgMSAwIDAgMCAwIDEuNGwxLjYgMS42YTEgMSAwIDAgMCAxLjQgMGwzLjc3Ny0zLjc3N2E2IDYgMCAwIDEtLjg3OSA4Ljg3OWwtMi40NzQgMi40NzRhNiA2IDAgMCAxLTguNDg2LTguNDg2bDIuNDc0LTIuNDc0YTYgNiAwIDAgMSA4LjQ4NiA4LjQ4NiIvPjwvc3ZnPg==" alt="RoadRescue">
-                    <span>RoadRescue</span>
+            <div class="logo-section">
+                <a href="#" class="logo-link">
+                    <img src="https://via.placeholder.com/32" alt="RoadRescue" class="logo-image">
+                    <span class="logo-text">RoadRescue</span>
                 </a>
             </div>
             <nav class="nav-menu">
-                <ul>
+                <ul class="nav-list">
                     <li class="nav-item">
                         <a href="dash.html" class="nav-link">
                             <i class="fas fa-home"></i>
@@ -466,6 +424,15 @@
 
         <!-- Main Content -->
         <main class="main-content">
+            <!-- Header -->
+            <header class="main-header">
+                <div class="header-left">
+                    <button class="menu-toggle" id="menuToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </header>
+
             <div class="settings-container">
                 <div class="settings-header">
                     <h1 class="settings-title">Settings</h1>
@@ -536,25 +503,139 @@
         </main>
     </div>
 
-    <script>
+    <!-- Overlay for Mobile -->
+    <div class="overlay" id="overlay"></div>
+       <script>
+        // Theme Management
+        const ThemeManager = {
+            init() {
+                // Initialize theme from localStorage
+                this.theme = localStorage.getItem('theme') || 'light';
+                this.applyTheme(this.theme);
+                
+                // Set up broadcast channel for cross-tab sync
+                this.channel = new BroadcastChannel('theme-channel');
+                
+                // Listen for theme changes from other tabs
+                this.channel.onmessage = (event) => {
+                    if (event.data.type === 'theme-change') {
+                        this.applyTheme(event.data.theme, false);
+                    }
+                };
+            },
+
+            toggle() {
+                const newTheme = this.theme === 'light' ? 'dark' : 'light';
+                this.applyTheme(newTheme, true);
+            },
+
+            applyTheme(theme, broadcast = true) {
+                this.theme = theme;
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+                
+                // Broadcast theme change to other tabs
+                if (broadcast) {
+                    this.channel.postMessage({
+                        type: 'theme-change',
+                        theme: theme
+                    });
+                }
+
+                // Update toggle switch if it exists
+                const toggle = document.getElementById('darkModeToggle');
+                if (toggle) {
+                    toggle.checked = theme === 'dark';
+                }
+
+                // Dispatch event for other scripts
+                window.dispatchEvent(new CustomEvent('themeChange', { 
+                    detail: { theme } 
+                }));
+            }
+        };
+
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Theme Manager
+            ThemeManager.init();
+            
+            // Initialize Settings
             initializeSettings();
+            
+            // Initialize Mobile Menu
+            initializeMobileMenu();
         });
 
         function initializeSettings() {
             // Initialize dark mode toggle
             const darkModeToggle = document.getElementById('darkModeToggle');
-            darkModeToggle.checked = ThemeManager.theme === 'dark';
-            
-            darkModeToggle.addEventListener('change', () => {
-                ThemeManager.toggle();
-            });
+            if (darkModeToggle) {
+                darkModeToggle.checked = ThemeManager.theme === 'dark';
+                
+                darkModeToggle.addEventListener('change', () => {
+                    ThemeManager.toggle();
+                });
+            }
 
             // Listen for theme changes
             window.addEventListener('themeChange', (e) => {
-                darkModeToggle.checked = e.detail.theme === 'dark';
+                if (darkModeToggle) {
+                    darkModeToggle.checked = e.detail.theme === 'dark';
+                }
             });
+        }
+
+        function initializeMobileMenu() {
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.getElementById('overlay');
+            
+            if (menuToggle && sidebar && overlay) {
+                // Toggle menu on hamburger click
+                menuToggle.addEventListener('click', () => {
+                    sidebar.classList.toggle('active');
+                    overlay.classList.toggle('active');
+                    document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
+                });
+
+                // Close menu when clicking overlay
+                overlay.addEventListener('click', () => {
+                    sidebar.classList.remove('active');
+                    overlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+
+                // Close menu when window is resized to desktop view
+                window.addEventListener('resize', () => {
+                    if (window.innerWidth > 1024) {
+                        sidebar.classList.remove('active');
+                        overlay.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                });
+            }
+        }
+
+        // Toast Notification Function
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.textContent = message;
+            
+            document.body.appendChild(toast);
+            
+            // Force reflow
+            toast.offsetHeight;
+            
+            // Show toast
+            toast.classList.add('show');
+            
+            // Hide and remove toast
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
         }
     </script>
 </body>
-</html>
+</html>     
