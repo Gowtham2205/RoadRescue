@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -51,13 +51,13 @@
             --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
 
-        /* Dark Theme */
+        /* Dark Theme - Updated colors */
         [data-theme="dark"] {
             --bg-main: #0f172a;
             --bg-secondary: #1e293b;
             --bg-card: #1e293b;
             --text-primary: #f8fafc;
-            --text-secondary: #cbd5e1;
+            --text-secondary: #94a3b8;
             --border-color: #334155;
             --input-bg: #1e293b;
             --sidebar-bg: #1e293b;
@@ -65,10 +65,9 @@
             --header-bg: #1e293b;
             --notification-bg: #1e293b;
             --notification-hover: #334155;
+            --active-nav-bg: #2563eb;
+            --nav-text: #94a3b8;
             --dropdown-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
         }
 
         /* Global Styles */
@@ -87,6 +86,25 @@
             overflow-x: hidden;
         }
 
+        /* Overlay for Mobile Menu */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            display: block;
+        }
+
         /* Theme Transitions */
         .theme-transition {
             transition: background-color 0.3s ease,
@@ -94,66 +112,32 @@
                         border-color 0.3s ease,
                         box-shadow 0.3s ease;
         }
-
-        /* Toast Notifications */
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 1rem 1.5rem;
-            background: var(--bg-card);
-            color: var(--text-primary);
-            border-radius: 0.5rem;
-            box-shadow: var(--shadow-lg);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 1000;
-            border: 1px solid var(--border-color);
-        }
-
-        .toast-success {
-            border-left: 4px solid var(--success);
-        }
-
-        .toast-info {
-            border-left: 4px solid var(--primary);
-        }
-
-        .toast-warning {
-            border-left: 4px solid var(--warning);
-        }
-
-        .toast-error {
-            border-left: 4px solid var(--danger);
-        }
-        /* Sidebar Styles */
+	        /* Sidebar Styles - Updated for dark theme */
         .sidebar {
             width: 280px;
-            background: var(--sidebar-bg);
+            background: #1e293b; /* Exact dark blue background */
+            height: 100vh;
             position: fixed;
             left: 0;
             top: 0;
-            height: 100vh;
-            border-right: 1px solid var(--border-color);
+            border-right: 1px solid #2d3a4f;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
             z-index: 1000;
-            transition: transform 0.3s ease, background-color 0.3s ease;
-        }
-	 .sidebar-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--border-color);
-            background-color: var(--sidebar-bg);
-            transition: background-color 0.3s ease;
+            overflow-y: auto;
         }
 
+        /* Logo Section */
         .logo-section {
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--border-color);
+            padding: 24px;
+            border-bottom: 1px solid #2d3a4f;
         }
 
         .logo-link {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 12px;
             text-decoration: none;
         }
 
@@ -163,56 +147,224 @@
         }
 
         .logo-text {
-            font-size: 1.25rem;
+            font-size: 20px;
             font-weight: 600;
-            color: var(--primary);
-            letter-spacing: -0.025em;
+            color: #3485ff;
         }
 
+        /* Navigation Menu - Updated styles */
         .nav-menu {
- 		padding: 1.5rem 1rem;
+            padding: 16px;
+            flex: 1;
         }
 
         .nav-list {
             list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
         .nav-item {
-            margin-bottom: 0.5rem;
+            margin-bottom: 4px;
         }
 
+        /* Updated Navigation Link Styles */
         .nav-link {
             display: flex;
             align-items: center;
-            padding: 0.875rem 1rem;
-            color: var(--text-secondary);
+            padding: 12px 16px;
             text-decoration: none;
-            border-radius: 0.5rem;
+            color: #94a3b8;
+            border-radius: 8px;
             transition: all 0.3s ease;
             font-weight: 500;
+            cursor: pointer;
         }
 
         .nav-link i {
             width: 20px;
-            margin-right: 0.75rem;
-            font-size: 1.1rem;
+            font-size: 18px;
+            margin-right: 12px;
+            color: #94a3b8;
         }
 
-         .nav-link:hover,
+        .nav-link:hover {
+            background: #334155;
+            color: #f8fafc;
+        }
+
+        .nav-link:hover i {
+            color: #f8fafc;
+        }
+
         .nav-link.active {
+            background: #2563eb;
+            color: #ffffff;
+        }
+
+        .nav-link.active i {
+            color: #ffffff;
+        }
+
+        /* Notification System - Updated styles */
+        .notification-wrapper {
+            position: relative;
+        }
+
+        .notification-trigger {
+            position: relative;
+            padding: 0.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            background: none;
+            border: none;
+            border-radius: 0.375rem;
+            transition: all 0.3s ease;
+        }
+
+        .notification-trigger:hover {
+            color: var(--primary);
+            background: var(--sidebar-hover);
+        }
+
+        .notification-count {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: var(--danger);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 0.375rem;
+        }
+
+        /* Updated Notification Dropdown Styles */
+        .notification-dropdown {
+            position: absolute;
+            top: calc(100% + 0.5rem);
+            right: -10px;
+            width: 320px;
+            background: var(--notification-bg);
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--dropdown-shadow);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification-dropdown::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            right: 20px;
+            width: 10px;
+            height: 10px;
+            background: var(--notification-bg);
+            transform: rotate(45deg);
+            border-left: 1px solid var(--border-color);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .notification-dropdown.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .notification-header {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .mark-read {
+            color: var(--primary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+
+        .notification-list {
+            max-height: 360px;
+            overflow-y: auto;
+        }
+
+        .notification-item {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .notification-item:hover {
+            background: var(--notification-hover);
+        }
+
+        .notification-item.unread {
+            background: rgba(52, 133, 255, 0.1);
+        }
+
+        .notification-icon-wrapper {
+            width: 36px;
+            height: 36px;
             background: var(--primary-lighter);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: var(--primary);
         }
 
-        .nav-link.active {
-                 font-weight: 600;
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-message {
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .notification-time {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+        }
+	           /* Main Content Area Styles */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 1rem 2rem;
+            background: var(--bg-main);
+            min-height: 100vh;
+            transition: margin-left 0.3s ease;
         }
 
         /* Header Styles */
         .main-header {
             position: sticky;
             top: 0;
-            background: var(--header-bg);
+            background: var(--bg-secondary);
             padding: 1rem 2rem;
             display: flex;
             align-items: center;
@@ -228,17 +380,19 @@
             gap: 2rem;
         }
 
+        /* Mobile Menu Toggle - Updated */
         .menu-toggle {
             display: none;
             background: none;
             border: none;
             color: var(--text-primary);
-            font-size: 1.25rem;
+            font-size: 24px;
             cursor: pointer;
-            padding: 0.5rem;
-            border-radius: 0.375rem;
+            padding: 8px;
+            z-index: 1001;
         }
 
+        /* Search Bar */
         .search-bar {
             position: relative;
             width: 400px;
@@ -264,13 +418,14 @@
             pointer-events: none;
         }
 
+        /* Header Right Section */
         .header-right {
             display: flex;
             align-items: center;
             gap: 1.5rem;
         }
 
-        /* User Profile */
+        /* User Profile Section */
         .user-profile {
             display: flex;
             align-items: center;
@@ -313,149 +468,6 @@
             font-size: 0.75rem;
         }
 
-        /* Notification System */
-        .notification-wrapper {
-            position: relative;
-        }
-
-        .notification-trigger {
-            position: relative;
-            padding: 0.5rem;
-            cursor: pointer;
-            color: var(--text-secondary);
-            transition: color 0.3s ease;
-            background: none;
-            border: none;
-            border-radius: 0.375rem;
-        }
-
-        .notification-trigger:hover {
-            color: var(--primary);
-            background: var(--sidebar-hover);
-        }
-
-        .notification-count {
-            position: absolute;
-            top: -2px;
-            right: -2px;
-            background: var(--danger);
-            color: white;
-            font-size: 0.75rem;
-            font-weight: 600;
-            min-width: 18px;
-            height: 18px;
-            border-radius: 9px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0 0.375rem;
-        }
-
-        .notification-dropdown {
-            position: absolute;
-            top: calc(100% + 0.5rem);
-            right: 0;
-            width: 320px;
-            background: var(--notification-bg);
-            border-radius: 0.5rem;
-            border: 1px solid var(--border-color);
-            box-shadow: var(--dropdown-shadow);
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: all 0.3s ease;
-        }
-
-        .notification-dropdown.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-        /* Notification Content Styles */
-        .notification-header {
-            padding: 1rem;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .notification-title {
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .mark-read {
-            color: var(--primary);
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 0.875rem;
-        }
-
-        .notification-list {
-            max-height: 360px;
-            overflow-y: auto;
-        }
-
-        .notification-item {
-            padding: 1rem;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: start;
-            gap: 1rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .notification-item:hover {
-            background: var(--notification-hover);
-        }
-
-        .notification-item.unread {
-            background: var(--primary-lighter);
-        }
-
-        [data-theme="dark"] .notification-item.unread {
-            background: rgba(52, 133, 255, 0.1);
-        }
-
-        .notification-icon-wrapper {
-            width: 36px;
-            height: 36px;
-            background: var(--primary-lighter);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
-        }
-
-        .notification-content {
-            flex: 1;
-        }
-
-        .notification-message {
-            color: var(--text-primary);
-            font-size: 0.875rem;
-            margin-bottom: 0.25rem;
-        }
-
-        .notification-time {
-            color: var(--text-secondary);
-            font-size: 0.75rem;
-        }
-
-        /* Main Content Area */
-        .main-content {
-            flex: 1;
-            margin-left: 280px;
-            padding: 1rem 2rem;
-            background: var(--bg-main);
-            min-height: 100vh;
-            transition: margin-left 0.3s ease;
-        }
-
         /* Welcome Section */
         .welcome-section {
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
@@ -491,7 +503,7 @@
             opacity: 0.9;
         }
 
-        /* Quick Actions */
+        /* Quick Actions Section */
         .quick-actions {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -517,16 +529,12 @@
         .action-icon {
             width: 48px;
             height: 48px;
-            background: var(--primary-lighter);
+            background: rgba(52, 133, 255, 0.1);
             border-radius: 0.75rem;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-bottom: 1rem;
-        }
-
-        [data-theme="dark"] .action-icon {
-            background: rgba(52, 133, 255, 0.2);
         }
 
         .action-icon i {
@@ -555,7 +563,26 @@
             font-size: 0.875rem;
         }
 
-        /* Active Request Section */
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow-lg);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+            border: 1px solid var(--border-color);
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+	           /* Active Request Section */
         .active-request {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -588,7 +615,8 @@
             font-size: 0.875rem;
             font-weight: 500;
         }
-        /* Mechanic Info Styles */
+
+        /* Mechanic Info */
         .mechanic-info {
             display: flex;
             align-items: center;
@@ -665,10 +693,11 @@
             border: 1px solid var(--border-color);
         }
 
-        /* Responsive Design */
+        /* Responsive Design - Updated */
         @media (max-width: 1024px) {
             .sidebar {
                 transform: translateX(-100%);
+                box-shadow: var(--shadow-lg);
             }
 
             .sidebar.active {
@@ -697,6 +726,18 @@
                 width: 100%;
                 justify-content: center;
             }
+
+            .notification-dropdown {
+                position: fixed;
+                top: 70px;
+                left: 1rem;
+                right: 1rem;
+                width: auto;
+            }
+
+            .notification-dropdown::before {
+                display: none;
+            }
         }
 
         @media (max-width: 768px) {
@@ -706,12 +747,6 @@
 
             .search-bar {
                 display: none;
-            }
-
-            .notification-dropdown {
-                width: calc(100vw - 2rem);
-                left: 1rem;
-                right: 1rem;
             }
 
             .welcome-title {
@@ -724,6 +759,10 @@
 
             .user-info {
                 display: none;
+            }
+
+            .notification-dropdown {
+                top: 60px;
             }
         }
 
@@ -743,10 +782,33 @@
             .mechanic-info {
                 padding: 1rem;
             }
+
+            .toast {
+                left: 20px;
+                right: 20px;
+                text-align: center;
+            }
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-4 {
+            margin-top: 1rem;
+        }
+
+        .mb-4 {
+            margin-bottom: 1rem;
         }
     </style>
 </head>
-<body>
+	<body>
     <div class="dashboard-container">
         <!-- Sidebar -->
         <aside class="sidebar">
@@ -857,7 +919,7 @@
 
             <!-- Quick Actions -->
             <section class="quick-actions">
-                <div class="action-card">
+                <div class="action-card" data-action="service-request">
                     <div class="action-icon">
                         <i class="fas fa-tools"></i>
                     </div>
@@ -866,7 +928,7 @@
                     <span class="action-link">Book Now →</span>
                 </div>
 
-                <div class="action-card">
+                <div class="action-card" data-action="track-service">
                     <div class="action-icon">
                         <i class="fas fa-map-marked-alt"></i>
                     </div>
@@ -875,7 +937,7 @@
                     <span class="action-link">Track Now →</span>
                 </div>
 
-                <div class="action-card">
+                <div class="action-card" data-action="service-history">
                     <div class="action-icon">
                         <i class="fas fa-history"></i>
                     </div>
@@ -918,228 +980,140 @@
             </section>
         </main>
     </div>
-    <script>
-        // Theme Management
-        const ThemeManager = {
-            init() {
-                this.theme = localStorage.getItem('theme') || 'light';
-                this.applyTheme(this.theme);
-                
-                // Set up broadcast channel for cross-tab sync
-                this.channel = new BroadcastChannel('theme-channel');
-                
-                // Listen for theme changes from other tabs
-                this.channel.onmessage = (event) => {
-                    if (event.data.type === 'theme-change') {
-                        this.applyTheme(event.data.theme, false);
-                    }
-                };
 
-                // Listen for storage changes
-                window.addEventListener('storage', (e) => {
-                    if (e.key === 'theme') {
-                        this.applyTheme(e.newValue, false);
-                    }
-                });
-            },
-
-            applyTheme(theme, broadcast = true) {
-                this.theme = theme;
-                document.documentElement.setAttribute('data-theme', theme);
-                localStorage.setItem('theme', theme);
-                
-                if (broadcast) {
-                    this.channel.postMessage({
-                        type: 'theme-change',
-                        theme: theme
-                    });
-                }
-            },
-
-            toggleTheme() {
-                const newTheme = this.theme === 'light' ? 'dark' : 'light';
-                this.applyTheme(newTheme);
-            }
-        };
-
-        // Notification System
-        const NotificationSystem = {
-            init() {
-                this.notifications = [
-                    {
-                        id: 1,
-                        message: 'Your mechanic will arrive in 10 minutes',
-                        time: '2 minutes ago',
-                        icon: 'car',
-                        unread: true
-                    },
-                    {
-                        id: 2,
-                        message: 'Payment received for last service',
-                        time: '1 hour ago',
-                        icon: 'credit-card',
-                        unread: true
-                    },
-                    {
-                        id: 3,
-                        message: 'Your premium membership will expire soon',
-                        time: '2 hours ago',
-                        icon: 'crown',
-                        unread: false
-                    }
-                ];
-
-                this.loadNotifications();
-                this.setupEventListeners();
-            },
-
-            loadNotifications() {
-                const notificationList = document.querySelector('.notification-list');
-                if (notificationList) {
-                    notificationList.innerHTML = this.notifications.map(notification => `
-                        <div class="notification-item ${notification.unread ? 'unread' : ''}" 
-                             data-id="${notification.id}">
-                            <div class="notification-icon-wrapper">
-                                <i class="fas fa-${notification.icon}"></i>
-                            </div>
-                            <div class="notification-content">
-                                <div class="notification-message">${notification.message}</div>
-                                <div class="notification-time">${notification.time}</div>
-                            </div>
-                        </div>
-                    `).join('');
-
-                    this.updateNotificationCount();
-                }
-            },
-
-            setupEventListeners() {
-                const notificationToggle = document.getElementById('notificationToggle');
-                const notificationDropdown = document.getElementById('notificationDropdown');
-                const markReadBtn = document.querySelector('.mark-read');
-
-                if (notificationToggle && notificationDropdown) {
-                    notificationToggle.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        notificationDropdown.classList.toggle('active');
-                    });
-
-                    document.addEventListener('click', (e) => {
-                        if (!notificationDropdown.contains(e.target) && 
-                            !notificationToggle.contains(e.target)) {
-                            notificationDropdown.classList.remove('active');
-                        }
-                    });
-                }
-
-                if (markReadBtn) {
-                    markReadBtn.addEventListener('click', () => this.markAllAsRead());
-                }
-
-                document.querySelectorAll('.notification-item').forEach(item => {
-                    item.addEventListener('click', () => {
-                        this.markAsRead(item.dataset.id);
-                    });
-                });
-            },
-
-            markAsRead(id) {
-                const notification = document.querySelector(`.notification-item[data-id="${id}"]`);
-                if (notification) {
-                    notification.classList.remove('unread');
-                    this.notifications.find(n => n.id === parseInt(id)).unread = false;
-                    this.updateNotificationCount();
-                }
-            },
-
-            markAllAsRead() {
-                this.notifications.forEach(n => n.unread = false);
-                document.querySelectorAll('.notification-item').forEach(item => {
-                    item.classList.remove('unread');
-                });
-                this.updateNotificationCount();
-                this.showToast('All notifications marked as read', 'success');
-            },
-
-            updateNotificationCount() {
-                const unreadCount = this.notifications.filter(n => n.unread).length;
-                const badge = document.querySelector('.notification-count');
-                if (badge) {
-                    badge.textContent = unreadCount;
-                    badge.style.display = unreadCount > 0 ? 'flex' : 'none';
-                }
-            },
-
-            showToast(message, type = 'info') {
-                const toast = document.createElement('div');
-                toast.className = `toast toast-${type} theme-transition`;
-                toast.textContent = message;
-                
-                document.body.appendChild(toast);
-                
-                // Force reflow
-                toast.offsetHeight;
-                toast.style.opacity = '1';
-                
-                setTimeout(() => {
-                    toast.style.opacity = '0';
-                    setTimeout(() => toast.remove(), 300);
-                }, 3000);
-            }
-        };
-
-        // Initialize when DOM is loaded
+    <!-- Overlay for Mobile -->
+    <div class="overlay" id="overlay"></div>
+        <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize theme
-            ThemeManager.init();
+            // Initialize all components
+            initializeMobileMenu();
+            initializeNotifications();
+            initializeActionCards();
+            initializeMap();
+            initializeContactButton();
+        });
 
-            // Initialize notifications
-            NotificationSystem.init();
-
-            // Mobile menu toggle
+        // Mobile Menu Management
+        function initializeMobileMenu() {
             const menuToggle = document.getElementById('menuToggle');
             const sidebar = document.querySelector('.sidebar');
+            const overlay = document.getElementById('overlay');
             
-            if (menuToggle && sidebar) {
+            if (menuToggle && sidebar && overlay) {
                 menuToggle.addEventListener('click', () => {
                     sidebar.classList.toggle('active');
+                    overlay.classList.toggle('active');
+                    document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
+                });
+
+                overlay.addEventListener('click', () => {
+                    sidebar.classList.remove('active');
+                    overlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            }
+        }
+
+        // Notification System
+        function initializeNotifications() {
+            const notifications = [
+                {
+                    id: 1,
+                    message: 'Your mechanic will arrive in 10 minutes',
+                    time: '2 minutes ago',
+                    icon: 'car',
+                    unread: true
+                },
+                {
+                    id: 2,
+                    message: 'Payment received for last service',
+                    time: '1 hour ago',
+                    icon: 'credit-card',
+                    unread: true
+                },
+                {
+                    id: 3,
+                    message: 'Your premium membership will expire soon',
+                    time: '2 hours ago',
+                    icon: 'crown',
+                    unread: false
+                }
+            ];
+
+            const notificationToggle = document.getElementById('notificationToggle');
+            const notificationDropdown = document.getElementById('notificationDropdown');
+            const notificationList = document.querySelector('.notification-list');
+            const markReadBtn = document.querySelector('.mark-read');
+
+            // Load notifications
+            if (notificationList) {
+                notificationList.innerHTML = notifications.map(notification => `
+                    <div class="notification-item ${notification.unread ? 'unread' : ''}" data-id="${notification.id}">
+                        <div class="notification-icon-wrapper">
+                            <i class="fas fa-${notification.icon}"></i>
+                        </div>
+                        <div class="notification-content">
+                            <div class="notification-message">${notification.message}</div>
+                            <div class="notification-time">${notification.time}</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Toggle notification dropdown
+            if (notificationToggle && notificationDropdown) {
+                notificationToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    notificationDropdown.classList.toggle('active');
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!notificationDropdown.contains(e.target) && 
+                        !notificationToggle.contains(e.target)) {
+                        notificationDropdown.classList.remove('active');
+                    }
                 });
             }
 
-            // Action cards click handlers
-            document.querySelectorAll('.action-card').forEach(card => {
-                card.addEventListener('click', function() {
-                    const title = this.querySelector('.action-title').textContent;
-                    handleActionClick(title);
+            // Mark all as read
+            if (markReadBtn) {
+                markReadBtn.addEventListener('click', () => {
+                    document.querySelectorAll('.notification-item').forEach(item => {
+                        item.classList.remove('unread');
+                    });
+                    document.querySelector('.notification-count').style.display = 'none';
+                    showToast('All notifications marked as read', 'success');
+                });
+            }
+        }
+
+        // Action Cards
+        function initializeActionCards() {
+            const actionCards = document.querySelectorAll('.action-card');
+            
+            actionCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const action = card.getAttribute('data-action');
+                    handleActionClick(action);
                 });
             });
-
-            // Contact button
-            const contactBtn = document.querySelector('.contact-btn');
-            if (contactBtn) {
-                contactBtn.addEventListener('click', () => {
-                    NotificationSystem.showToast('Calling mechanic...', 'info');
-                });
-            }
-
-            // Initialize map placeholder
-            initializeMap();
-        });
+        }
 
         function handleActionClick(action) {
             switch(action) {
-                case 'Request Service':
+                case 'service-request':
                     window.location.href = 'service-request.html';
                     break;
-                case 'Track Service':
+                case 'track-service':
                     window.location.href = 'track-service.html';
                     break;
-                case 'Service History':
+                case 'service-history':
                     window.location.href = 'history.html';
                     break;
             }
         }
 
+        // Initialize Map Placeholder
         function initializeMap() {
             const mapContainer = document.getElementById('trackingMap');
             if (mapContainer) {
@@ -1148,9 +1122,50 @@
                         <span style="color: var(--text-secondary);">Map loading...</span>
                     </div>
                 `;
-                // Here you would typically initialize your actual map service
             }
         }
+
+        // Contact Button
+        function initializeContactButton() {
+            const contactBtn = document.querySelector('.contact-btn');
+            if (contactBtn) {
+                contactBtn.addEventListener('click', () => {
+                    showToast('Calling mechanic...', 'info');
+                });
+            }
+        }
+
+        // Toast Notification System
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.textContent = message;
+            
+            document.body.appendChild(toast);
+            
+            // Force reflow
+            toast.offsetHeight;
+            
+            // Show toast
+            toast.style.opacity = '1';
+            
+            // Hide and remove toast
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Navigation Links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+                if (href && href !== '#') {
+                    e.preventDefault();
+                    window.location.href = href;
+                }
+            });
+        });
     </script>
 </body>
 </html>
