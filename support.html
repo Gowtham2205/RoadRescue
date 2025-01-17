@@ -5,75 +5,102 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Support | RoadRescue Pro</title>
     
+    <!-- Initialize theme before page load -->
+    <script>
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+
+    <!-- Theme Management Script -->
+    <script>
+        const ThemeManager = {
+            init() {
+                // Initialize theme from localStorage
+                this.theme = localStorage.getItem('theme') || 'light';
+                this.applyTheme(this.theme);
+                
+                // Set up broadcast channel for cross-tab sync
+                this.channel = new BroadcastChannel('theme-channel');
+                
+                // Listen for theme changes from other tabs
+                this.channel.onmessage = (event) => {
+                    if (event.data.type === 'theme-change') {
+                        this.applyTheme(event.data.theme, false);
+                    }
+                };
+            },
+
+            applyTheme(theme, broadcast = true) {
+                this.theme = theme;
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+                
+                if (broadcast) {
+                    this.channel.postMessage({
+                        type: 'theme-change',
+                        theme: theme
+                    });
+                }
+
+                window.dispatchEvent(new CustomEvent('themeChange', { 
+                    detail: { theme } 
+                }));
+            }
+        };
+    </script>
+    
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
     <style>
+        /* CSS Variables for Theme Management */
         :root {
-            /* Light Mode Colors (default) */
+            /* Light Theme Colors */
+            --primary: #4299e1;
+            --primary-dark: #3182ce;
+            --primary-hover: #2b6cb0;
+            --primary-light: #63b3ed;
+            --primary-lighter: #ebf8ff;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            
+            /* Light Theme Specific */
             --bg-main: #f8fafc;
             --bg-secondary: #ffffff;
             --bg-card: #ffffff;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
+            --text-primary: #1a202c;
+            --text-secondary: #4a5568;
             --border-color: #e2e8f0;
             --input-bg: #ffffff;
             --sidebar-bg: #ffffff;
-            --sidebar-hover: #f1f5f9;
+            --sidebar-hover: #f8fafc;
+            --sidebar-active: #4299e1;
+            --sidebar-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             --modal-overlay: rgba(0, 0, 0, 0.5);
             --chat-user-bg: #e0e9ff;
             --chat-support-bg: #f1f5f9;
-            
-            /* Brand Colors */
-            --primary: #3485ff;
-            --primary-dark: #2563eb;
-            --primary-light: #60a5fa;
-            --primary-lighter: #e0e9ff;
-            --secondary: #0ea5e9;
-            --success: #10b981;
-            --success-light: #d1fae5;
-            --warning: #f59e0b;
-            --warning-light: #fef3c7;
-            --danger: #ef4444;
-            --danger-light: #fee2e2;
-            --info: #3b82f6;
-            --info-light: #dbeafe;
-            
-            /* Shadows */
-            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
-            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
         }
 
-        /* Dark Mode Colors */
+        /* Dark Theme Colors */
         [data-theme="dark"] {
-            --bg-main: #0f172a;
-            --bg-secondary: #1e293b;
-            --bg-card: #1e293b;
-            --text-primary: #f1f5f9;
-            --text-secondary: #94a3b8;
-            --border-color: #334155;
-            --input-bg: #1e293b;
-            --sidebar-bg: #1e293b;
-            --sidebar-hover: #334155;
+            --bg-main: #121212;
+            --bg-secondary: #1a1a1a;
+            --bg-card: #1e1e1e;
+            --text-primary: #ffffff;
+            --text-secondary: #a0aec0;
+            --border-color: #2d2d2d;
+            --input-bg: #2d2d2d;
+            --sidebar-bg: #1a1a1a;
+            --sidebar-hover: #2d2d2d;
+            --sidebar-active: #4299e1;
+            --sidebar-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
             --modal-overlay: rgba(0, 0, 0, 0.7);
             --chat-user-bg: #2563eb;
             --chat-support-bg: #334155;
-            
-            /* Adjusted shadows for dark mode */
-            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
-            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
-            
-            /* Success and warning colors for dark mode */
-            --success-light: rgba(16, 185, 129, 0.2);
-            --warning-light: rgba(245, 158, 11, 0.2);
-            --danger-light: rgba(239, 68, 68, 0.2);
-            --info-light: rgba(59, 130, 246, 0.2);
-            --primary-lighter: rgba(52, 133, 255, 0.2);
         }
-
+                /* Reset & Base Styles */
         * {
             margin: 0;
             padding: 0;
@@ -96,7 +123,7 @@
             left: 0;
             right: 0;
             padding: 1rem;
-            background: var(--bg-secondary);
+            background: var(--bg-card);
             border-bottom: 1px solid var(--border-color);
             z-index: 999;
             transition: background-color 0.3s ease;
@@ -139,7 +166,8 @@
             opacity: 1;
             display: block;
         }
-                /* Layout Structure */
+
+        /* Layout Structure */
         .dashboard-container {
             display: flex;
             min-height: 100vh;
@@ -246,8 +274,7 @@
             color: var(--text-secondary);
             font-size: 1.1rem;
         }
-
-        /* Quick Actions */
+                /* Quick Actions */
         .quick-actions {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -304,40 +331,7 @@
             margin-bottom: 2rem;
         }
 
-        /* Responsive Styles for Mobile Header and Sidebar */
-        @media (max-width: 1024px) {
-            .mobile-header {
-                display: block;
-            }
-
-            .sidebar {
-                transform: translateX(-100%);
-            }
-
-            .sidebar.active {
-                transform: translateX(0);
-            }
-
-            .main-content {
-                margin-left: 0;
-                padding-top: 4.5rem;
-            }
-
-            .support-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .quick-actions {
-                grid-template-columns: 1fr;
-            }
-
-            .main-content {
-                padding: 4.5rem 1rem 1rem;
-            }
-        }
-                /* FAQ Section */
+        /* FAQ Section */
         .faq-section {
             background: var(--bg-secondary);
             border-radius: 1rem;
@@ -484,8 +478,7 @@
         .chat-input button:hover {
             background: var(--primary-dark);
         }
-
-        /* Contact Form */
+                /* Contact Form */
         .contact-form {
             background: var(--bg-secondary);
             border-radius: 1rem;
@@ -566,7 +559,8 @@
             background: var(--success-light);
             color: var(--success);
         }
-                /* Knowledge Base Section */
+
+        /* Knowledge Base Section */
         .kb-section {
             background: var(--bg-secondary);
             border-radius: 1rem;
@@ -643,14 +637,10 @@
             background: var(--primary-dark);
         }
 
-        /* Additional Responsive Styles */
+        /* Responsive Styles */
         @media (max-width: 1024px) {
-            .chat-container {
-                height: 400px;
-            }
-
-            .kb-grid {
-                grid-template-columns: repeat(2, 1fr);
+            .mobile-header {
+                display: block;
             }
 
             .sidebar {
@@ -660,9 +650,30 @@
             .sidebar.active {
                 transform: translateX(0);
             }
+
+            .main-content {
+                margin-left: 0;
+                padding-top: 4.5rem;
+            }
+
+            .support-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .chat-container {
+                height: 400px;
+            }
+
+            .kb-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         @media (max-width: 768px) {
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+
             .kb-grid {
                 grid-template-columns: 1fr;
             }
@@ -686,6 +697,10 @@
                 border-radius: 0.5rem;
             }
 
+            .main-content {
+                padding: 4.5rem 1rem 1rem;
+            }
+
             .support-title {
                 font-size: 1.5rem;
             }
@@ -700,10 +715,6 @@
                 font-size: 0.875rem;
             }
 
-            .main-content {
-                padding: 4.5rem 1rem 1rem;
-            }
-
             .action-card {
                 padding: 1rem;
             }
@@ -715,7 +726,7 @@
             }
         }
     </style>
-</head>
+    </head>
 <body>
     <!-- Mobile Header -->
     <header class="mobile-header">
@@ -940,28 +951,12 @@
     </div>
         <script>
         document.addEventListener('DOMContentLoaded', function() {
+            ThemeManager.init(); // Initialize theme manager first
             initializeSupport();
             loadFAQs();
             loadTickets();
             setupEventListeners();
-            initializeTheme();
         });
-
-        // Theme Management with Settings Page Sync
-        function initializeTheme() {
-            // Get initial theme from localStorage
-            const savedTheme = localStorage.getItem('selectedTheme');
-            if (savedTheme) {
-                document.documentElement.setAttribute('data-theme', savedTheme);
-            }
-
-            // Listen for theme changes from settings page
-            window.addEventListener('storage', function(e) {
-                if (e.key === 'selectedTheme') {
-                    document.documentElement.setAttribute('data-theme', e.newValue || 'light');
-                }
-            });
-        }
 
         // Mobile Menu and Support Initialization
         function initializeSupport() {
