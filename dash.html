@@ -35,7 +35,7 @@
             --warning: #f59e0b;
             --danger: #ef4444;
             
-            /* Light Theme Colors */
+            /* Light Theme */
             --bg-main: #f8fafc;
             --bg-secondary: #ffffff;
             --bg-card: #ffffff;
@@ -48,9 +48,10 @@
             --notification-bg: #ffffff;
             --notification-hover: #f8fafc;
             --shadow-color: rgba(0, 0, 0, 0.1);
+            --map-border: #e2e8f0;
         }
 
-        /* Dark Theme Colors */
+        /* Dark Theme */
         [data-theme="dark"] {
             --bg-main: #0f172a;
             --bg-secondary: #1e293b;
@@ -64,6 +65,7 @@
             --notification-bg: #1e293b;
             --notification-hover: #334155;
             --shadow-color: rgba(0, 0, 0, 0.3);
+            --map-border: #334155;
         }
 
         body {
@@ -73,13 +75,14 @@
             min-height: 100vh;
         }
 
-        /* Layout */
+        /* Layout Structure */
         .dashboard-container {
             display: flex;
             min-height: 100vh;
             position: relative;
         }
-	            /* Sidebar Styles */
+
+        /* Sidebar Styles */
         .sidebar {
             width: 280px;
             background: var(--sidebar-bg);
@@ -107,11 +110,7 @@
             font-size: 1.5rem;
             font-weight: 600;
         }
-
-        .logo-link:hover {
-            opacity: 0.9;
-        }
-
+	            /* Navigation Styles */
         .nav-menu {
             padding: 1rem;
         }
@@ -226,26 +225,225 @@
             align-items: center;
             justify-content: center;
             padding: 0 6px;
+            transition: opacity 0.3s ease;
         }
 
         .notification-dropdown {
             position: absolute;
-            top: 100%;
-            right: 0;
+            top: calc(100% + 10px);
+            right: -10px;
             width: 320px;
             background: var(--notification-bg);
             border: 1px solid var(--border-color);
-            border-radius: 0.5rem;
+            border-radius: 12px;
             box-shadow: 0 4px 12px var(--shadow-color);
-            margin-top: 0.5rem;
-            display: none;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
             z-index: 1000;
         }
 
-        .notification-dropdown.active {
-            display: block;
+        .notification-dropdown::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            right: 20px;
+            width: 12px;
+            height: 12px;
+            background: var(--notification-bg);
+            border-left: 1px solid var(--border-color);
+            border-top: 1px solid var(--border-color);
+            transform: rotate(45deg);
         }
-	          /* Welcome Section Styles */
+
+        .notification-dropdown.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .notification-header {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .notification-list {
+            max-height: 360px;
+            overflow-y: auto;
+        }
+	            /* Notification Items */
+        .notification-item {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            gap: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .notification-item:hover {
+            background: var(--notification-hover);
+        }
+
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-lighter);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-message {
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+            font-size: 0.875rem;
+        }
+
+        .notification-time {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+        }
+
+        /* Service Tracking Section */
+        .service-tracking {
+            background: var(--bg-card);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .tracking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .tracking-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .tracking-status {
+            background: var(--primary-lighter);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .mechanic-details {
+            display: flex;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .mechanic-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .mechanic-info {
+            flex: 1;
+        }
+
+        .mechanic-name {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .mechanic-specialty {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .mechanic-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            color: var(--warning);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .tracking-map {
+            width: 100%;
+            height: 300px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            border: 1px solid var(--map-border);
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .eta-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+        }
+
+        .eta-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .eta-time {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .distance-info {
+            text-align: right;
+        }
+
+        .distance-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .distance-value {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+	            /* Welcome Section Styles */
         .welcome-section {
             background: var(--primary);
             border-radius: 24px;
@@ -347,96 +545,7 @@
             text-decoration: none;
         }
 
-        .action-link:hover {
-            text-decoration: underline;
-        }
-
-        /* Mechanic Section */
-        .mechanic-section {
-            margin-top: 2rem;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .section-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .mechanic-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .mechanic-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .mechanic-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .mechanic-avatar {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .mechanic-info {
-            flex: 1;
-        }
-
-        .mechanic-name {
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 0.25rem;
-        }
-
-        .mechanic-specialty {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-        }
-
-        .mechanic-rating {
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-            color: var(--warning);
-            font-weight: 500;
-        }
-
-        .request-button {
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 0.75rem 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            width: 100%;
-        }
-
-        .request-button:hover {
-            background: var(--primary-dark);
-        }
-	         /* Toast Notifications */
+        /* Toast Notifications */
         .toast {
             position: fixed;
             bottom: 20px;
@@ -455,82 +564,7 @@
             opacity: 1;
         }
 
-        /* Notification Dropdown Content */
-        .notification-header {
-            padding: 1rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .notification-title {
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .notification-list {
-            max-height: 360px;
-            overflow-y: auto;
-        }
-
-        .notification-item {
-            padding: 1rem;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            gap: 1rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .notification-item:hover {
-            background: var(--notification-hover);
-        }
-
-        .notification-item:last-child {
-            border-bottom: none;
-        }
-
-        .notification-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--primary-lighter);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
-        }
-
-        .notification-content {
-            flex: 1;
-        }
-
-        .notification-message {
-            color: var(--text-primary);
-            margin-bottom: 0.25rem;
-            font-size: 0.875rem;
-        }
-
-        .notification-time {
-            color: var(--text-secondary);
-            font-size: 0.75rem;
-        }
-
-        /* Overlay */
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-        }
-
-        .overlay.active {
-            display: block;
-        }
-
-        /* Responsive Styles */
+        /* Responsive Design */
         @media (max-width: 1024px) {
             .sidebar {
                 transform: translateX(-100%);
@@ -548,8 +582,8 @@
                 display: block;
             }
 
-            .welcome-section {
-                border-radius: 16px;
+            .tracking-map {
+                height: 250px;
             }
         }
 
@@ -565,7 +599,7 @@
 
             .welcome-section {
                 padding: 1.5rem;
-                margin: 0 0 1.5rem 0;
+                border-radius: 16px;
             }
 
             .welcome-title {
@@ -581,66 +615,35 @@
                 gap: 1rem;
             }
 
-            .action-card {
-                padding: 1.25rem;
+            .mechanic-details {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                padding: 1rem;
             }
 
-            .mechanic-grid {
-                grid-template-columns: 1fr;
+            .eta-info {
+                flex-direction: column;
                 gap: 1rem;
+                text-align: center;
             }
 
-            .notification-dropdown {
-                position: fixed;
-                top: auto;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                width: 100%;
-                margin: 0;
-                border-radius: 16px 16px 0 0;
-                max-height: 80vh;
-                overflow-y: auto;
+            .distance-info {
+                text-align: center;
             }
-        }
-
-        /* User Profile Styles */
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 0.5rem;
-            cursor: pointer;
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .user-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .user-name {
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .user-status {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
         }
 
         @media (max-width: 480px) {
-            .user-info {
-                display: none;
+            .notification-dropdown {
+                width: 280px;
+                right: -140px;
+            }
+
+            .notification-dropdown::before {
+                right: 150px;
             }
         }
-	       </style>
+	        </style>
 </head>
 <body>
     <div class="dashboard-container">
@@ -713,28 +716,37 @@
                     <div class="notification-wrapper">
                         <button class="notification-trigger" id="notificationTrigger">
                             <i class="fas fa-bell"></i>
-                            <span class="notification-count">2</span>
+                            <span class="notification-count" id="notificationCount">3</span>
                         </button>
                         <div class="notification-dropdown" id="notificationDropdown">
                             <div class="notification-header">
                                 <h3 class="notification-title">Notifications</h3>
                             </div>
                             <div class="notification-list">
-                                <div class="notification-item">
+                                <div class="notification-item" data-id="1">
                                     <div class="notification-icon">
                                         <i class="fas fa-car"></i>
                                     </div>
                                     <div class="notification-content">
-                                        <div class="notification-message">Your mechanic will arrive in 10 minutes</div>
-                                        <div class="notification-time">2 minutes ago</div>
+                                        <div class="notification-message">Your mechanic is 5 minutes away</div>
+                                        <div class="notification-time">Just now</div>
                                     </div>
                                 </div>
-                                <div class="notification-item">
+                                <div class="notification-item" data-id="2">
                                     <div class="notification-icon">
-                                        <i class="fas fa-credit-card"></i>
+                                        <i class="fas fa-tools"></i>
                                     </div>
                                     <div class="notification-content">
-                                        <div class="notification-message">Payment received for last service</div>
+                                        <div class="notification-message">Service request accepted by Rajesh</div>
+                                        <div class="notification-time">5 minutes ago</div>
+                                    </div>
+                                </div>
+                                <div class="notification-item" data-id="3">
+                                    <div class="notification-icon">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <div class="notification-message">Payment confirmed for last service</div>
                                         <div class="notification-time">1 hour ago</div>
                                     </div>
                                 </div>
@@ -750,85 +762,52 @@
                     </div>
                 </div>
             </header>
-
-            <!-- Welcome Section -->
+	                <!-- Welcome Section -->
             <section class="welcome-section">
                 <div class="welcome-content">
                     <h1 class="welcome-title">
                         Welcome back, John! 
                         <span style="font-size: 1.5rem;">👋</span>
                     </h1>
-                    <p class="welcome-text">Need roadside assistance? We're here to help 24/7.</p>
+                    <p class="welcome-text">Your service request is in progress</p>
                     <div class="location-info">
                         <i class="fas fa-map-marker-alt"></i>
                         <span>Mumbai, Maharashtra</span>
                     </div>
                 </div>
             </section>
-		            <!-- Quick Actions -->
-            <section class="quick-actions">
-                <div class="action-card" onclick="window.location.href='service-request.html'">
-                    <div class="action-icon">
-                        <i class="fas fa-tools"></i>
-                    </div>
-                    <h3 class="action-title">Request Service</h3>
-                    <p class="action-description">Book a mechanic for immediate assistance</p>
-                    <span class="action-link">Book Now →</span>
-                </div>
 
-                <div class="action-card" onclick="window.location.href='track-service.html'">
-                    <div class="action-icon">
-                        <i class="fas fa-map-marked-alt"></i>
-                    </div>
-                    <h3 class="action-title">Track Service</h3>
-                    <p class="action-description">Monitor your ongoing service request</p>
-                    <span class="action-link">Track Now →</span>
+            <!-- Service Tracking Section -->
+            <section class="service-tracking">
+                <div class="tracking-header">
+                    <h2 class="tracking-title">Active Service Request</h2>
+                    <span class="tracking-status">In Progress</span>
                 </div>
-
-                <div class="action-card" onclick="window.location.href='service-history.html'">
-                    <div class="action-icon">
-                        <i class="fas fa-history"></i>
-                    </div>
-                    <h3 class="action-title">Service History</h3>
-                    <p class="action-description">View your past service records</p>
-                    <span class="action-link">View History →</span>
-                </div>
-            </section>
-
-            <!-- Mechanic Section -->
-            <section class="mechanic-section">
-                <div class="section-header">
-                    <h2 class="section-title">Available Mechanics</h2>
-                </div>
-                <div class="mechanic-grid">
-                    <div class="mechanic-card">
-                        <div class="mechanic-header">
-                            <img src="https://via.placeholder.com/64" alt="Mechanic" class="mechanic-avatar">
-                            <div class="mechanic-info">
-                                <h3 class="mechanic-name">Rajesh Kumar</h3>
-                                <p class="mechanic-specialty">Car Specialist</p>
-                                <div class="mechanic-rating">
-                                    <i class="fas fa-star"></i>
-                                    <span>4.8</span>
-                                </div>
-                            </div>
+                
+                <div class="mechanic-details">
+                    <img src="https://via.placeholder.com/80" alt="Mechanic" class="mechanic-avatar">
+                    <div class="mechanic-info">
+                        <h3 class="mechanic-name">Rajesh Kumar</h3>
+                        <p class="mechanic-specialty">Car Specialist • 8 years experience</p>
+                        <div class="mechanic-rating">
+                            <i class="fas fa-star"></i>
+                            <span>4.8 (120+ reviews)</span>
                         </div>
-                        <button class="request-button">Request Service</button>
                     </div>
+                </div>
 
-                    <div class="mechanic-card">
-                        <div class="mechanic-header">
-                            <img src="https://via.placeholder.com/64" alt="Mechanic" class="mechanic-avatar">
-                            <div class="mechanic-info">
-                                <h3 class="mechanic-name">Amit Patel</h3>
-                                <p class="mechanic-specialty">Bike Specialist</p>
-                                <div class="mechanic-rating">
-                                    <i class="fas fa-star"></i>
-                                    <span>4.9</span>
-                                </div>
-                            </div>
-                        </div>
-                        <button class="request-button">Request Service</button>
+                <div class="tracking-map" id="map">
+                    <!-- Map will be initialized here -->
+                </div>
+
+                <div class="eta-info">
+                    <div>
+                        <div class="eta-label">Estimated Time of Arrival</div>
+                        <div class="eta-time" id="etaTime">12 minutes</div>
+                    </div>
+                    <div class="distance-info">
+                        <div class="distance-label">Distance</div>
+                        <div class="distance-value" id="distance">2.5 km away</div>
                     </div>
                 </div>
             </section>
@@ -842,7 +821,8 @@
         document.addEventListener('DOMContentLoaded', function() {
             initializeMobileMenu();
             initializeNotifications();
-            initializeActionCards();
+            initializeThemeSync();
+            simulateETA();
         });
 
         // Mobile Menu Management
@@ -878,36 +858,71 @@
         function initializeNotifications() {
             const notificationTrigger = document.getElementById('notificationTrigger');
             const notificationDropdown = document.getElementById('notificationDropdown');
+            const notificationCount = document.getElementById('notificationCount');
+            const notificationItems = document.querySelectorAll('.notification-item');
             
-            if (notificationTrigger && notificationDropdown) {
-                notificationTrigger.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    notificationDropdown.classList.toggle('active');
-                });
+            let count = parseInt(notificationCount.textContent);
 
-                document.addEventListener('click', (e) => {
-                    if (!notificationDropdown.contains(e.target)) {
-                        notificationDropdown.classList.remove('active');
+            notificationTrigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                notificationDropdown.classList.toggle('active');
+            });
+
+            notificationItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    if (!item.classList.contains('read')) {
+                        item.classList.add('read');
+                        count--;
+                        notificationCount.textContent = count;
+                        if (count === 0) {
+                            notificationCount.style.opacity = '0';
+                        }
                     }
                 });
-            }
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!notificationDropdown.contains(e.target) && 
+                    !notificationTrigger.contains(e.target)) {
+                    notificationDropdown.classList.remove('active');
+                }
+            });
         }
 
-        // Action Cards Interaction
-        function initializeActionCards() {
-            document.querySelectorAll('.request-button').forEach(button => {
-                button.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    showToast('Requesting service...');
-                });
+        // Theme Sync with Settings
+        function initializeThemeSync() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+
+            window.addEventListener('storage', (e) => {
+                if (e.key === 'theme') {
+                    document.documentElement.setAttribute('data-theme', e.newValue);
+                }
             });
+        }
+
+        // Simulate ETA Updates
+        function simulateETA() {
+            const etaTime = document.getElementById('etaTime');
+            const distance = document.getElementById('distance');
+            let minutes = 12;
+            let kilometers = 2.5;
+
+            setInterval(() => {
+                minutes = Math.max(0, minutes - 1);
+                kilometers = Math.max(0, kilometers - 0.2);
+                
+                etaTime.textContent = `${minutes} minutes`;
+                distance.textContent = `${kilometers.toFixed(1)} km away`;
+
+                if (minutes === 0) {
+                    showToast('Your mechanic has arrived!', 'success');
+                }
+            }, 60000); // Update every minute
         }
 
         // Toast Notification
         function showToast(message, type = 'info') {
-            const existingToasts = document.querySelectorAll('.toast');
-            existingToasts.forEach(toast => toast.remove());
-
             const toast = document.createElement('div');
             toast.className = `toast toast-${type}`;
             toast.textContent = message;
@@ -924,4 +939,3 @@
     </script>
 </body>
 </html>
-		
