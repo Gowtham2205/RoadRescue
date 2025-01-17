@@ -88,7 +88,7 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* Mobile Header - New Addition */
+        /* Mobile Header */
         .mobile-header {
             display: none;
             position: fixed;
@@ -96,7 +96,7 @@
             left: 0;
             right: 0;
             padding: 1rem;
-            background: var(--bg-card);
+            background: var(--bg-secondary);
             border-bottom: 1px solid var(--border-color);
             z-index: 999;
             transition: background-color 0.3s ease;
@@ -121,7 +121,7 @@
             transition: color 0.3s ease;
         }
 
-        /* Overlay - New Addition */
+        /* Overlay */
         .overlay {
             display: none;
             position: fixed;
@@ -231,7 +231,6 @@
             transition: margin-left 0.3s ease;
         }
 
-        /* Support Header */
         .support-header {
             margin-bottom: 2rem;
         }
@@ -589,6 +588,7 @@
             border-radius: 0.75rem;
             transition: all 0.3s ease;
             cursor: pointer;
+            background: var(--bg-secondary);
         }
 
         .kb-card:hover {
@@ -652,6 +652,14 @@
             .kb-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
+
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
         }
 
         @media (max-width: 768px) {
@@ -677,6 +685,10 @@
                 width: 100%;
                 border-radius: 0.5rem;
             }
+
+            .support-title {
+                font-size: 1.5rem;
+            }
         }
 
         @media (max-width: 480px) {
@@ -688,8 +700,18 @@
                 font-size: 0.875rem;
             }
 
-            .support-title {
-                font-size: 1.5rem;
+            .main-content {
+                padding: 4.5rem 1rem 1rem;
+            }
+
+            .action-card {
+                padding: 1rem;
+            }
+
+            .action-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.25rem;
             }
         }
     </style>
@@ -701,6 +723,8 @@
             <button class="menu-toggle" id="menuToggle">
                 <i class="fas fa-bars"></i>
             </button>
+            <span style="color: var(--text-primary); font-weight: 600;">Support</span>
+            <div style="width: 24px;"></div> <!-- Spacer for alignment -->
         </div>
     </header>
 
@@ -716,7 +740,7 @@
                     <span>RoadRescue</span>
                 </a>
             </div>
-                       <nav class="nav-menu">
+            <nav class="nav-menu">
                 <ul>
                     <li class="nav-item">
                         <a href="dash.html" class="nav-link">
@@ -772,7 +796,7 @@
             </div>
 
             <!-- Quick Actions -->
-            <div class="quick-actions mb-4">
+            <div class="quick-actions">
                 <div class="action-card" onclick="openChat()">
                     <div class="action-icon">
                         <i class="fas fa-comments"></i>
@@ -801,8 +825,7 @@
                     </div>
                 </div>
             </div>
-
-            <div class="support-grid">
+                        <div class="support-grid">
                 <!-- FAQ Section -->
                 <div class="faq-section">
                     <div class="faq-header">
@@ -849,7 +872,7 @@
                             <option value="other">Other</option>
                         </select>
                     </div>
-                                        <div class="form-group">
+                    <div class="form-group">
                         <label class="form-label">Description</label>
                         <textarea class="form-textarea" id="ticketDescription" placeholder="Describe your issue in detail"></textarea>
                     </div>
@@ -915,8 +938,7 @@
             </div>
         </main>
     </div>
-
-    <script>
+        <script>
         document.addEventListener('DOMContentLoaded', function() {
             initializeSupport();
             loadFAQs();
@@ -925,26 +947,24 @@
             initializeTheme();
         });
 
-        // Theme Management
-function initializeTheme() {
-    // Get theme from localStorage (set by settings page)
-    const savedTheme = localStorage.getItem('selectedTheme') || 'light';
-    document.documentElement.setAttribute('data-theme', savedTheme);
+        // Theme Management with Settings Page Sync
+        function initializeTheme() {
+            // Get initial theme from localStorage
+            const savedTheme = localStorage.getItem('selectedTheme');
+            if (savedTheme) {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            }
 
-    // Listen for theme changes from settings page
-    window.addEventListener('storage', function(e) {
-        if (e.key === 'selectedTheme') {
-            document.documentElement.setAttribute('data-theme', e.newValue);
-        }
-    });
-}
-
-        function applyTheme(theme) {
-            document.documentElement.setAttribute('data-theme', theme);
+            // Listen for theme changes from settings page
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'selectedTheme') {
+                    document.documentElement.setAttribute('data-theme', e.newValue || 'light');
+                }
+            });
         }
 
+        // Mobile Menu and Support Initialization
         function initializeSupport() {
-            // Mobile menu toggle
             const menuToggle = document.getElementById('menuToggle');
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('overlay');
@@ -963,7 +983,8 @@ function initializeTheme() {
                 });
             }
         }
-                // FAQ Data and Functions
+
+        // FAQ Data and Functions
         const faqs = [
             {
                 question: "How do I request emergency roadside assistance?",
