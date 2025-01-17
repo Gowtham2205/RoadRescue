@@ -14,15 +14,23 @@
         const savedTheme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
     </script>
+
     <style>
-        /* CSS Variables for Theme Management */
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        /* Theme Variables */
         :root {
-            /* Colors */
-            --primary: #3485ff;
-            --primary-dark: #2563eb;
-            --primary-light: #60a5fa;
-            --primary-lighter: #e0e9ff;
-            --secondary: #0ea5e9;
+            --primary: #0095FF;
+            --primary-dark: #0077cc;
+            --primary-light: #66b3ff;
+            --primary-lighter: #e0f2ff;
+            --secondary: #64748b;
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
@@ -34,12 +42,9 @@
             --text-primary: #1e293b;
             --text-secondary: #64748b;
             --border-color: #e2e8f0;
-            --input-bg: #ffffff;
             --sidebar-bg: #ffffff;
             --sidebar-hover: #f1f5f9;
             --header-bg: #ffffff;
-            --notification-bg: #ffffff;
-            --notification-hover: #f8fafc;
         }
 
         /* Dark Theme */
@@ -50,20 +55,9 @@
             --text-primary: #f8fafc;
             --text-secondary: #94a3b8;
             --border-color: #334155;
-            --input-bg: #1e293b;
             --sidebar-bg: #1e293b;
             --sidebar-hover: #334155;
             --header-bg: #1e293b;
-            --notification-bg: #1e293b;
-            --notification-hover: #334155;
-        }
-
-        /* Reset & Base Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
         body {
@@ -94,52 +88,6 @@
             overflow-y: auto;
         }
 
-        @media (max-width: 1024px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-
-            .sidebar.active {
-                transform: translateX(0);
-            }
-        }
-
-        /* Header Styles */
-        .main-header {
-            position: sticky;
-            top: 0;
-            background: var(--header-bg);
-            padding: 1rem 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid var(--border-color);
-            margin: -1rem -2rem 1rem -2rem;
-            z-index: 100;
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-        }
-
-        .menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--text-primary);
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 0.5rem;
-        }
-
-        @media (max-width: 1024px) {
-            .menu-toggle {
-                display: block;
-            }
-        }
-                /* Logo and Navigation Styles */
         .logo-section {
             padding: 1.5rem;
             border-bottom: 1px solid var(--border-color);
@@ -162,7 +110,7 @@
             font-weight: 600;
             color: var(--primary);
         }
-
+                /* Navigation Menu */
         .nav-menu {
             padding: 1.5rem 1rem;
         }
@@ -207,10 +155,34 @@
             transition: margin-left 0.3s ease;
         }
 
-        @media (max-width: 1024px) {
-            .main-content {
-                margin-left: 0;
-            }
+        /* Header Styles */
+        .main-header {
+            position: sticky;
+            top: 0;
+            background: var(--header-bg);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
+            margin: -1rem -2rem 1rem -2rem;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
         }
 
         /* Settings Styles */
@@ -260,7 +232,7 @@
             color: var(--text-primary);
         }
 
-        /* Toggle Switch Styles */
+        /* Toggle Switch */
         .toggle-switch {
             position: relative;
             display: inline-block;
@@ -306,8 +278,7 @@
         input:checked + .toggle-slider:before {
             transform: translateX(26px);
         }
-
-        /* Setting Items */
+                /* Setting Items */
         .setting-item {
             display: flex;
             justify-content: space-between;
@@ -336,6 +307,25 @@
             font-size: 0.9rem;
         }
 
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+
         /* Overlay */
         .overlay {
             display: none;
@@ -352,8 +342,35 @@
             display: block;
         }
 
-        /* Responsive Adjustments */
+        /* Responsive Styles */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .main-header {
+                padding: 1rem;
+                margin: -1rem -1rem 1rem -1rem;
+            }
+        }
+
         @media (max-width: 768px) {
+            .settings-container {
+                padding: 0 1rem;
+            }
+
             .settings-card {
                 padding: 1rem;
             }
@@ -363,14 +380,24 @@
                 gap: 1rem;
                 align-items: flex-start;
             }
+
+            .settings-title {
+                font-size: 1.5rem;
+            }
+
+            .settings-subtitle {
+                font-size: 0.875rem;
+            }
         }
-        <body>
+    </style>
+</head>
+<body>
     <div class="dashboard-container">
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="logo-section">
                 <a href="#" class="logo-link">
-                    <img src="https://via.placeholder.com/32" alt="RoadRescue" class="logo-image">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDA5NUZGIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTE0LjcgNi4zYTEgMSAwIDAgMCAwIDEuNGwxLjYgMS42YTEgMSAwIDAgMCAxLjQgMGwzLjc3Ny0zLjc3N2E2IDYgMCAwIDEtLjg3OSA4Ljg3OWwtMi40NzQgMi40NzRhNiA2IDAgMCAxLTguNDg2LTguNDg2bDIuNDc0LTIuNDc0YTYgNiAwIDAgMSA4LjQ4NiA4LjQ4NiIvPjwvc3ZnPg==" alt="RoadRescue" class="logo-image">
                     <span class="logo-text">RoadRescue</span>
                 </a>
             </div>
@@ -455,8 +482,7 @@
                         </label>
                     </div>
                 </div>
-
-                <!-- Notification Settings -->
+                                <!-- Notification Settings -->
                 <div class="settings-card">
                     <div class="settings-card-header">
                         <h2 class="settings-card-title">Notification Settings</h2>
@@ -505,18 +531,15 @@
 
     <!-- Overlay for Mobile -->
     <div class="overlay" id="overlay"></div>
-       <script>
+
+    <script>
         // Theme Management
         const ThemeManager = {
             init() {
-                // Initialize theme from localStorage
                 this.theme = localStorage.getItem('theme') || 'light';
                 this.applyTheme(this.theme);
                 
-                // Set up broadcast channel for cross-tab sync
                 this.channel = new BroadcastChannel('theme-channel');
-                
-                // Listen for theme changes from other tabs
                 this.channel.onmessage = (event) => {
                     if (event.data.type === 'theme-change') {
                         this.applyTheme(event.data.theme, false);
@@ -534,7 +557,6 @@
                 document.documentElement.setAttribute('data-theme', theme);
                 localStorage.setItem('theme', theme);
                 
-                // Broadcast theme change to other tabs
                 if (broadcast) {
                     this.channel.postMessage({
                         type: 'theme-change',
@@ -542,13 +564,11 @@
                     });
                 }
 
-                // Update toggle switch if it exists
                 const toggle = document.getElementById('darkModeToggle');
                 if (toggle) {
                     toggle.checked = theme === 'dark';
                 }
 
-                // Dispatch event for other scripts
                 window.dispatchEvent(new CustomEvent('themeChange', { 
                     detail: { theme } 
                 }));
@@ -567,7 +587,6 @@
         });
 
         function initializeSettings() {
-            // Initialize dark mode toggle
             const darkModeToggle = document.getElementById('darkModeToggle');
             if (darkModeToggle) {
                 darkModeToggle.checked = ThemeManager.theme === 'dark';
@@ -577,7 +596,6 @@
                 });
             }
 
-            // Listen for theme changes
             window.addEventListener('themeChange', (e) => {
                 if (darkModeToggle) {
                     darkModeToggle.checked = e.detail.theme === 'dark';
@@ -591,21 +609,18 @@
             const overlay = document.getElementById('overlay');
             
             if (menuToggle && sidebar && overlay) {
-                // Toggle menu on hamburger click
                 menuToggle.addEventListener('click', () => {
                     sidebar.classList.toggle('active');
                     overlay.classList.toggle('active');
                     document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
                 });
 
-                // Close menu when clicking overlay
                 overlay.addEventListener('click', () => {
                     sidebar.classList.remove('active');
                     overlay.classList.remove('active');
                     document.body.style.overflow = '';
                 });
 
-                // Close menu when window is resized to desktop view
                 window.addEventListener('resize', () => {
                     if (window.innerWidth > 1024) {
                         sidebar.classList.remove('active');
@@ -616,21 +631,15 @@
             }
         }
 
-        // Toast Notification Function
         function showToast(message, type = 'info') {
             const toast = document.createElement('div');
             toast.className = `toast toast-${type}`;
             toast.textContent = message;
             
             document.body.appendChild(toast);
-            
-            // Force reflow
             toast.offsetHeight;
-            
-            // Show toast
             toast.classList.add('show');
             
-            // Hide and remove toast
             setTimeout(() => {
                 toast.classList.remove('show');
                 setTimeout(() => toast.remove(), 300);
@@ -638,4 +647,4 @@
         }
     </script>
 </body>
-</html>     
+</html>
