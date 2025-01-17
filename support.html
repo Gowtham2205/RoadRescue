@@ -833,6 +833,42 @@
             loadTickets();
             setupEventListeners();
 
+            // Add this right after the DOMContentLoaded event listener
+document.addEventListener('DOMContentLoaded', function() {
+    initializeMobileMenu();
+    initializeSupport();
+    loadFAQs();
+    loadTickets();
+    setupEventListeners();
+    initializeTheme(); // Add this line
+});
+
+// Add these theme-related functions
+function initializeTheme() {
+    // Check localStorage for theme preference
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    applyTheme(savedTheme);
+
+    // Listen for theme changes from other pages
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'theme') {
+            applyTheme(e.newValue);
+        }
+    });
+}
+
+function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+}
+
+// Add theme toggle function (if you want to add a theme toggle button)
+function toggleTheme() {
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    applyTheme(newTheme);
+}
+
             // Check localStorage for theme preference
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme) {
