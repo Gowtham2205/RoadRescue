@@ -926,18 +926,18 @@
         });
 
         // Theme Management
-        function initializeTheme() {
-            // Get theme from localStorage (set by settings page)
-            const currentTheme = localStorage.getItem('selectedTheme') || 'light';
-            applyTheme(currentTheme);
+function initializeTheme() {
+    // Get theme from localStorage (set by settings page)
+    const savedTheme = localStorage.getItem('selectedTheme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
 
-            // Listen for theme changes from settings page
-            window.addEventListener('storage', function(e) {
-                if (e.key === 'selectedTheme') {
-                    applyTheme(e.newValue);
-                }
-            });
+    // Listen for theme changes from settings page
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'selectedTheme') {
+            document.documentElement.setAttribute('data-theme', e.newValue);
         }
+    });
+}
 
         function applyTheme(theme) {
             document.documentElement.setAttribute('data-theme', theme);
