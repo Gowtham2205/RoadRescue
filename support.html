@@ -698,13 +698,6 @@
                             <span>Support</span>
                         </a>
                     </li>
-                    <!-- Theme Toggle Button -->
-                    <li class="nav-item">
-                        <a href="#" class="nav-link" onclick="toggleTheme(); return false;">
-                            <i class="fas fa-moon"></i>
-                            <span>Toggle Theme</span>
-                        </a>
-                    </li>
                     <li class="nav-item">
                         <a href="log.html" class="nav-link">
                             <i class="fas fa-sign-out-alt"></i>
@@ -842,35 +835,22 @@
         });
 
         // Theme Management
-        function initializeTheme() {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            applyTheme(savedTheme);
+function initializeTheme() {
+    // Get theme from localStorage (set by settings page)
+    const currentTheme = localStorage.getItem('selectedTheme') || 'light';
+    applyTheme(currentTheme);
 
-            // Listen for theme changes from other pages
-            window.addEventListener('storage', function(e) {
-                if (e.key === 'theme') {
-                    applyTheme(e.newValue);
-                }
-            });
+    // Listen for theme changes from settings page
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'selectedTheme') {
+            applyTheme(e.newValue);
         }
+    });
+}
 
-        function applyTheme(theme) {
-            document.documentElement.setAttribute('data-theme', theme);
-            localStorage.setItem('theme', theme);
-            
-            // Update theme toggle icon
-            const themeIcon = document.querySelector('.nav-link .fa-moon');
-            if (themeIcon) {
-                themeIcon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
-            }
-        }
-
-        function toggleTheme() {
-            const currentTheme = localStorage.getItem('theme') || 'light';
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            applyTheme(newTheme);
-        }
-
+function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+}
         // FAQ Data
         const faqs = [
             {
