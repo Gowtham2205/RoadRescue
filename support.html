@@ -119,7 +119,7 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Plus Jakarta Sans', sans-serif;
-            -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -129,14 +129,14 @@
             transition: background-color 0.3s ease, color 0.3s ease;
             min-height: 100vh;
             position: relative;
-            overflow-x: hidden; /* Prevent horizontal scroll during animations */
+            overflow-x: hidden;
         }
 
         body.sidebar-active {
             overflow: hidden;
         }
 
-        /* Mobile Header - Updated for better visibility and touch */
+        /* Mobile Header */
         .mobile-header {
             display: none;
             position: fixed;
@@ -149,8 +149,6 @@
             border-bottom: 1px solid var(--border-color);
             z-index: 999;
             transition: background-color 0.3s ease;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
         }
 
         .mobile-header-content {
@@ -160,15 +158,15 @@
             justify-content: space-between;
         }
 
-        /* Menu Toggle Button - Updated for better interaction */
+        /* Menu Toggle Button */
         .menu-toggle {
             background: none;
             border: none;
             color: var(--text-primary);
             font-size: 1.5rem;
             cursor: pointer;
-            width: 44px; /* Increased touch target */
-            height: 44px; /* Increased touch target */
+            width: 44px;
+            height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -177,7 +175,7 @@
             padding: 0;
             margin: 0;
             position: relative;
-            z-index: 1000; /* Ensure button stays above overlay */
+            z-index: 1000;
         }
 
         .menu-toggle:hover {
@@ -188,7 +186,7 @@
             transform: scale(0.95);
         }
 
-        /* Overlay - Updated for smoother transitions */
+        /* Overlay */
         .overlay {
             display: none;
             position: fixed;
@@ -201,8 +199,6 @@
             opacity: 0;
             transition: opacity 0.3s ease;
             touch-action: none;
-            -webkit-backdrop-filter: blur(4px);
-            backdrop-filter: blur(4px);
         }
 
         .overlay.active {
@@ -218,7 +214,7 @@
             overflow-x: hidden;
         }
 
-        /* Sidebar Styles - Updated for better mobile handling */
+        /* Sidebar Styles */
         .sidebar {
             width: 280px;
             background: var(--sidebar-bg);
@@ -228,32 +224,25 @@
             height: 100vh;
             border-right: 1px solid var(--border-color);
             z-index: 1000;
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.3s ease, background-color 0.3s ease;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             transform: translateX(-100%);
-            will-change: transform;
         }
 
         .sidebar.active {
             transform: translateX(0);
-            box-shadow: var(--shadow-lg);
         }
 
         @media (min-width: 1025px) {
             .sidebar {
                 transform: translateX(0);
-                box-shadow: none;
             }
         }
 
         .sidebar-header {
             padding: 1.5rem;
             border-bottom: 1px solid var(--border-color);
-            background: var(--sidebar-bg);
-            position: sticky;
-            top: 0;
-            z-index: 1;
         }
 
         .logo {
@@ -261,8 +250,6 @@
             align-items: center;
             gap: 0.75rem;
             text-decoration: none;
-            user-select: none;
-            -webkit-user-select: none;
         }
 
         .logo img {
@@ -276,7 +263,7 @@
             color: var(--text-primary);
         }
 
-        /* Navigation Menu - Updated for better touch interaction */
+        /* Navigation Menu */
         .nav-menu {
             padding: 1rem;
         }
@@ -319,7 +306,7 @@
             font-weight: 600;
         }
 
-        /* Main Content - Updated for smooth transitions */
+        /* Main Content */
         .main-content {
             flex: 1;
             margin-left: 280px;
@@ -342,11 +329,6 @@
             .main-content.sidebar-active {
                 transform: translateX(280px);
             }
-
-            body.sidebar-active .overlay {
-                display: block;
-                opacity: 1;
-            }
         }
                 /* Support Header Styles */
         .support-header {
@@ -366,7 +348,7 @@
             font-size: 1.1rem;
         }
 
-        /* Quick Actions - Updated for better touch interaction */
+        /* Quick Actions */
         .quick-actions {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -387,17 +369,16 @@
             gap: 1rem;
             user-select: none;
             -webkit-user-select: none;
-            touch-action: manipulation;
-        }
-
-        .action-card:active {
-            transform: scale(0.98);
         }
 
         .action-card:hover {
             transform: translateY(-4px);
             box-shadow: var(--shadow-lg);
             border-color: var(--primary-light);
+        }
+
+        .action-card:active {
+            transform: scale(0.98);
         }
 
         .action-icon {
@@ -424,7 +405,7 @@
             font-size: 0.875rem;
         }
 
-        /* Support Grid - Updated for better responsiveness */
+        /* Support Grid */
         .support-grid {
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -433,7 +414,7 @@
             animation: fadeIn 0.5s ease 0.2s backwards;
         }
 
-        /* FAQ Section - Updated for better interaction */
+        /* FAQ Section */
         .faq-section {
             background: var(--bg-secondary);
             border-radius: 1rem;
@@ -456,6 +437,7 @@
             font-size: 1.25rem;
             font-weight: 600;
             color: var(--text-primary);
+            margin: 0;
         }
 
         .faq-list {
@@ -464,7 +446,6 @@
 
         .faq-item {
             border-bottom: 1px solid var(--border-color);
-            transition: all 0.3s ease;
         }
 
         .faq-item:last-child {
@@ -507,6 +488,63 @@
 
         .faq-item.active .faq-question i {
             transform: rotate(180deg);
+        }
+
+        /* Knowledge Base Section */
+        .kb-section {
+            margin-top: 2rem;
+        }
+
+        .kb-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .kb-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 1rem;
+        }
+
+        .kb-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-light);
+        }
+
+        .kb-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--primary-lighter);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .kb-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .kb-description {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin: 0;
         }
 
         /* Animations */
@@ -571,7 +609,7 @@
                 padding: 0.875rem;
             }
         }
-                /* Chat Container - Updated for better mobile interaction */
+                /* Chat Container */
         .chat-container {
             background: var(--bg-secondary);
             border-radius: 1rem;
@@ -689,7 +727,6 @@
             background: var(--input-bg);
             color: var(--text-primary);
             transition: all 0.3s ease;
-            font-size: 1rem;
         }
 
         .chat-input input:focus {
@@ -704,13 +741,12 @@
             color: white;
             border: none;
             border-radius: 2rem;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            font-weight: 500;
-            white-space: nowrap;
         }
 
         .chat-input button:hover {
@@ -721,7 +757,49 @@
             transform: scale(0.98);
         }
 
-        /* Ticket Section - Updated for better mobile view */
+        /* Contact Form */
+        .contact-form {
+            background: var(--bg-secondary);
+            border-radius: 1rem;
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px var(--primary-lighter);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* Ticket Section */
         .ticket-section {
             background: var(--bg-secondary);
             border-radius: 1rem;
@@ -755,6 +833,10 @@
             align-items: center;
             transition: all 0.3s ease;
             cursor: pointer;
+        }
+
+        .ticket-item:last-child {
+            border-bottom: none;
         }
 
         .ticket-item:hover {
@@ -796,44 +878,33 @@
             color: var(--success);
         }
 
-        /* Mobile Responsive Updates */
-        @media (max-width: 768px) {
-            .chat-container {
-                height: calc(100vh - 200px);
-                position: fixed;
-                top: 80px;
-                left: 1rem;
-                right: 1rem;
-                z-index: 997;
-            }
-
-            .ticket-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.5rem;
-            }
-
-            .ticket-status {
-                align-self: flex-start;
-            }
-
-            .chat-input {
-                flex-direction: column;
-                padding: 0.75rem;
-            }
-
-            .chat-input input {
-                border-radius: 0.5rem;
-            }
-
-            .chat-input button {
-                width: 100%;
-                border-radius: 0.5rem;
-                justify-content: center;
-            }
+        /* Button Styles */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
         }
-        </style>
-</head>
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+    </style>
+    </head>
 <body>
     <!-- Mobile Header -->
     <header class="mobile-header">
@@ -846,14 +917,14 @@
         </div>
     </header>
 
-    <!-- Overlay with improved touch handling -->
-    <div class="overlay" id="overlay" role="presentation"></div>
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
 
     <div class="dashboard-container">
-        <!-- Sidebar with improved accessibility -->
-        <aside class="sidebar" id="sidebar" role="navigation">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <a href="#" class="logo" aria-label="RoadRescue Home">
+                <a href="#" class="logo">
                     <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMzQ4NWZmIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTE0LjcgNi4zYTEgMSAwIDAgMCAwIDEuNGwxLjYgMS42YTEgMSAwIDAgMCAxLjQgMGwzLjc3Ny0zLjc3N2E2IDYgMCAwIDEtLjg3OSA4Ljg3OWwtMi40NzQgMi40NzRhNiA2IDAgMCAxLTguNDg2LTguNDg2bDIuNDc0LTIuNDc0YTYgNiAwIDAgMSA4LjQ4NiA4LjQ4NiIvPjwvc3ZnPg==" 
                          alt="RoadRescue Logo">
                     <span>RoadRescue</span>
@@ -862,43 +933,43 @@
             <nav class="nav-menu">
                 <ul>
                     <li class="nav-item">
-                        <a href="dash.html" class="nav-link" data-page="dashboard">
+                        <a href="dash.html" class="nav-link">
                             <i class="fas fa-home"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="profile.html" class="nav-link" data-page="profile">
+                        <a href="profile.html" class="nav-link">
                             <i class="fas fa-user"></i>
                             <span>Profile</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="myvehicle.html" class="nav-link" data-page="vehicles">
+                        <a href="myvehicle.html" class="nav-link">
                             <i class="fas fa-car"></i>
                             <span>My Vehicles</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="history.html" class="nav-link" data-page="history">
+                        <a href="history.html" class="nav-link">
                             <i class="fas fa-history"></i>
                             <span>Service History</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="settings.html" class="nav-link" data-page="settings">
+                        <a href="settings.html" class="nav-link">
                             <i class="fas fa-cog"></i>
                             <span>Settings</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="support.html" class="nav-link active" data-page="support">
+                        <a href="support.html" class="nav-link active">
                             <i class="fas fa-headset"></i>
                             <span>Support</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="log.html" class="nav-link" data-page="logout">
+                        <a href="log.html" class="nav-link">
                             <i class="fas fa-sign-out-alt"></i>
                             <span>Logout</span>
                         </a>
@@ -908,15 +979,15 @@
         </aside>
 
         <!-- Main Content -->
-        <main class="main-content" id="mainContent" role="main">
+        <main class="main-content" id="mainContent">
             <div class="support-header">
                 <h1 class="support-title">Help & Support</h1>
                 <p class="support-subtitle">Get assistance and find answers to your questions</p>
             </div>
 
-            <!-- Quick Actions with improved touch handling -->
+            <!-- Quick Actions -->
             <div class="quick-actions">
-                <div class="action-card" onclick="openChat()" role="button" tabindex="0">
+                <div class="action-card" onclick="openChat()">
                     <div class="action-icon">
                         <i class="fas fa-comments"></i>
                     </div>
@@ -925,7 +996,7 @@
                         <p>Chat with our support team</p>
                     </div>
                 </div>
-                <div class="action-card" onclick="openTicketForm()" role="button" tabindex="0">
+                <div class="action-card" onclick="openTicketForm()">
                     <div class="action-icon">
                         <i class="fas fa-ticket-alt"></i>
                     </div>
@@ -934,7 +1005,7 @@
                         <p>Submit a support ticket</p>
                     </div>
                 </div>
-                <div class="action-card" onclick="scrollToFAQ()" role="button" tabindex="0">
+                <div class="action-card" onclick="scrollToFAQ()">
                     <div class="action-icon">
                         <i class="fas fa-question-circle"></i>
                     </div>
@@ -945,42 +1016,39 @@
                 </div>
             </div>
                         <div class="support-grid">
-                <!-- FAQ Section with improved accessibility -->
+                <!-- FAQ Section -->
                 <div class="faq-section" id="faqSection">
                     <div class="faq-header">
                         <h2 class="faq-title">Frequently Asked Questions</h2>
                     </div>
-                    <div class="faq-list" id="faqList" role="list">
+                    <div class="faq-list" id="faqList">
                         <!-- FAQ items will be dynamically added here -->
                     </div>
                 </div>
 
-                <!-- Live Chat Section with improved interaction -->
-                <div class="chat-container" id="chatContainer" style="display: none;" role="complementary">
+                <!-- Live Chat Section -->
+                <div class="chat-container" id="chatContainer" style="display: none;">
                     <div class="chat-header">
                         <div class="chat-status" title="Online"></div>
                         <h3>Live Support</h3>
                     </div>
-                    <div class="chat-messages" id="chatMessages" role="log" aria-live="polite">
-                        <!-- Chat messages will be dynamically added here -->
+                    <div class="chat-messages" id="chatMessages">
+                        <!-- Initial welcome message will be added by JavaScript -->
                     </div>
                     <div class="chat-input">
                         <input type="text" 
+                               id="messageInput" 
                                placeholder="Type your message..." 
-                               id="messageInput"
-                               aria-label="Message input"
-                               autocomplete="off">
-                        <button class="btn btn-primary" 
-                                onclick="sendMessage()"
-                                aria-label="Send message">
+                               aria-label="Message input">
+                        <button class="btn btn-primary" onclick="sendMessage()">
                             <i class="fas fa-paper-plane"></i>
                             Send
                         </button>
                     </div>
                 </div>
 
-                <!-- Contact Form with improved validation -->
-                <div class="contact-form" id="contactForm" style="display: none;" role="form">
+                <!-- Contact Form -->
+                <div class="contact-form" id="contactForm" style="display: none;">
                     <h2>Submit a Ticket</h2>
                     <div class="form-group">
                         <label class="form-label" for="ticketSubject">Subject</label>
@@ -992,9 +1060,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="ticketCategory">Category</label>
-                        <select class="form-input" 
-                                id="ticketCategory"
-                                required>
+                        <select class="form-input" id="ticketCategory" required>
                             <option value="">Select category</option>
                             <option value="technical">Technical Issue</option>
                             <option value="billing">Billing</option>
@@ -1012,17 +1078,13 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="ticketPriority">Priority</label>
-                        <select class="form-input" 
-                                id="ticketPriority"
-                                required>
+                        <select class="form-input" id="ticketPriority" required>
                             <option value="low">Low</option>
                             <option value="medium">Medium</option>
                             <option value="high">High</option>
                         </select>
                     </div>
-                    <button class="btn btn-primary" 
-                            onclick="submitTicket()"
-                            type="submit">Submit Ticket</button>
+                    <button class="btn btn-primary" onclick="submitTicket()">Submit Ticket</button>
                 </div>
             </div>
 
@@ -1030,14 +1092,12 @@
             <div class="ticket-section">
                 <div class="ticket-header">
                     <h2>Your Support Tickets</h2>
-                    <button class="btn btn-primary" 
-                            onclick="openTicketForm()"
-                            aria-label="Create new ticket">
+                    <button class="btn btn-primary" onclick="openTicketForm()">
                         <i class="fas fa-plus"></i>
                         New Ticket
                     </button>
                 </div>
-                <div class="ticket-list" id="ticketList" role="list">
+                <div class="ticket-list" id="ticketList">
                     <!-- Tickets will be dynamically added here -->
                 </div>
             </div>
@@ -1046,40 +1106,28 @@
             <div class="kb-section">
                 <h2>Knowledge Base</h2>
                 <div class="kb-grid">
-                    <div class="kb-card" 
-                         onclick="openKBArticle('getting-started')"
-                         role="button"
-                         tabindex="0">
+                    <div class="kb-card" onclick="openKBArticle('getting-started')">
                         <div class="kb-icon">
                             <i class="fas fa-rocket"></i>
                         </div>
                         <h3 class="kb-title">Getting Started</h3>
                         <p class="kb-description">Learn the basics of using RoadRescue Pro</p>
                     </div>
-                    <div class="kb-card" 
-                         onclick="openKBArticle('service-guide')"
-                         role="button"
-                         tabindex="0">
+                    <div class="kb-card" onclick="openKBArticle('service-guide')">
                         <div class="kb-icon">
                             <i class="fas fa-tools"></i>
                         </div>
                         <h3 class="kb-title">Service Guide</h3>
                         <p class="kb-description">Understanding our service types and process</p>
                     </div>
-                    <div class="kb-card" 
-                         onclick="openKBArticle('billing')"
-                         role="button"
-                         tabindex="0">
+                    <div class="kb-card" onclick="openKBArticle('billing')">
                         <div class="kb-icon">
                             <i class="fas fa-credit-card"></i>
                         </div>
                         <h3 class="kb-title">Billing & Payments</h3>
                         <p class="kb-description">Payment methods and billing information</p>
                     </div>
-                    <div class="kb-card" 
-                         onclick="openKBArticle('safety')"
-                         role="button"
-                         tabindex="0">
+                    <div class="kb-card" onclick="openKBArticle('safety')">
                         <div class="kb-icon">
                             <i class="fas fa-shield-alt"></i>
                         </div>
@@ -1090,9 +1138,9 @@
             </div>
         </main>
     </div>
-          <script>
+        <script>
         document.addEventListener('DOMContentLoaded', function() {
-            ThemeManager.init(); // Initialize theme manager first
+            ThemeManager.init();
             initializeSupport();
             loadFAQs();
             loadTickets();
@@ -1141,133 +1189,44 @@
             }
         ];
 
-        // Mobile Menu and Support Initialization with improved touch handling
+        // Mobile Menu and Support Initialization
         function initializeSupport() {
             const menuToggle = document.getElementById('menuToggle');
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('overlay');
             const mainContent = document.querySelector('.main-content');
-            let touchStartX = null;
-            let touchEndX = null;
 
-            // Toggle menu with improved touch handling
-            menuToggle.addEventListener('click', (e) => {
-                e.stopPropagation();
+            menuToggle.addEventListener('click', function(e) {
                 e.preventDefault();
-                toggleMenu();
+                sidebar.classList.toggle('active');
+                overlay.classList.toggle('active');
+                document.body.classList.toggle('sidebar-active');
+                
+                if (sidebar.classList.contains('active')) {
+                    mainContent.style.transform = 'translateX(280px)';
+                } else {
+                    mainContent.style.transform = 'translateX(0)';
+                }
             });
 
-            // Function to toggle menu state
-            function toggleMenu() {
-                const isActive = sidebar.classList.contains('active');
-                if (isActive) {
-                    closeMenu();
-                } else {
-                    openMenu();
-                }
-            }
-
-            // Function to open menu with animation
-            function openMenu() {
-                sidebar.classList.add('active');
-                overlay.classList.add('active');
-                document.body.classList.add('sidebar-active');
-                mainContent.style.transform = 'translateX(280px)';
-                menuToggle.setAttribute('aria-expanded', 'true');
-            }
-
-            // Function to close menu with animation
-            function closeMenu() {
+            overlay.addEventListener('click', function() {
                 sidebar.classList.remove('active');
                 overlay.classList.remove('active');
                 document.body.classList.remove('sidebar-active');
                 mainContent.style.transform = 'translateX(0)';
-                menuToggle.setAttribute('aria-expanded', 'false');
-            }
-
-            // Improved touch event handling
-            document.addEventListener('touchstart', (e) => {
-                touchStartX = e.touches[0].clientX;
-            }, { passive: true });
-
-            document.addEventListener('touchmove', (e) => {
-                if (!touchStartX) return;
-                
-                const currentX = e.touches[0].clientX;
-                const diff = touchStartX - currentX;
-
-                // If swiping left and menu is open, prevent scroll
-                if (sidebar.classList.contains('active') && diff > 0) {
-                    e.preventDefault();
-                }
-                // If swiping right near left edge and menu is closed, prevent scroll
-                if (!sidebar.classList.contains('active') && diff < 0 && touchStartX < 50) {
-                    e.preventDefault();
-                }
-            }, { passive: false });
-
-            document.addEventListener('touchend', (e) => {
-                touchEndX = e.changedTouches[0].clientX;
-                handleSwipe();
-            }, { passive: true });
-
-            function handleSwipe() {
-                if (!touchStartX || !touchEndX) return;
-
-                const swipeDistance = touchEndX - touchStartX;
-                const swipeThreshold = 50;
-
-                if (Math.abs(swipeDistance) > swipeThreshold) {
-                    if (swipeDistance > 0 && touchStartX < 50) {
-                        // Swiped right from left edge
-                        openMenu();
-                    } else if (swipeDistance < 0 && sidebar.classList.contains('active')) {
-                        // Swiped left while menu is open
-                        closeMenu();
-                    }
-                }
-
-                touchStartX = null;
-                touchEndX = null;
-            }
-
-            // Close menu when clicking overlay
-            overlay.addEventListener('click', closeMenu);
-
-            // Handle escape key
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && sidebar.classList.contains('active')) {
-                    closeMenu();
-                }
-            });
-
-            // Handle window resize
-            let resizeTimer;
-            window.addEventListener('resize', () => {
-                clearTimeout(resizeTimer);
-                resizeTimer = setTimeout(() => {
-                    if (window.innerWidth > 1024) {
-                        closeMenu();
-                        mainContent.style.transform = '';
-                    }
-                }, 250);
             });
         }
 
-        // FAQ System with improved interaction
+        // FAQ System
         function loadFAQs() {
             const faqList = document.getElementById('faqList');
             faqList.innerHTML = faqs.map((faq, index) => `
-                <div class="faq-item" role="listitem">
-                    <div class="faq-question" 
-                         onclick="toggleFAQ(${index})"
-                         role="button"
-                         aria-expanded="false"
-                         tabindex="0">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(${index})">
                         ${faq.question}
                         <i class="fas fa-chevron-down"></i>
                     </div>
-                    <div class="faq-answer" role="region">
+                    <div class="faq-answer">
                         ${faq.answer}
                     </div>
                 </div>
@@ -1277,29 +1236,29 @@
         function toggleFAQ(index) {
             const faqItems = document.querySelectorAll('.faq-item');
             const item = faqItems[index];
-            const question = item.querySelector('.faq-question');
             const wasActive = item.classList.contains('active');
 
             // Close all FAQs
             faqItems.forEach(faq => {
                 faq.classList.remove('active');
-                faq.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
             });
 
             // Toggle clicked FAQ
             if (!wasActive) {
                 item.classList.add('active');
-                question.setAttribute('aria-expanded', 'true');
             }
         }
 
         // Chat Functions
         function openChat() {
-            document.getElementById('chatContainer').style.display = 'flex';
-            document.getElementById('contactForm').style.display = 'none';
+            const chatContainer = document.getElementById('chatContainer');
+            const contactForm = document.getElementById('contactForm');
+            const chatMessages = document.getElementById('chatMessages');
+            
+            chatContainer.style.display = 'flex';
+            contactForm.style.display = 'none';
             
             // Add welcome message if chat is empty
-            const chatMessages = document.getElementById('chatMessages');
             if (!chatMessages.hasChildNodes()) {
                 chatMessages.innerHTML = `
                     <div class="message support">
@@ -1387,12 +1346,6 @@
             }
         }
 
-        // Knowledge Base Functions
-        function openKBArticle(articleId) {
-            // Simulate opening knowledge base article
-            alert('Opening knowledge base article: ' + articleId);
-        }
-
         // Event Listeners Setup
         function setupEventListeners() {
             const messageInput = document.getElementById('messageInput');
@@ -1404,11 +1357,6 @@
                     }
                 });
             }
-
-            // Add touch feedback to all interactive elements
-            document.querySelectorAll('.action-card, .kb-card, .btn').forEach(element => {
-                element.addEventListener('touchstart', function() {}, {passive: true});
-            });
         }
 
         // Utility Functions
@@ -1425,8 +1373,13 @@
         }
 
         function scrollToFAQ() {
-            document.querySelector('.faq-section').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('faqSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function openKBArticle(articleId) {
+            // Simulate opening knowledge base article
+            alert('Opening knowledge base article: ' + articleId);
         }
     </script>
 </body>
-</html> 
+</html>
