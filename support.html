@@ -15,14 +15,9 @@
     <script>
         const ThemeManager = {
             init() {
-                // Initialize theme from localStorage
                 this.theme = localStorage.getItem('theme') || 'light';
                 this.applyTheme(this.theme);
-                
-                // Set up broadcast channel for cross-tab sync
                 this.channel = new BroadcastChannel('theme-channel');
-                
-                // Listen for theme changes from other tabs
                 this.channel.onmessage = (event) => {
                     if (event.data.type === 'theme-change') {
                         this.applyTheme(event.data.theme, false);
@@ -124,6 +119,7 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
         }
 
         body {
@@ -133,13 +129,14 @@
             transition: background-color 0.3s ease, color 0.3s ease;
             min-height: 100vh;
             position: relative;
+            overflow-x: hidden; /* Prevent horizontal scroll during animations */
         }
 
         body.sidebar-active {
             overflow: hidden;
         }
 
-        /* Mobile Header - Updated for better visibility */
+        /* Mobile Header - Updated for better visibility and touch */
         .mobile-header {
             display: none;
             position: fixed;
@@ -152,6 +149,8 @@
             border-bottom: 1px solid var(--border-color);
             z-index: 999;
             transition: background-color 0.3s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         .mobile-header-content {
@@ -168,8 +167,8 @@
             color: var(--text-primary);
             font-size: 1.5rem;
             cursor: pointer;
-            width: 40px;
-            height: 40px;
+            width: 44px; /* Increased touch target */
+            height: 44px; /* Increased touch target */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -177,6 +176,8 @@
             transition: all 0.3s ease;
             padding: 0;
             margin: 0;
+            position: relative;
+            z-index: 1000; /* Ensure button stays above overlay */
         }
 
         .menu-toggle:hover {
@@ -200,6 +201,8 @@
             opacity: 0;
             transition: opacity 0.3s ease;
             touch-action: none;
+            -webkit-backdrop-filter: blur(4px);
+            backdrop-filter: blur(4px);
         }
 
         .overlay.active {
@@ -225,25 +228,32 @@
             height: 100vh;
             border-right: 1px solid var(--border-color);
             z-index: 1000;
-            transition: transform 0.3s ease, background-color 0.3s ease;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             transform: translateX(-100%);
+            will-change: transform;
         }
 
         .sidebar.active {
             transform: translateX(0);
+            box-shadow: var(--shadow-lg);
         }
 
         @media (min-width: 1025px) {
             .sidebar {
                 transform: translateX(0);
+                box-shadow: none;
             }
         }
 
         .sidebar-header {
             padding: 1.5rem;
             border-bottom: 1px solid var(--border-color);
+            background: var(--sidebar-bg);
+            position: sticky;
+            top: 0;
+            z-index: 1;
         }
 
         .logo {
@@ -251,6 +261,8 @@
             align-items: center;
             gap: 0.75rem;
             text-decoration: none;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         .logo img {
@@ -264,7 +276,7 @@
             color: var(--text-primary);
         }
 
-        /* Navigation Menu */
+        /* Navigation Menu - Updated for better touch interaction */
         .nav-menu {
             padding: 1rem;
         }
@@ -280,12 +292,14 @@
         .nav-link {
             display: flex;
             align-items: center;
-            padding: 0.75rem 1rem;
+            padding: 0.875rem 1rem;
             text-decoration: none;
             color: var(--text-secondary);
             border-radius: 0.5rem;
             transition: all 0.3s ease;
             font-weight: 500;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         .nav-link i {
@@ -310,7 +324,9 @@
             flex: 1;
             margin-left: 280px;
             padding: 2rem;
-            transition: margin-left 0.3s ease, transform 0.3s ease;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform, margin-left;
         }
 
         @media (max-width: 1024px) {
@@ -326,10 +342,16 @@
             .main-content.sidebar-active {
                 transform: translateX(280px);
             }
-        }
 
+            body.sidebar-active .overlay {
+                display: block;
+                opacity: 1;
+            }
+        }
+                /* Support Header Styles */
         .support-header {
             margin-bottom: 2rem;
+            animation: fadeIn 0.5s ease;
         }
 
         .support-title {
@@ -344,12 +366,13 @@
             font-size: 1.1rem;
         }
 
-        /* Quick Actions */
+        /* Quick Actions - Updated for better touch interaction */
         .quick-actions {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 1rem;
             margin-bottom: 2rem;
+            animation: slideUp 0.5s ease;
         }
 
         .action-card {
@@ -362,6 +385,13 @@
             display: flex;
             align-items: center;
             gap: 1rem;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+
+        .action-card:active {
+            transform: scale(0.98);
         }
 
         .action-card:hover {
@@ -380,6 +410,7 @@
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
+            flex-shrink: 0;
         }
 
         .action-content h3 {
@@ -392,26 +423,33 @@
             color: var(--text-secondary);
             font-size: 0.875rem;
         }
-                /* Support Grid */
+
+        /* Support Grid - Updated for better responsiveness */
         .support-grid {
             display: grid;
             grid-template-columns: 2fr 1fr;
             gap: 2rem;
             margin-bottom: 2rem;
+            animation: fadeIn 0.5s ease 0.2s backwards;
         }
 
-        /* FAQ Section */
+        /* FAQ Section - Updated for better interaction */
         .faq-section {
             background: var(--bg-secondary);
             border-radius: 1rem;
             border: 1px solid var(--border-color);
             overflow: hidden;
             transition: all 0.3s ease;
+            height: fit-content;
         }
 
         .faq-header {
             padding: 1.5rem;
             border-bottom: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            position: sticky;
+            top: 0;
+            z-index: 1;
         }
 
         .faq-title {
@@ -442,27 +480,98 @@
             color: var(--text-primary);
             font-weight: 500;
             transition: all 0.3s ease;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         .faq-question:hover {
             color: var(--primary);
         }
 
+        .faq-question i {
+            transition: transform 0.3s ease;
+        }
+
         .faq-answer {
-            padding: 0 1rem 1rem;
+            padding: 0 1rem;
             color: var(--text-secondary);
-            display: none;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
         }
 
         .faq-item.active .faq-answer {
-            display: block;
+            padding: 0 1rem 1rem;
+            max-height: 500px;
         }
 
         .faq-item.active .faq-question i {
             transform: rotate(180deg);
         }
 
-        /* Chat Container */
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile Responsive Updates */
+        @media (max-width: 1024px) {
+            .support-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-actions {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .support-title {
+                font-size: 1.5rem;
+            }
+
+            .action-card {
+                padding: 1.25rem;
+            }
+
+            .action-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.25rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 5rem 1rem 1rem;
+            }
+
+            .support-grid {
+                gap: 1rem;
+            }
+
+            .faq-question {
+                font-size: 0.875rem;
+                padding: 0.875rem;
+            }
+        }
+                /* Chat Container - Updated for better mobile interaction */
         .chat-container {
             background: var(--bg-secondary);
             border-radius: 1rem;
@@ -471,6 +580,8 @@
             flex-direction: column;
             height: 500px;
             transition: all 0.3s ease;
+            animation: slideUp 0.5s ease;
+            position: relative;
         }
 
         .chat-header {
@@ -479,6 +590,10 @@
             display: flex;
             align-items: center;
             gap: 1rem;
+            background: var(--bg-secondary);
+            position: sticky;
+            top: 0;
+            z-index: 2;
         }
 
         .chat-status {
@@ -486,6 +601,28 @@
             height: 10px;
             border-radius: 50%;
             background: var(--success);
+            position: relative;
+        }
+
+        .chat-status::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(2.5);
+                opacity: 0;
+            }
         }
 
         .chat-messages {
@@ -495,6 +632,8 @@
             display: flex;
             flex-direction: column;
             gap: 1rem;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
         }
 
         .message {
@@ -502,6 +641,19 @@
             padding: 0.75rem 1rem;
             border-radius: 1rem;
             position: relative;
+            word-wrap: break-word;
+            animation: messageSlide 0.3s ease;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .message.user {
@@ -523,6 +675,10 @@
             border-top: 1px solid var(--border-color);
             display: flex;
             gap: 1rem;
+            background: var(--bg-secondary);
+            position: sticky;
+            bottom: 0;
+            z-index: 2;
         }
 
         .chat-input input {
@@ -533,6 +689,7 @@
             background: var(--input-bg);
             color: var(--text-primary);
             transition: all 0.3s ease;
+            font-size: 1rem;
         }
 
         .chat-input input:focus {
@@ -552,82 +709,26 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            font-weight: 500;
+            white-space: nowrap;
         }
 
         .chat-input button:hover {
             background: var(--primary-dark);
         }
 
-        /* Contact Form */
-        .contact-form {
-            background: var(--bg-secondary);
-            border-radius: 1rem;
-            border: 1px solid var(--border-color);
-            padding: 1.5rem;
-            transition: all 0.3s ease;
+        .chat-input button:active {
+            transform: scale(0.98);
         }
 
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-            font-weight: 500;
-        }
-
-        .form-input,
-        .form-textarea {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: 0.5rem;
-            background: var(--input-bg);
-            color: var(--text-primary);
-            transition: all 0.3s ease;
-        }
-
-        .form-input:focus,
-        .form-textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 2px var(--primary-lighter);
-        }
-
-        .form-textarea {
-            resize: vertical;
-            min-height: 120px;
-        }
-
-        /* Mobile Responsive Styles */
-        @media (max-width: 1024px) {
-            .support-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .quick-actions {
-                grid-template-columns: 1fr;
-            }
-
-            .main-content {
-                padding: 5rem 1rem 1rem;
-            }
-
-            .support-title {
-                font-size: 1.5rem;
-            }
-        }
-                /* Ticket Section */
+        /* Ticket Section - Updated for better mobile view */
         .ticket-section {
             background: var(--bg-secondary);
             border-radius: 1rem;
             border: 1px solid var(--border-color);
             overflow: hidden;
             margin-top: 2rem;
+            animation: fadeIn 0.5s ease 0.4s backwards;
         }
 
         .ticket-header {
@@ -636,6 +737,10 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background: var(--bg-secondary);
+            position: sticky;
+            top: 0;
+            z-index: 1;
         }
 
         .ticket-list {
@@ -648,6 +753,12 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .ticket-item:hover {
+            background: var(--bg-main);
         }
 
         .ticket-info {
@@ -671,6 +782,8 @@
             border-radius: 1rem;
             font-size: 0.875rem;
             font-weight: 500;
+            text-align: center;
+            min-width: 80px;
         }
 
         .status-open {
@@ -683,102 +796,15 @@
             color: var(--success);
         }
 
-        /* Knowledge Base Section */
-        .kb-section {
-            background: var(--bg-secondary);
-            border-radius: 1rem;
-            border: 1px solid var(--border-color);
-            padding: 1.5rem;
-            margin-top: 2rem;
-            transition: all 0.3s ease;
-        }
-
-        .kb-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .kb-card {
-            padding: 1.5rem;
-            border: 1px solid var(--border-color);
-            border-radius: 0.75rem;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            background: var(--bg-secondary);
-        }
-
-        .kb-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--primary);
-            box-shadow: var(--shadow-md);
-        }
-
-        .kb-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            background: var(--primary-lighter);
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1rem;
-        }
-
-        .kb-title {
-            color: var(--text-primary);
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .kb-description {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-        }
-
-        /* Button Styles */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: none;
-            gap: 0.5rem;
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-dark);
-        }
-
-        /* Additional Mobile Responsive Styles */
-        @media (max-width: 480px) {
-            .message {
-                max-width: 90%;
-            }
-
-            .faq-question {
-                font-size: 0.875rem;
-            }
-
-            .action-card {
-                padding: 1rem;
-            }
-
-            .action-icon {
-                width: 40px;
-                height: 40px;
-                font-size: 1.25rem;
+        /* Mobile Responsive Updates */
+        @media (max-width: 768px) {
+            .chat-container {
+                height: calc(100vh - 200px);
+                position: fixed;
+                top: 80px;
+                left: 1rem;
+                right: 1rem;
+                z-index: 997;
             }
 
             .ticket-item {
@@ -787,8 +813,13 @@
                 gap: 0.5rem;
             }
 
+            .ticket-status {
+                align-self: flex-start;
+            }
+
             .chat-input {
                 flex-direction: column;
+                padding: 0.75rem;
             }
 
             .chat-input input {
@@ -798,15 +829,16 @@
             .chat-input button {
                 width: 100%;
                 border-radius: 0.5rem;
+                justify-content: center;
             }
         }
-    </style>
-    </head>
+        </style>
+</head>
 <body>
     <!-- Mobile Header -->
     <header class="mobile-header">
         <div class="mobile-header-content">
-            <button class="menu-toggle" id="menuToggle">
+            <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">
                 <i class="fas fa-bars"></i>
             </button>
             <span style="color: var(--text-primary); font-weight: 600;">Support</span>
@@ -814,58 +846,59 @@
         </div>
     </header>
 
-    <!-- Overlay -->
-    <div class="overlay" id="overlay"></div>
+    <!-- Overlay with improved touch handling -->
+    <div class="overlay" id="overlay" role="presentation"></div>
 
     <div class="dashboard-container">
-        <!-- Sidebar -->
-        <aside class="sidebar" id="sidebar">
+        <!-- Sidebar with improved accessibility -->
+        <aside class="sidebar" id="sidebar" role="navigation">
             <div class="sidebar-header">
-                <a href="#" class="logo">
-                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMzQ4NWZmIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTE0LjcgNi4zYTEgMSAwIDAgMCAwIDEuNGwxLjYgMS42YTEgMSAwIDAgMCAxLjQgMGwzLjc3Ny0zLjc3N2E2IDYgMCAwIDEtLjg3OSA4Ljg3OWwtMi40NzQgMi40NzRhNiA2IDAgMCAxLTguNDg2LTguNDg2bDIuNDc0LTIuNDc0YTYgNiAwIDAgMSA4LjQ4NiA4LjQ4NiIvPjwvc3ZnPg==" alt="RoadRescue">
+                <a href="#" class="logo" aria-label="RoadRescue Home">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMzQ4NWZmIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTE0LjcgNi4zYTEgMSAwIDAgMCAwIDEuNGwxLjYgMS42YTEgMSAwIDAgMCAxLjQgMGwzLjc3Ny0zLjc3N2E2IDYgMCAwIDEtLjg3OSA4Ljg3OWwtMi40NzQgMi40NzRhNiA2IDAgMCAxLTguNDg2LTguNDg2bDIuNDc0LTIuNDc0YTYgNiAwIDAgMSA4LjQ4NiA4LjQ4NiIvPjwvc3ZnPg==" 
+                         alt="RoadRescue Logo">
                     <span>RoadRescue</span>
                 </a>
             </div>
             <nav class="nav-menu">
                 <ul>
                     <li class="nav-item">
-                        <a href="dash.html" class="nav-link">
+                        <a href="dash.html" class="nav-link" data-page="dashboard">
                             <i class="fas fa-home"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="profile.html" class="nav-link">
+                        <a href="profile.html" class="nav-link" data-page="profile">
                             <i class="fas fa-user"></i>
                             <span>Profile</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="myvehicle.html" class="nav-link">
+                        <a href="myvehicle.html" class="nav-link" data-page="vehicles">
                             <i class="fas fa-car"></i>
                             <span>My Vehicles</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="history.html" class="nav-link">
+                        <a href="history.html" class="nav-link" data-page="history">
                             <i class="fas fa-history"></i>
                             <span>Service History</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="settings.html" class="nav-link">
+                        <a href="settings.html" class="nav-link" data-page="settings">
                             <i class="fas fa-cog"></i>
                             <span>Settings</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="support.html" class="nav-link active">
+                        <a href="support.html" class="nav-link active" data-page="support">
                             <i class="fas fa-headset"></i>
                             <span>Support</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="log.html" class="nav-link">
+                        <a href="log.html" class="nav-link" data-page="logout">
                             <i class="fas fa-sign-out-alt"></i>
                             <span>Logout</span>
                         </a>
@@ -875,15 +908,15 @@
         </aside>
 
         <!-- Main Content -->
-        <main class="main-content">
+        <main class="main-content" id="mainContent" role="main">
             <div class="support-header">
                 <h1 class="support-title">Help & Support</h1>
                 <p class="support-subtitle">Get assistance and find answers to your questions</p>
             </div>
 
-            <!-- Quick Actions -->
+            <!-- Quick Actions with improved touch handling -->
             <div class="quick-actions">
-                <div class="action-card" onclick="openChat()">
+                <div class="action-card" onclick="openChat()" role="button" tabindex="0">
                     <div class="action-icon">
                         <i class="fas fa-comments"></i>
                     </div>
@@ -892,7 +925,7 @@
                         <p>Chat with our support team</p>
                     </div>
                 </div>
-                <div class="action-card" onclick="openTicketForm()">
+                <div class="action-card" onclick="openTicketForm()" role="button" tabindex="0">
                     <div class="action-icon">
                         <i class="fas fa-ticket-alt"></i>
                     </div>
@@ -901,7 +934,7 @@
                         <p>Submit a support ticket</p>
                     </div>
                 </div>
-                <div class="action-card" onclick="scrollToFAQ()">
+                <div class="action-card" onclick="scrollToFAQ()" role="button" tabindex="0">
                     <div class="action-icon">
                         <i class="fas fa-question-circle"></i>
                     </div>
@@ -912,44 +945,56 @@
                 </div>
             </div>
                         <div class="support-grid">
-                <!-- FAQ Section -->
-                <div class="faq-section">
+                <!-- FAQ Section with improved accessibility -->
+                <div class="faq-section" id="faqSection">
                     <div class="faq-header">
                         <h2 class="faq-title">Frequently Asked Questions</h2>
                     </div>
-                    <div class="faq-list" id="faqList">
+                    <div class="faq-list" id="faqList" role="list">
                         <!-- FAQ items will be dynamically added here -->
                     </div>
                 </div>
 
-                <!-- Live Chat Section -->
-                <div class="chat-container" id="chatContainer" style="display: none;">
+                <!-- Live Chat Section with improved interaction -->
+                <div class="chat-container" id="chatContainer" style="display: none;" role="complementary">
                     <div class="chat-header">
-                        <div class="chat-status"></div>
+                        <div class="chat-status" title="Online"></div>
                         <h3>Live Support</h3>
                     </div>
-                    <div class="chat-messages" id="chatMessages">
+                    <div class="chat-messages" id="chatMessages" role="log" aria-live="polite">
                         <!-- Chat messages will be dynamically added here -->
                     </div>
                     <div class="chat-input">
-                        <input type="text" placeholder="Type your message..." id="messageInput">
-                        <button class="btn btn-primary" onclick="sendMessage()">
+                        <input type="text" 
+                               placeholder="Type your message..." 
+                               id="messageInput"
+                               aria-label="Message input"
+                               autocomplete="off">
+                        <button class="btn btn-primary" 
+                                onclick="sendMessage()"
+                                aria-label="Send message">
                             <i class="fas fa-paper-plane"></i>
                             Send
                         </button>
                     </div>
                 </div>
 
-                <!-- Contact Form -->
-                <div class="contact-form" id="contactForm" style="display: none;">
+                <!-- Contact Form with improved validation -->
+                <div class="contact-form" id="contactForm" style="display: none;" role="form">
                     <h2>Submit a Ticket</h2>
                     <div class="form-group">
-                        <label class="form-label">Subject</label>
-                        <input type="text" class="form-input" id="ticketSubject" placeholder="Enter ticket subject">
+                        <label class="form-label" for="ticketSubject">Subject</label>
+                        <input type="text" 
+                               class="form-input" 
+                               id="ticketSubject" 
+                               placeholder="Enter ticket subject"
+                               required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Category</label>
-                        <select class="form-input" id="ticketCategory">
+                        <label class="form-label" for="ticketCategory">Category</label>
+                        <select class="form-input" 
+                                id="ticketCategory"
+                                required>
                             <option value="">Select category</option>
                             <option value="technical">Technical Issue</option>
                             <option value="billing">Billing</option>
@@ -959,18 +1004,25 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Description</label>
-                        <textarea class="form-textarea" id="ticketDescription" placeholder="Describe your issue in detail"></textarea>
+                        <label class="form-label" for="ticketDescription">Description</label>
+                        <textarea class="form-textarea" 
+                                  id="ticketDescription" 
+                                  placeholder="Describe your issue in detail"
+                                  required></textarea>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Priority</label>
-                        <select class="form-input" id="ticketPriority">
+                        <label class="form-label" for="ticketPriority">Priority</label>
+                        <select class="form-input" 
+                                id="ticketPriority"
+                                required>
                             <option value="low">Low</option>
                             <option value="medium">Medium</option>
                             <option value="high">High</option>
                         </select>
                     </div>
-                    <button class="btn btn-primary" onclick="submitTicket()">Submit Ticket</button>
+                    <button class="btn btn-primary" 
+                            onclick="submitTicket()"
+                            type="submit">Submit Ticket</button>
                 </div>
             </div>
 
@@ -978,12 +1030,14 @@
             <div class="ticket-section">
                 <div class="ticket-header">
                     <h2>Your Support Tickets</h2>
-                    <button class="btn btn-primary" onclick="openTicketForm()">
+                    <button class="btn btn-primary" 
+                            onclick="openTicketForm()"
+                            aria-label="Create new ticket">
                         <i class="fas fa-plus"></i>
                         New Ticket
                     </button>
                 </div>
-                <div class="ticket-list" id="ticketList">
+                <div class="ticket-list" id="ticketList" role="list">
                     <!-- Tickets will be dynamically added here -->
                 </div>
             </div>
@@ -992,28 +1046,40 @@
             <div class="kb-section">
                 <h2>Knowledge Base</h2>
                 <div class="kb-grid">
-                    <div class="kb-card" onclick="openKBArticle('getting-started')">
+                    <div class="kb-card" 
+                         onclick="openKBArticle('getting-started')"
+                         role="button"
+                         tabindex="0">
                         <div class="kb-icon">
                             <i class="fas fa-rocket"></i>
                         </div>
                         <h3 class="kb-title">Getting Started</h3>
                         <p class="kb-description">Learn the basics of using RoadRescue Pro</p>
                     </div>
-                    <div class="kb-card" onclick="openKBArticle('service-guide')">
+                    <div class="kb-card" 
+                         onclick="openKBArticle('service-guide')"
+                         role="button"
+                         tabindex="0">
                         <div class="kb-icon">
                             <i class="fas fa-tools"></i>
                         </div>
                         <h3 class="kb-title">Service Guide</h3>
                         <p class="kb-description">Understanding our service types and process</p>
                     </div>
-                    <div class="kb-card" onclick="openKBArticle('billing')">
+                    <div class="kb-card" 
+                         onclick="openKBArticle('billing')"
+                         role="button"
+                         tabindex="0">
                         <div class="kb-icon">
                             <i class="fas fa-credit-card"></i>
                         </div>
                         <h3 class="kb-title">Billing & Payments</h3>
                         <p class="kb-description">Payment methods and billing information</p>
                     </div>
-                    <div class="kb-card" onclick="openKBArticle('safety')">
+                    <div class="kb-card" 
+                         onclick="openKBArticle('safety')"
+                         role="button"
+                         tabindex="0">
                         <div class="kb-icon">
                             <i class="fas fa-shield-alt"></i>
                         </div>
@@ -1024,7 +1090,7 @@
             </div>
         </main>
     </div>
-        <script>
+          <script>
         document.addEventListener('DOMContentLoaded', function() {
             ThemeManager.init(); // Initialize theme manager first
             initializeSupport();
@@ -1033,101 +1099,7 @@
             setupEventListeners();
         });
 
-        // Mobile Menu and Support Initialization
-        function initializeSupport() {
-            const menuToggle = document.getElementById('menuToggle');
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('overlay');
-            const mainContent = document.querySelector('.main-content');
-            
-            // Toggle menu with improved touch handling
-            menuToggle.addEventListener('click', (e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                toggleMenu();
-            });
-
-            // Function to toggle menu state
-            function toggleMenu() {
-                const isActive = sidebar.classList.contains('active');
-                
-                if (isActive) {
-                    closeMenu();
-                } else {
-                    openMenu();
-                }
-            }
-
-            // Function to open menu
-            function openMenu() {
-                sidebar.classList.add('active');
-                overlay.classList.add('active');
-                document.body.classList.add('sidebar-active');
-                mainContent.style.transform = 'translateX(280px)';
-            }
-
-            // Function to close menu
-            function closeMenu() {
-                sidebar.classList.remove('active');
-                overlay.classList.remove('active');
-                document.body.classList.remove('sidebar-active');
-                mainContent.style.transform = 'translateX(0)';
-            }
-
-            // Close menu when clicking overlay
-            overlay.addEventListener('click', (e) => {
-                e.stopPropagation();
-                closeMenu();
-            });
-
-            // Close menu when clicking outside
-            document.addEventListener('click', (e) => {
-                if (window.innerWidth <= 1024 && 
-                    !sidebar.contains(e.target) && 
-                    !menuToggle.contains(e.target) && 
-                    sidebar.classList.contains('active')) {
-                    closeMenu();
-                }
-            });
-
-            // Handle touch events for better mobile experience
-            let touchStartX = 0;
-            let touchEndX = 0;
-
-            document.addEventListener('touchstart', (e) => {
-                touchStartX = e.changedTouches[0].screenX;
-            }, false);
-
-            document.addEventListener('touchend', (e) => {
-                touchEndX = e.changedTouches[0].screenX;
-                handleSwipe();
-            }, false);
-
-            function handleSwipe() {
-                const swipeThreshold = 50;
-                const swipeDistance = touchEndX - touchStartX;
-
-                if (Math.abs(swipeDistance) > swipeThreshold) {
-                    if (swipeDistance > 0 && !sidebar.classList.contains('active')) {
-                        // Swiped right, open menu
-                        openMenu();
-                    } else if (swipeDistance < 0 && sidebar.classList.contains('active')) {
-                        // Swiped left, close menu
-                        closeMenu();
-                    }
-                }
-            }
-
-            // Handle window resize
-            window.addEventListener('resize', () => {
-                if (window.innerWidth > 1024) {
-                    closeMenu();
-                    mainContent.style.transform = '';
-                }
-            });
-        }
-
-        // FAQ Data and Functions
+        // FAQ Data
         const faqs = [
             {
                 question: "How do I request emergency roadside assistance?",
@@ -1151,15 +1123,151 @@
             }
         ];
 
+        // Sample ticket data
+        const tickets = [
+            {
+                id: 'TKT-001',
+                subject: 'Battery Service Issue',
+                category: 'technical',
+                status: 'open',
+                date: '2024-02-15'
+            },
+            {
+                id: 'TKT-002',
+                subject: 'Billing Question',
+                category: 'billing',
+                status: 'closed',
+                date: '2024-02-10'
+            }
+        ];
+
+        // Mobile Menu and Support Initialization with improved touch handling
+        function initializeSupport() {
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            const mainContent = document.querySelector('.main-content');
+            let touchStartX = null;
+            let touchEndX = null;
+
+            // Toggle menu with improved touch handling
+            menuToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                toggleMenu();
+            });
+
+            // Function to toggle menu state
+            function toggleMenu() {
+                const isActive = sidebar.classList.contains('active');
+                if (isActive) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            }
+
+            // Function to open menu with animation
+            function openMenu() {
+                sidebar.classList.add('active');
+                overlay.classList.add('active');
+                document.body.classList.add('sidebar-active');
+                mainContent.style.transform = 'translateX(280px)';
+                menuToggle.setAttribute('aria-expanded', 'true');
+            }
+
+            // Function to close menu with animation
+            function closeMenu() {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.classList.remove('sidebar-active');
+                mainContent.style.transform = 'translateX(0)';
+                menuToggle.setAttribute('aria-expanded', 'false');
+            }
+
+            // Improved touch event handling
+            document.addEventListener('touchstart', (e) => {
+                touchStartX = e.touches[0].clientX;
+            }, { passive: true });
+
+            document.addEventListener('touchmove', (e) => {
+                if (!touchStartX) return;
+                
+                const currentX = e.touches[0].clientX;
+                const diff = touchStartX - currentX;
+
+                // If swiping left and menu is open, prevent scroll
+                if (sidebar.classList.contains('active') && diff > 0) {
+                    e.preventDefault();
+                }
+                // If swiping right near left edge and menu is closed, prevent scroll
+                if (!sidebar.classList.contains('active') && diff < 0 && touchStartX < 50) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+
+            document.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].clientX;
+                handleSwipe();
+            }, { passive: true });
+
+            function handleSwipe() {
+                if (!touchStartX || !touchEndX) return;
+
+                const swipeDistance = touchEndX - touchStartX;
+                const swipeThreshold = 50;
+
+                if (Math.abs(swipeDistance) > swipeThreshold) {
+                    if (swipeDistance > 0 && touchStartX < 50) {
+                        // Swiped right from left edge
+                        openMenu();
+                    } else if (swipeDistance < 0 && sidebar.classList.contains('active')) {
+                        // Swiped left while menu is open
+                        closeMenu();
+                    }
+                }
+
+                touchStartX = null;
+                touchEndX = null;
+            }
+
+            // Close menu when clicking overlay
+            overlay.addEventListener('click', closeMenu);
+
+            // Handle escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && sidebar.classList.contains('active')) {
+                    closeMenu();
+                }
+            });
+
+            // Handle window resize
+            let resizeTimer;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => {
+                    if (window.innerWidth > 1024) {
+                        closeMenu();
+                        mainContent.style.transform = '';
+                    }
+                }, 250);
+            });
+        }
+
+        // FAQ System with improved interaction
         function loadFAQs() {
             const faqList = document.getElementById('faqList');
             faqList.innerHTML = faqs.map((faq, index) => `
-                <div class="faq-item" onclick="toggleFAQ(${index})">
-                    <div class="faq-question">
+                <div class="faq-item" role="listitem">
+                    <div class="faq-question" 
+                         onclick="toggleFAQ(${index})"
+                         role="button"
+                         aria-expanded="false"
+                         tabindex="0">
                         ${faq.question}
                         <i class="fas fa-chevron-down"></i>
                     </div>
-                    <div class="faq-answer">
+                    <div class="faq-answer" role="region">
                         ${faq.answer}
                     </div>
                 </div>
@@ -1168,7 +1276,21 @@
 
         function toggleFAQ(index) {
             const faqItems = document.querySelectorAll('.faq-item');
-            faqItems[index].classList.toggle('active');
+            const item = faqItems[index];
+            const question = item.querySelector('.faq-question');
+            const wasActive = item.classList.contains('active');
+
+            // Close all FAQs
+            faqItems.forEach(faq => {
+                faq.classList.remove('active');
+                faq.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+            });
+
+            // Toggle clicked FAQ
+            if (!wasActive) {
+                item.classList.add('active');
+                question.setAttribute('aria-expanded', 'true');
+            }
         }
 
         // Chat Functions
@@ -1176,13 +1298,15 @@
             document.getElementById('chatContainer').style.display = 'flex';
             document.getElementById('contactForm').style.display = 'none';
             
-            // Add welcome message
+            // Add welcome message if chat is empty
             const chatMessages = document.getElementById('chatMessages');
-            chatMessages.innerHTML = `
-                <div class="message support">
-                    <p>Hello! How can we help you today?</p>
-                </div>
-            `;
+            if (!chatMessages.hasChildNodes()) {
+                chatMessages.innerHTML = `
+                    <div class="message support">
+                        <p>Hello! How can we help you today?</p>
+                    </div>
+                `;
+            }
         }
 
         function sendMessage() {
@@ -1217,23 +1341,6 @@
         }
 
         // Ticket System Functions
-        const tickets = [
-            {
-                id: 'TKT-001',
-                subject: 'Battery Service Issue',
-                category: 'technical',
-                status: 'open',
-                date: '2024-02-15'
-            },
-            {
-                id: 'TKT-002',
-                subject: 'Billing Question',
-                category: 'billing',
-                status: 'closed',
-                date: '2024-02-10'
-            }
-        ];
-
         function loadTickets() {
             const ticketList = document.getElementById('ticketList');
             ticketList.innerHTML = tickets.map(ticket => `
@@ -1263,6 +1370,7 @@
             const priority = document.getElementById('ticketPriority').value;
 
             if (subject && category && description) {
+                // Simulate ticket submission
                 alert('Ticket submitted successfully! We will respond shortly.');
                 document.getElementById('contactForm').style.display = 'none';
                 
@@ -1271,25 +1379,36 @@
                 document.getElementById('ticketCategory').value = '';
                 document.getElementById('ticketDescription').value = '';
                 document.getElementById('ticketPriority').value = 'low';
+
+                // Refresh tickets list
+                loadTickets();
             } else {
                 alert('Please fill in all required fields.');
             }
         }
 
+        // Knowledge Base Functions
+        function openKBArticle(articleId) {
+            // Simulate opening knowledge base article
+            alert('Opening knowledge base article: ' + articleId);
+        }
+
+        // Event Listeners Setup
         function setupEventListeners() {
             const messageInput = document.getElementById('messageInput');
             if (messageInput) {
                 messageInput.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
                         sendMessage();
                     }
                 });
             }
-        }
 
-        // Knowledge Base Functions
-        function openKBArticle(articleId) {
-            alert('Opening knowledge base article: ' + articleId);
+            // Add touch feedback to all interactive elements
+            document.querySelectorAll('.action-card, .kb-card, .btn').forEach(element => {
+                element.addEventListener('touchstart', function() {}, {passive: true});
+            });
         }
 
         // Utility Functions
@@ -1310,4 +1429,4 @@
         }
     </script>
 </body>
-</html>
+</html> 
