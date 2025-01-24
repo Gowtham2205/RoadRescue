@@ -45,7 +45,6 @@
                     detail: { theme } 
                 }));
 
-                // Update UI elements that depend on theme
                 this.updateUIForTheme(theme);
             },
 
@@ -125,7 +124,6 @@
             --info-light: rgba(59, 130, 246, 0.2);
             --primary-lighter: rgba(66, 153, 225, 0.2);
         }
-
         /* Reset & Base Styles */
         * {
             margin: 0;
@@ -149,44 +147,25 @@
             overflow: hidden;
         }
 
-        /* Mobile Header Styles */
-        .mobile-header {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 64px;
-            padding: 0 1rem;
-            background: var(--bg-secondary);
-            border-bottom: 1px solid var(--border-color);
-            z-index: 1000;
-            transition: background-color 0.3s ease;
-        }
-
-        .mobile-header-content {
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
+        /* Hamburger Menu Button */
         .menu-toggle {
-            background: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1000;
+            background: var(--bg-secondary);
             border: none;
             color: var(--text-primary);
             font-size: 1.5rem;
             cursor: pointer;
             width: 44px;
             height: 44px;
-            display: flex;
+            border-radius: 8px;
+            display: none;
             align-items: center;
             justify-content: center;
-            border-radius: 8px;
             transition: all 0.3s ease;
-            padding: 0;
-            margin: 0;
-            z-index: 1001;
+            border: 1px solid var(--border-color);
         }
 
         .menu-toggle:hover {
@@ -229,47 +208,59 @@
             width: 280px;
             background: var(--sidebar-bg);
             position: fixed;
-            left: -280px;
+            left: 0;
             top: 0;
             height: 100vh;
             border-right: 1px solid var(--border-color);
             z-index: 999;
-            transition: left 0.3s ease;
+            transition: transform 0.3s ease;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
         }
 
-        .sidebar.active {
-            left: 0;
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+            transition: margin-left 0.3s ease;
         }
 
-        @media (min-width: 1025px) {
+        /* Mobile Responsive Styles */
+        @media (max-width: 1024px) {
+            .menu-toggle {
+                display: flex;
+            }
+
             .sidebar {
-                left: 0;
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding-top: 5rem;
             }
         }
 
-        .sidebar-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--border-color);
+        /* Support Page Specific Styles */
+        .support-header {
+            margin-bottom: 2rem;
         }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            text-decoration: none;
-        }
-
-        .logo img {
-            width: 32px;
-            height: 32px;
-        }
-
-        .logo span {
-            font-size: 1.25rem;
-            font-weight: 600;
+        .support-title {
+            font-size: 1.875rem;
+            font-weight: 700;
             color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .support-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
         }
 
         /* Navigation Menu */
@@ -294,8 +285,6 @@
             border-radius: 0.5rem;
             transition: all 0.3s ease;
             font-weight: 500;
-            user-select: none;
-            -webkit-user-select: none;
         }
 
         .nav-link i {
@@ -314,616 +303,292 @@
             color: var(--primary);
             font-weight: 600;
         }
-/* Main Content */
-        .main-content {
-            flex: 1;
-            margin-left: 280px;
-            padding: 2rem;
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                        margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            will-change: transform, margin-left;
-        }
 
-        @media (max-width: 1024px) {
-            .main-content {
-                margin-left: 0;
-                padding-top: 5rem;
-            }
-            
-            .mobile-header {
-                display: block;
-            }
-
-            .main-content.sidebar-active {
-                transform: translateX(280px);
-            }
-        }
-                /* Support Header Styles */
-        .support-header {
-            margin-bottom: 2rem;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .support-title {
-            font-size: 1.875rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .support-subtitle {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-        }
-
-        /* Quick Actions */
-        .quick-actions {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin-bottom: 2rem;
-            animation: slideUp 0.5s ease;
-        }
-
-        .action-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 1rem;
-            padding: 1.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-
-        .action-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--primary-light);
-        }
-
-        .action-card:active {
-            transform: scale(0.98);
-        }
-
-        .action-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            background: var(--primary-lighter);
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            flex-shrink: 0;
-        }
-
-        .action-content h3 {
-            font-size: 1.1rem;
-            margin-bottom: 0.25rem;
-            color: var(--text-primary);
-        }
-
-        .action-content p {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-        }
-
-        /* Support Grid */
-        .support-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 2rem;
-            margin-bottom: 2rem;
-            animation: fadeIn 0.5s ease 0.2s backwards;
-        }
-
-        /* FAQ Section */
-        .faq-section {
-            background: var(--bg-secondary);
-            border-radius: 1rem;
-            border: 1px solid var(--border-color);
-            overflow: hidden;
-            transition: all 0.3s ease;
-            height: fit-content;
-        }
-
-        .faq-header {
+        /* Logo Styles */
+        .sidebar-header {
             padding: 1.5rem;
             border-bottom: 1px solid var(--border-color);
-            background: var(--bg-secondary);
-            position: sticky;
-            top: 0;
-            z-index: 1;
         }
 
-        .faq-title {
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+
+        .logo img {
+            width: 32px;
+            height: 32px;
+        }
+
+        .logo span {
             font-size: 1.25rem;
             font-weight: 600;
             color: var(--text-primary);
-            margin: 0;
         }
 
-        .faq-list {
-            padding: 1rem;
-        }
+	/* Quick Actions */
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
 
-        .faq-item {
-            border-bottom: 1px solid var(--border-color);
-        }
+.action-card {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
 
-        .faq-item:last-child {
-            border-bottom: none;
-        }
+.action-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
 
-        .faq-question {
-            padding: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            color: var(--text-primary);
-            font-weight: 500;
-            transition: all 0.3s ease;
-            user-select: none;
-            -webkit-user-select: none;
-        }
+.action-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--primary-lighter);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
 
-        .faq-question:hover {
-            color: var(--primary);
-        }
+.action-content h3 {
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+}
 
-        .faq-question i {
-            transition: transform 0.3s ease;
-        }
+.action-content p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin: 0;
+}
 
-        .faq-answer {
-            padding: 0 1rem;
-            color: var(--text-secondary);
-            max-height: 0;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
+/* FAQ Section */
+.faq-section {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--border-color);
+}
 
-        .faq-item.active .faq-answer {
-            padding: 0 1rem 1rem;
-            max-height: 500px;
-        }
+.faq-item {
+    border-bottom: 1px solid var(--border-color);
+}
 
-        .faq-item.active .faq-question i {
-            transform: rotate(180deg);
-        }
+.faq-question {
+    padding: 1rem 0;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-primary);
+    font-weight: 500;
+}
 
-        /* Knowledge Base Section */
-        .kb-section {
-            margin-top: 2rem;
-        }
+.faq-answer {
+    display: none;
+    padding: 0 0 1rem;
+    color: var(--text-secondary);
+}
 
-        .kb-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1rem;
-        }
+.faq-item.active .faq-answer {
+    display: block;
+}
 
-        .kb-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 1rem;
-            padding: 1.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            gap: 1rem;
-        }
+.faq-item.active .fa-chevron-down {
+    transform: rotate(180deg);
+}
 
-        .kb-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--primary-light);
-        }
+/* Knowledge Base */
+.kb-section {
+    margin-top: 2rem;
+}
 
-        .kb-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            background: var(--primary-lighter);
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-        }
+.kb-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
 
-        .kb-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin: 0;
-        }
+.kb-card {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid var(--border-color);
+}
 
-        .kb-description {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            margin: 0;
-        }
+.kb-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
 
-        /* Animations */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
+.kb-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--primary-lighter);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+.kb-title {
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
 
-        /* Mobile Responsive Updates */
-        @media (max-width: 1024px) {
-            .support-grid {
-                grid-template-columns: 1fr;
-            }
+.kb-description {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin: 0;
+}
 
-            .quick-actions {
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            }
-        }
+/* Chat Container */
+.chat-container {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 400px;
+}
 
-        @media (max-width: 768px) {
-            .support-title {
-                font-size: 1.5rem;
-            }
+.chat-header {
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
 
-            .action-card {
-                padding: 1.25rem;
-            }
+.chat-status {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--success);
+}
 
-            .action-icon {
-                width: 40px;
-                height: 40px;
-                font-size: 1.25rem;
-            }
-        }
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+}
 
-        @media (max-width: 480px) {
-            .main-content {
-                padding: 5rem 1rem 1rem;
-            }
+.message {
+    margin-bottom: 1rem;
+    max-width: 80%;
+}
 
-            .support-grid {
-                gap: 1rem;
-            }
+.message.user {
+    margin-left: auto;
+}
 
-            .faq-question {
-                font-size: 0.875rem;
-                padding: 0.875rem;
-            }
-        }
-                /* Chat Container */
-        .chat-container {
-            background: var(--bg-secondary);
-            border-radius: 1rem;
-            border: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            height: 500px;
-            transition: all 0.3s ease;
-            animation: slideUp 0.5s ease;
-            position: relative;
-        }
+.message p {
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    display: inline-block;
+}
 
-        .chat-header {
-            padding: 1rem;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            background: var(--bg-secondary);
-            position: sticky;
-            top: 0;
-            z-index: 2;
-        }
+.message.user p {
+    background: var(--chat-user-bg);
+    color: white;
+}
 
-        .chat-status {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--success);
-            position: relative;
-        }
+.message.support p {
+    background: var(--chat-support-bg);
+    color: var(--text-primary);
+}
 
-        .chat-status::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: var(--success);
-            animation: pulse 2s infinite;
-        }
+.chat-input {
+    padding: 1rem;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    gap: 0.5rem;
+}
 
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-                opacity: 0.5;
-            }
-            100% {
-                transform: scale(2.5);
-                opacity: 0;
-            }
-        }
+.chat-input input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--input-bg);
+    color: var(--text-primary);
+}
 
-        .chat-messages {
-            flex: 1;
-            padding: 1rem;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-        }
+/* Form Styles */
+.form-group {
+    margin-bottom: 1rem;
+}
 
-        .message {
-            max-width: 80%;
-            padding: 0.75rem 1rem;
-            border-radius: 1rem;
-            position: relative;
-            word-wrap: break-word;
-            animation: messageSlide 0.3s ease;
-        }
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    font-weight: 500;
+}
 
-        @keyframes messageSlide {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+.form-input, .form-textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--input-bg);
+    color: var(--text-primary);
+}
 
-        .message.user {
-            background: var(--chat-user-bg);
-            color: var(--text-primary);
-            align-self: flex-end;
-            border-bottom-right-radius: 0.25rem;
-        }
+.form-textarea {
+    min-height: 100px;
+    resize: vertical;
+}
 
-        .message.support {
-            background: var(--chat-support-bg);
-            color: var(--text-primary);
-            align-self: flex-start;
-            border-bottom-left-radius: 0.25rem;
-        }
+.btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
 
-        .chat-input {
-            padding: 1rem;
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            gap: 1rem;
-            background: var(--bg-secondary);
-            position: sticky;
-            bottom: 0;
-            z-index: 2;
-        }
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
 
-        .chat-input input {
-            flex: 1;
-            padding: 0.75rem 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: 2rem;
-            background: var(--input-bg);
-            color: var(--text-primary);
-            transition: all 0.3s ease;
-        }
-
-        .chat-input input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 2px var(--primary-lighter);
-        }
-
-        .chat-input button {
-            padding: 0.75rem 1.5rem;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 2rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .chat-input button:hover {
-            background: var(--primary-dark);
-        }
-
-        .chat-input button:active {
-            transform: scale(0.98);
-        }
-
-        /* Contact Form */
-        .contact-form {
-            background: var(--bg-secondary);
-            border-radius: 1rem;
-            border: 1px solid var(--border-color);
-            padding: 1.5rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-            font-weight: 500;
-        }
-
-        .form-input,
-        .form-textarea {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: 0.5rem;
-            background: var(--input-bg);
-            color: var(--text-primary);
-            transition: all 0.3s ease;
-        }
-
-        .form-input:focus,
-        .form-textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 2px var(--primary-lighter);
-        }
-
-        .form-textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-
-        /* Ticket Section */
-        .ticket-section {
-            background: var(--bg-secondary);
-            border-radius: 1rem;
-            border: 1px solid var(--border-color);
-            overflow: hidden;
-            margin-top: 2rem;
-            animation: fadeIn 0.5s ease 0.4s backwards;
-        }
-
-        .ticket-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--bg-secondary);
-            position: sticky;
-            top: 0;
-            z-index: 1;
-        }
-
-        .ticket-list {
-            padding: 1rem;
-        }
-
-        .ticket-item {
-            padding: 1rem;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .ticket-item:last-child {
-            border-bottom: none;
-        }
-
-        .ticket-item:hover {
-            background: var(--bg-main);
-        }
-
-        .ticket-info {
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-        }
-
-        .ticket-subject {
-            color: var(--text-primary);
-            font-weight: 500;
-        }
-
-        .ticket-meta {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-        }
-
-        .ticket-status {
-            padding: 0.25rem 0.75rem;
-            border-radius: 1rem;
-            font-size: 0.875rem;
-            font-weight: 500;
-            text-align: center;
-            min-width: 80px;
-        }
-
-        .status-open {
-            background: var(--warning-light);
-            color: var(--warning);
-        }
-
-        .status-closed {
-            background: var(--success-light);
-            color: var(--success);
-        }
-
-        /* Button Styles */
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            border: none;
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-dark);
-        }
-
-        .btn-primary:active {
-            transform: scale(0.98);
-        }
-    </style>       
-	</head>
+.btn-primary:hover {
+    background: var(--primary-dark);
+}
+    </style>
+</head>
 <body>
-    <!-- Mobile Header -->
-    <header class="mobile-header">
-        <div class="mobile-header-content">
-            <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">
-                <i class="fas fa-bars"></i>
-            </button>
-            <span style="color: var(--text-primary); font-weight: 600;">Support</span>
-            <div style="width: 24px;"></div>
-        </div>
-    </header>
+    <!-- Hamburger Menu Button -->
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">
+        <i class="fas fa-bars"></i>
+    </button>
 
     <!-- Overlay -->
     <div class="overlay" id="overlay"></div>
@@ -1096,20 +761,6 @@
                 </div>
             </div>
 
-            <!-- Support Tickets Section -->
-            <div class="ticket-section">
-                <div class="ticket-header">
-                    <h2>Your Support Tickets</h2>
-                    <button class="btn btn-primary" onclick="openTicketForm()">
-                        <i class="fas fa-plus"></i>
-                        New Ticket
-                    </button>
-                </div>
-                <div class="ticket-list" id="ticketList">
-                    <!-- Tickets will be dynamically added here -->
-                </div>
-            </div>
-
             <!-- Knowledge Base Section -->
             <div class="kb-section">
                 <h2>Knowledge Base</h2>
@@ -1151,51 +802,8 @@
             ThemeManager.init();
             initializeSupport();
             loadFAQs();
-            loadTickets();
             setupEventListeners();
         });
-
-        // FAQ Data
-        const faqs = [
-            {
-                question: "How do I request emergency roadside assistance?",
-                answer: "You can request assistance through our mobile app or by calling our 24/7 emergency hotline. Select 'Request Service' from the dashboard and follow the prompts to specify your location and issue."
-            },
-            {
-                question: "What services are covered under my subscription?",
-                answer: "Basic subscription includes battery jump-start, tire change, fuel delivery, and lockout services. Premium subscribers also get free towing up to 50km, unlimited service calls, and priority support."
-            },
-            {
-                question: "How long does it typically take for help to arrive?",
-                answer: "Our average response time is 30-45 minutes in urban areas. Response times may vary based on your location, traffic conditions, and service demand. You can track your mechanic's arrival in real-time through the app."
-            },
-            {
-                question: "What payment methods do you accept?",
-                answer: "We accept all major credit/debit cards, UPI payments, and digital wallets. Premium subscribers can also opt for monthly billing. Payment is processed after service completion."
-            },
-            {
-                question: "How do I cancel or reschedule a service request?",
-                answer: "You can cancel or modify your service request through the app or by contacting our support team. Cancellations before mechanic dispatch are free of charge."
-            }
-        ];
-
-        // Sample ticket data
-        const tickets = [
-            {
-                id: 'TKT-001',
-                subject: 'Battery Service Issue',
-                category: 'technical',
-                status: 'open',
-                date: '2024-02-15'
-            },
-            {
-                id: 'TKT-002',
-                subject: 'Billing Question',
-                category: 'billing',
-                status: 'closed',
-                date: '2024-02-10'
-            }
-        ];
 
         function initializeSupport() {
             const menuToggle = document.getElementById('menuToggle');
@@ -1212,11 +820,6 @@
                 sidebar.classList.toggle('active');
                 overlay.classList.toggle('active');
                 document.body.classList.toggle('sidebar-active');
-                
-                if (window.innerWidth <= 1024) {
-                    mainContent.style.transform = sidebar.classList.contains('active') ? 
-                        'translateX(280px)' : 'translateX(0)';
-                }
             }
 
             // Touch event handlers
@@ -1231,7 +834,6 @@
 
             function handleSwipe() {
                 const diff = touchEndX - touchStartX;
-
                 if (Math.abs(diff) > swipeThreshold) {
                     if (diff > 0 && !sidebar.classList.contains('active')) {
                         // Swipe right
@@ -1261,14 +863,35 @@
 
             // Window resize handler
             window.addEventListener('resize', function() {
-                if (window.innerWidth > 1024) {
-                    mainContent.style.transform = '';
-                    if (sidebar.classList.contains('active')) {
-                        toggleMenu();
-                    }
+                if (window.innerWidth > 1024 && sidebar.classList.contains('active')) {
+                    toggleMenu();
                 }
             });
         }
+
+        // FAQ Data and Functions
+        const faqs = [
+            {
+                question: "How do I request emergency roadside assistance?",
+                answer: "You can request assistance through our mobile app or by calling our 24/7 emergency hotline. Select 'Request Service' from the dashboard and follow the prompts to specify your location and issue."
+            },
+            {
+                question: "What services are covered under my subscription?",
+                answer: "Basic subscription includes battery jump-start, tire change, fuel delivery, and lockout services. Premium subscribers also get free towing up to 50km, unlimited service calls, and priority support."
+            },
+            {
+                question: "How long does it typically take for help to arrive?",
+                answer: "Our average response time is 30-45 minutes in urban areas. Response times may vary based on your location, traffic conditions, and service demand. You can track your mechanic's arrival in real-time through the app."
+            },
+            {
+                question: "What payment methods do you accept?",
+                answer: "We accept all major credit/debit cards, UPI payments, and digital wallets. Premium subscribers can also opt for monthly billing. Payment is processed after service completion."
+            },
+            {
+                question: "How do I cancel or reschedule a service request?",
+                answer: "You can cancel or modify your service request through the app or by contacting our support team. Cancellations before mechanic dispatch are free of charge."
+            }
+        ];
 
         function loadFAQs() {
             const faqList = document.getElementById('faqList');
@@ -1290,12 +913,10 @@
             const item = faqItems[index];
             const wasActive = item.classList.contains('active');
 
-            // Close all FAQs
             faqItems.forEach(faq => {
                 faq.classList.remove('active');
             });
 
-            // Toggle clicked FAQ
             if (!wasActive) {
                 item.classList.add('active');
             }
@@ -1346,23 +967,6 @@
             }
         }
 
-        function loadTickets() {
-            const ticketList = document.getElementById('ticketList');
-            ticketList.innerHTML = tickets.map(ticket => `
-                <div class="ticket-item">
-                    <div class="ticket-info">
-                        <span class="ticket-subject">${ticket.subject}</span>
-                        <span class="ticket-meta">
-                            ${ticket.id} • ${formatDate(ticket.date)}
-                        </span>
-                    </div>
-                    <span class="ticket-status status-${ticket.status}">
-                        ${capitalizeFirst(ticket.status)}
-                    </span>
-                </div>
-            `).join('');
-        }
-
         function openTicketForm() {
             document.getElementById('contactForm').style.display = 'block';
             document.getElementById('chatContainer').style.display = 'none';
@@ -1378,12 +982,11 @@
                 alert('Ticket submitted successfully! We will respond shortly.');
                 document.getElementById('contactForm').style.display = 'none';
                 
+                // Clear form
                 document.getElementById('ticketSubject').value = '';
                 document.getElementById('ticketCategory').value = '';
                 document.getElementById('ticketDescription').value = '';
                 document.getElementById('ticketPriority').value = 'low';
-
-                loadTickets();
             } else {
                 alert('Please fill in all required fields.');
             }
@@ -1399,18 +1002,6 @@
                     }
                 });
             }
-        }
-
-        function formatDate(dateString) {
-            return new Date(dateString).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
-            });
-        }
-
-        function capitalizeFirst(string) {
-            return string.charAt(0).toUpperCase() + string.slice(1);
         }
 
         function scrollToFAQ() {
