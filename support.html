@@ -749,23 +749,20 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            ThemeManager.init();
-            initializeSupport();
-            loadFAQs();
-        });
-
-        function initializeSupport() {
-            const menuToggle = document.getElementById('menuToggle');
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('overlay');
-            const mainContent = document.getElementById('mainContent');
-
-            function toggleMenu() {
-                sidebar.classList.toggle('active');
-                overlay.classList.toggle('active');
-                document.body.classList.toggle('sidebar-active');
-            }
+document.addEventListener('DOMContentLoaded', function() {
+    const menuBtn = document.querySelector('.menu-toggle');
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.querySelector('.overlay');
+    
+    menuBtn.addEventListener('click', toggleMenu);
+    overlay.addEventListener('click', toggleMenu);
+    
+    function toggleMenu() {
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+    }
+});
+        
 
             // Menu toggle button click
             menuToggle.addEventListener('click', (e) => {
