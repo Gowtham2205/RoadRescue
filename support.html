@@ -804,47 +804,77 @@
             loadFAQs();
             setupEventListeners();
         });
+function initializeSupport() {
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.getElementById('overlay');
+    const mainContent = document.querySelector('.main-content');
+    
+    // Toggle menu function
+    function toggleMenu() {
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+        document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
+    }
 
-        function initializeSupport() {
-            const menuToggle = document.getElementById('menuToggle');
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('overlay');
-            const mainContent = document.querySelector('.main-content');
+    // Menu toggle button click
+    menuToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleMenu();
+    });
 
-            // Touch handling variables
-            let touchStartX = 0;
-            let touchEndX = 0;
-            const swipeThreshold = 50;
+    // Overlay click
+    overlay.addEventListener('click', () => {
+        toggleMenu();
+    });
 
-            function toggleMenu() {
-                sidebar.classList.toggle('active');
-                overlay.classList.toggle('active');
-                document.body.classList.toggle('sidebar-active');
+    // Close sidebar when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!sidebar.contains(e.target) && 
+            !menuToggle.contains(e.target) && 
+            sidebar.classList.contains('active')) {
+            toggleMenu();
+        }
+    });
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 1024) {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
+
+    // Touch handling variables
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const swipeThreshold = 50;
+
+    // Touch event handlers
+    document.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    document.addEventListener('touchend', e => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+        const diff = touchEndX - touchStartX;
+        if (Math.abs(diff) > swipeThreshold) {
+            if (diff > 0 && !sidebar.classList.contains('active')) {
+                // Swipe right
+                toggleMenu();
+            } else if (diff < 0 && sidebar.classList.contains('active')) {
+                // Swipe left
+                toggleMenu();
             }
-
-            // Touch event handlers
-            document.addEventListener('touchstart', e => {
-                touchStartX = e.changedTouches[0].screenX;
-            }, { passive: true });
-
-            document.addEventListener('touchend', e => {
-                touchEndX = e.changedTouches[0].screenX;
-                handleSwipe();
-            }, { passive: true });
-
-            function handleSwipe() {
-                const diff = touchEndX - touchStartX;
-                if (Math.abs(diff) > swipeThreshold) {
-                    if (diff > 0 && !sidebar.classList.contains('active')) {
-                        // Swipe right
-                        toggleMenu();
-                    } else if (diff < 0 && sidebar.classList.contains('active')) {
-                        // Swipe left
-                        toggleMenu();
-                    }
-                }
-            }
-
+        }
+    }
+}
+        
             // Click event handlers
             menuToggle.addEventListener('click', function(e) {
                 e.preventDefault();
