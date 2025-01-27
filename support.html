@@ -749,95 +749,102 @@
     </div>
 
     <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const menuBtn = document.querySelector('.menu-toggle');
-    const sidebar = document.querySelector('.sidebar');
-    const overlay = document.querySelector('.overlay');
-    
-    menuBtn.addEventListener('click', toggleMenu);
-    overlay.addEventListener('click', toggleMenu);
-    
-    function toggleMenu() {
-        sidebar.classList.toggle('active');
-        overlay.classList.toggle('active');
-    }
-});
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize theme
+        ThemeManager.init();
+
+        // Initialize mobile menu functionality
+        initializeMobileMenu();
+
+        // Initialize other support page features
+        initializeSupportFeatures();
+    });
+
+    function initializeMobileMenu() {
+        const menuBtn = document.querySelector('.menu-toggle');
+        const sidebar = document.querySelector('.sidebar');
+        const overlay = document.querySelector('.overlay');
         
-
-            // Menu toggle button click
-            menuToggle.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
+        // Menu toggle function
+        function toggleMenu() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
+        }
+        
+        // Event Listeners
+        menuBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            toggleMenu();
+        });
+        
+        overlay.addEventListener('click', toggleMenu);
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (sidebar.classList.contains('active') && 
+                !sidebar.contains(e.target) && 
+                !menuBtn.contains(e.target)) {
                 toggleMenu();
-            });
+            }
+        });
+        
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 1024 && sidebar.classList.contains('active')) {
+                toggleMenu();
+            }
+        });
 
-            // Overlay click
-            overlay.addEventListener('click', toggleMenu);
+        // Touch swipe functionality
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const swipeThreshold = 50;
 
-            // Close sidebar when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!sidebar.contains(e.target) && 
-                    !menuToggle.contains(e.target) && 
-                    sidebar.classList.contains('active')) {
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        document.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+
+        function handleSwipe() {
+            const diff = touchEndX - touchStartX;
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0 && !sidebar.classList.contains('active')) {
+                    // Swipe right
                     toggleMenu();
-                }
-            });
-
-            // Handle window resize
-            window.addEventListener('resize', () => {
-                if (window.innerWidth > 1024 && sidebar.classList.contains('active')) {
+                } else if (diff < 0 && sidebar.classList.contains('active')) {
+                    // Swipe left
                     toggleMenu();
-                }
-            });
-
-            // Touch handling
-            let touchStartX = 0;
-            let touchEndX = 0;
-            const swipeThreshold = 50;
-
-            document.addEventListener('touchstart', e => {
-                touchStartX = e.changedTouches[0].screenX;
-            }, { passive: true });
-
-            document.addEventListener('touchend', e => {
-                touchEndX = e.changedTouches[0].screenX;
-                handleSwipe();
-            }, { passive: true });
-
-            function handleSwipe() {
-                const diff = touchEndX - touchStartX;
-                if (Math.abs(diff) > swipeThreshold) {
-                    if (diff > 0 && !sidebar.classList.contains('active')) {
-                        // Swipe right
-                        toggleMenu();
-                    } else if (diff < 0 && sidebar.classList.contains('active')) {
-                        // Swipe left
-                        toggleMenu();
-                    }
                 }
             }
         }
+    }
 
-        // Other support page functions...
-        function loadFAQs() {
-            // Implementation for loading FAQs
-        }
-
-        function openChat() {
+    function initializeSupportFeatures() {
+        // Support page specific functions
+        window.openChat = function() {
             // Implementation for opening chat
-        }
+            console.log('Opening chat...');
+        };
 
-        function openTicketForm() {
+        window.openTicketForm = function() {
             // Implementation for opening ticket form
-        }
+            console.log('Opening ticket form...');
+        };
 
-        function scrollToFAQ() {
+        window.scrollToFAQ = function() {
             document.getElementById('faqSection').scrollIntoView({ behavior: 'smooth' });
-        }
+        };
 
-        function openKBArticle(articleId) {
+        window.openKBArticle = function(articleId) {
             // Implementation for opening knowledge base article
-        }
-    </script>
+            console.log('Opening article:', articleId);
+        };
+    }
+</script>
 </body>
 </html>    
